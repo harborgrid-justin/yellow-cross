@@ -104,11 +104,13 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Yellow Cross Platform running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('All 15 enterprise features loaded successfully');
-});
+// Start server only if this file is run directly (not imported)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Yellow Cross Platform running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log('All 15 enterprise features loaded successfully');
+  });
+}
 
 module.exports = app;
