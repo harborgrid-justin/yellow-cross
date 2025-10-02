@@ -104,18 +104,13 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
-// Start server only if not in test mode
+// Start server (only if not in test mode)
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Yellow Cross Platform running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log('All 15 enterprise features loaded successfully');
   });
-
-} else {
-  console.log(`Yellow Cross Platform running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('All 15 enterprise features loaded successfully');
 }
 
 module.exports = app;
