@@ -104,6 +104,7 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
+
 // Start server (only if not in test mode)
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
