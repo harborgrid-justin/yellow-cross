@@ -7,19 +7,18 @@
 const express = require('express');
 const router = express.Router();
 
-// Client CRM overview - lists all 8 sub-features
-router.get('/', (req, res) => {
+// Sub-Feature 1: Client Database Management
+router.get('/database', (req, res) => {
   res.json({
-    feature: 'Client Relationship Management (CRM)',
-    subFeatures: [
-      'Client Database Management',
-      'Client Communication History',
-      'Client Portal Access',
-      'Client Intake & Onboarding',
-      'Client Billing Information',
-      'Client Conflict Checking',
-      'Client Retention & Feedback',
-      'Client Relationship Analytics'
+    feature: 'Client Database Management',
+    description: 'Comprehensive client database with custom fields and search',
+    endpoint: '/api/clients/database',
+    capabilities: [
+      'Complete client profiles',
+      'Custom fields',
+      'Advanced search',
+      'Client categorization',
+      'Data import/export'
     ]
   });
 });
@@ -132,6 +131,23 @@ router.get('/analytics', (req, res) => {
       'Revenue per client',
       'Client acquisition cost',
       'Churn analysis'
+    ]
+  });
+});
+
+// Client CRM overview - lists all 8 sub-features
+router.get('/', (req, res) => {
+  res.json({
+    feature: 'Client Relationship Management (CRM)',
+    subFeatures: [
+      'Client Database Management',
+      'Client Communication History',
+      'Client Portal Access',
+      'Client Intake & Onboarding',
+      'Client Billing Information',
+      'Client Conflict Checking',
+      'Client Retention & Feedback',
+      'Client Relationship Analytics'
     ]
   });
 });

@@ -59,7 +59,7 @@ Yellow Cross is a comprehensive enterprise-grade practice management platform sp
 ### 2. Client Relationship Management (8 Sub-Features)
 
 #### Endpoints:
-- `GET /api/clients` - Client Database Management
+- `GET /api/clients/database` - Client Database Management
 - `GET /api/clients/:id/communications` - Communication History
 - `POST /api/clients/:id/portal` - Client Portal Access
 - `POST /api/clients/intake` - Client Intake & Onboarding
