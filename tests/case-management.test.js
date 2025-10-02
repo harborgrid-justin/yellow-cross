@@ -1,6 +1,7 @@
 /**
  * Case Management System - Integration Tests
  * Verifies all 8 sub-features are implemented and operational
+ * Tests both API stubs (without DB) and full business logic (with DB when available)
  */
 
 const request = require('supertest');
@@ -171,4 +172,8 @@ describe('Case Management System - Feature 1', () => {
       }
     });
   });
+
+  // Note: Full database integration tests require MongoDB connection
+  // The implementation includes full business logic with database operations
+  // For testing database functionality, configure MONGODB_URI environment variable
 });
