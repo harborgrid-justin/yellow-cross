@@ -30,6 +30,22 @@ describe('Client Relationship Management (CRM) - Feature 2', () => {
     });
   });
 
+  describe('Sub-Feature 1: Client Database Management', () => {
+    test('GET /api/clients/database should return database management capabilities', async () => {
+      const response = await request(app)
+        .get('/api/clients/database')
+        .expect(200);
+      
+      expect(response.body).toHaveProperty('feature', 'Client Database Management');
+      expect(response.body).toHaveProperty('description');
+      expect(response.body).toHaveProperty('endpoint', '/api/clients/database');
+      expect(response.body).toHaveProperty('capabilities');
+      expect(response.body.capabilities).toContain('Complete client profiles');
+      expect(response.body.capabilities).toContain('Custom fields');
+      expect(response.body.capabilities).toContain('Advanced search');
+    });
+  });
+
   describe('Sub-Feature 2: Client Communication History', () => {
     test('GET /api/clients/:id/communications should return communication tracking capabilities', async () => {
       const response = await request(app)
@@ -147,6 +163,7 @@ describe('Client Relationship Management (CRM) - Feature 2', () => {
       // Test all endpoints in sequence
       const endpoints = [
         { method: 'get', path: '/api/clients', expectedFeature: 'Client Relationship Management (CRM)' },
+        { method: 'get', path: '/api/clients/database', expectedFeature: 'Client Database Management' },
         { method: 'get', path: '/api/clients/123/communications', expectedFeature: 'Client Communication History' },
         { method: 'post', path: '/api/clients/123/portal', expectedFeature: 'Client Portal Access' },
         { method: 'post', path: '/api/clients/intake', expectedFeature: 'Client Intake & Onboarding' },
