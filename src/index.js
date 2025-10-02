@@ -8,10 +8,18 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
+const { connectDB } = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require('path');
+
+// Connect to MongoDB (optional - will not fail if connection fails)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB().catch(err => {
+    console.log('MongoDB connection failed, continuing without database:', err.message);
+  });
+}
 
 // Security middleware with CSP adjusted for frontend
 app.use(helmet({
