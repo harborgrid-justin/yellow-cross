@@ -192,7 +192,7 @@ citationSchema.methods.recordUsage = function() {
   this.lastUsed = Date.now();
 };
 
-citationSchema.methods.validate = function(validatedBy, notes) {
+citationSchema.methods.validateCitation = function(validatedBy, notes) {
   this.isValidated = true;
   this.validatedBy = validatedBy;
   this.validatedAt = Date.now();
