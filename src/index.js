@@ -104,8 +104,8 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
-// Start server only if this file is run directly (not imported)
-if (require.main === module) {
+// Start server only if not in test mode
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Yellow Cross Platform running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
