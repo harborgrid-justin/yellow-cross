@@ -186,31 +186,420 @@ Get financial reporting data
 ### 5. Calendar & Scheduling
 
 #### GET /api/calendar
-Calendar and scheduling system overview
+Calendar and scheduling system overview with statistics (if database connected)
+
+**Response:**
+```json
+{
+  "feature": "Calendar & Scheduling System",
+  "subFeatures": [
+    "Court Date Management",
+    "Deadline Management",
+    "Appointment Scheduling",
+    "Attorney Availability",
+    "Reminder & Notification System",
+    "Calendar Synchronization",
+    "Resource Scheduling",
+    "Conflict Detection"
+  ],
+  "statistics": {
+    "events": {
+      "total": 150,
+      "upcoming": 45
+    },
+    "deadlines": {
+      "total": 89,
+      "upcoming": 23,
+      "overdue": 5
+    },
+    "resources": {
+      "total": 12,
+      "activeBookings": 34
+    }
+  },
+  "databaseConnected": true
+}
+```
 
 #### POST /api/calendar/court-dates
-Schedule court dates
+Schedule a court date with automatic conflict detection
+
+**Request Body:**
+```json
+{
+  "title": "Motion Hearing",
+  "description": "Hearing for summary judgment motion",
+  "startDate": "2024-12-15T10:00:00Z",
+  "endDate": "2024-12-15T11:00:00Z",
+  "location": "Superior Court, Courtroom 3",
+  "courtroom": "Courtroom 3",
+  "caseId": "507f1f77bcf86cd799439011",
+  "caseNumber": "CASE-2024-0001",
+  "organizer": "John Doe",
+  "attorneys": ["John Doe", "Jane Smith"],
+  "priority": "High",
+  "createdBy": "jdoe"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Court date scheduled successfully",
+  "data": {
+    "courtDate": { /* full event object */ },
+    "eventNumber": "EVT-2024-12345",
+    "eventId": "507f1f77bcf86cd799439011"
+  }
+}
+```
+
+#### GET /api/calendar/court-dates
+List court dates with optional filters
+
+**Query Parameters:**
+- `startDate`: Filter by start date (ISO format)
+- `endDate`: Filter by end date (ISO format)
+- `caseId`: Filter by case ID
+- `attorney`: Filter by attorney name
 
 #### POST /api/calendar/deadlines
-Manage deadlines
+Create a deadline with automatic status tracking
+
+**Request Body:**
+```json
+{
+  "title": "Response to Motion",
+  "description": "File response to defendant's motion",
+  "deadlineType": "Filing Deadline",
+  "dueDate": "2024-12-20T17:00:00Z",
+  "priority": "Critical",
+  "caseId": "507f1f77bcf86cd799439011",
+  "caseNumber": "CASE-2024-0001",
+  "assignedTo": "Jane Smith",
+  "calculationMethod": "Court Rules",
+  "courtRule": "FRCP Rule 12",
+  "reminders": [
+    {
+      "daysBeforeDue": 7,
+      "reminderType": "Email",
+      "recipients": ["jsmith@lawfirm.com"]
+    }
+  ],
+  "createdBy": "jdoe"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Deadline created successfully",
+  "data": {
+    "deadline": { /* full deadline object */ },
+    "deadlineNumber": "DL-2024-12345",
+    "deadlineId": "507f1f77bcf86cd799439011",
+    "daysUntilDue": 15
+  }
+}
+```
+
+#### GET /api/calendar/deadlines
+List deadlines with filtering options
+
+**Query Parameters:**
+- `type`: Filter type (upcoming, overdue)
+- `days`: Number of days for upcoming (default: 30)
+- `caseId`: Filter by case ID
+- `attorney`: Filter by attorney
+- `includeCompleted`: Include completed deadlines (true/false)
+
+#### POST /api/calendar/deadlines/calculate
+Calculate deadline based on business days and court rules
+
+**Request Body:**
+```json
+{
+  "triggerDate": "2024-12-01T00:00:00Z",
+  "daysToAdd": 30,
+  "courtRules": {
+    "skipWeekends": true,
+    "holidays": ["2024-12-25", "2024-01-01"]
+  }
+}
+```
+
+#### POST /api/calendar/deadlines/:id/complete
+Mark a deadline as completed
+
+#### POST /api/calendar/deadlines/:id/extend
+Extend a deadline with reason
+
+**Request Body:**
+```json
+{
+  "newDueDate": "2024-12-30T17:00:00Z",
+  "extensionReason": "Agreed extension by opposing counsel",
+  "grantedBy": "Judge Smith"
+}
+```
 
 #### POST /api/calendar/appointments
-Schedule appointments
+Schedule an appointment with conflict detection
+
+**Request Body:**
+```json
+{
+  "title": "Client Consultation",
+  "appointmentType": "Consultation",
+  "startDate": "2024-12-10T14:00:00Z",
+  "endDate": "2024-12-10T15:00:00Z",
+  "location": "Conference Room A",
+  "virtualMeetingUrl": "https://meet.example.com/abc-123",
+  "caseId": "507f1f77bcf86cd799439011",
+  "clientId": "507f1f77bcf86cd799439012",
+  "organizer": "John Doe",
+  "attorneys": ["John Doe"],
+  "attendees": [
+    {
+      "name": "Client Name",
+      "email": "client@example.com",
+      "role": "Client"
+    }
+  ],
+  "priority": "Medium",
+  "notes": "Initial consultation for new case",
+  "createdBy": "jdoe"
+}
+```
+
+#### GET /api/calendar/appointments
+List appointments with filters
+
+#### PUT /api/calendar/appointments/:id
+Update an appointment
+
+#### POST /api/calendar/appointments/:id/cancel
+Cancel an appointment
 
 #### GET /api/calendar/availability
 Check attorney availability
 
+**Query Parameters:**
+- `attorney`: Attorney name (required)
+- `startDate`: Check from date (optional)
+- `endDate`: Check until date (optional)
+
+#### POST /api/calendar/availability
+Set attorney availability or out-of-office periods
+
+**Request Body:**
+```json
+{
+  "attorneyName": "John Doe",
+  "availabilityType": "Out of Office",
+  "startDate": "2024-12-20T00:00:00Z",
+  "endDate": "2024-12-22T23:59:59Z",
+  "allDay": true,
+  "reason": "Vacation",
+  "notes": "Emergency contact: Jane Smith",
+  "createdBy": "jdoe"
+}
+```
+
+#### POST /api/calendar/availability/check
+Check attorney availability for specific time slot
+
+#### GET /api/calendar/availability/slots
+Get available time slots for an attorney
+
+**Query Parameters:**
+- `attorney`: Attorney name (required)
+- `date`: Date to check (required)
+- `duration`: Slot duration in minutes (default: 60)
+
 #### POST /api/calendar/reminders
-Set reminders and notifications
+Create a reminder for an event
+
+**Request Body:**
+```json
+{
+  "eventId": "507f1f77bcf86cd799439011",
+  "reminderType": "Email",
+  "minutesBefore": 60,
+  "recipients": ["user@example.com"],
+  "createdBy": "jdoe"
+}
+```
+
+#### GET /api/calendar/reminders/pending
+Get all pending reminders that need to be sent
 
 #### POST /api/calendar/sync
-Synchronize with external calendars
+Synchronize calendar with external providers (Google, Outlook, iCal)
+
+**Request Body:**
+```json
+{
+  "provider": "Google",
+  "syncDirection": "TwoWay",
+  "calendarId": "primary",
+  "accessToken": "oauth-token",
+  "refreshToken": "refresh-token",
+  "syncOptions": {
+    "syncPastDays": 30,
+    "syncFutureDays": 90,
+    "syncCategories": ["Court Date", "Appointment"]
+  },
+  "username": "jdoe"
+}
+```
+
+#### GET /api/calendar/sync/status
+Get calendar synchronization status
 
 #### POST /api/calendar/resources
-Schedule resources (rooms, equipment)
+Create a bookable resource (room, equipment)
+
+**Request Body:**
+```json
+{
+  "name": "Conference Room A",
+  "description": "Large conference room with video conferencing",
+  "resourceType": "Conference Room",
+  "location": {
+    "building": "Main Building",
+    "floor": "3rd Floor",
+    "roomNumber": "301"
+  },
+  "capacity": 12,
+  "features": ["Video Conferencing", "Whiteboard", "Projector"],
+  "amenities": ["Coffee Machine", "Water"],
+  "isBookable": true,
+  "createdBy": "admin"
+}
+```
+
+#### GET /api/calendar/resources
+List resources with availability checking
+
+**Query Parameters:**
+- `type`: Resource type filter
+- `status`: Status filter
+- `available`: Check availability (true/false)
+- `startDate`: Check availability from (if available=true)
+- `endDate`: Check availability until (if available=true)
+- `minCapacity`: Minimum capacity required
+
+#### POST /api/calendar/resources/book
+Book a resource with conflict checking
+
+**Request Body:**
+```json
+{
+  "resourceId": "507f1f77bcf86cd799439011",
+  "startDate": "2024-12-15T10:00:00Z",
+  "endDate": "2024-12-15T12:00:00Z",
+  "purpose": "Client Meeting",
+  "bookedBy": "John Doe",
+  "attendees": [
+    { "name": "John Doe", "email": "jdoe@lawfirm.com" },
+    { "name": "Client Name", "email": "client@example.com" }
+  ],
+  "caseId": "507f1f77bcf86cd799439011",
+  "setupTime": 15,
+  "cleanupTime": 10,
+  "notes": "Need projector setup",
+  "createdBy": "jdoe"
+}
+```
+
+#### GET /api/calendar/resources/bookings
+List resource bookings
+
+**Query Parameters:**
+- `resourceId`: Filter by resource
+- `bookedBy`: Filter by user
+- `status`: Filter by status
+- `startDate`: Filter from date
+- `endDate`: Filter until date
+
+#### POST /api/calendar/resources/bookings/:id/cancel
+Cancel a resource booking
 
 #### GET /api/calendar/conflicts
 Check for scheduling conflicts
+
+**Query Parameters:**
+- `attorney`: Attorney name (required)
+- `startDate`: Check from (required)
+- `endDate`: Check until (required)
+- `resourceId`: Also check resource conflicts (optional)
+
+#### POST /api/calendar/conflicts/check
+Check conflicts for multiple attorneys
+
+**Request Body:**
+```json
+{
+  "startDate": "2024-12-15T10:00:00Z",
+  "endDate": "2024-12-15T11:00:00Z",
+  "attorneys": ["John Doe", "Jane Smith", "Bob Wilson"],
+  "excludeEventId": "507f1f77bcf86cd799439011"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "timeSlot": {
+    "startDate": "2024-12-15T10:00:00Z",
+    "endDate": "2024-12-15T11:00:00Z"
+  },
+  "attorneys": ["John Doe", "Jane Smith", "Bob Wilson"],
+  "hasConflicts": true,
+  "totalConflicts": 2,
+  "availableAttorneys": ["Bob Wilson"],
+  "conflictsByAttorney": {
+    "John Doe": [
+      {
+        "eventId": "...",
+        "title": "Court Hearing",
+        "eventType": "Court Date",
+        "startDate": "2024-12-15T09:30:00Z",
+        "endDate": "2024-12-15T11:00:00Z"
+      }
+    ],
+    "Jane Smith": [
+      {
+        "eventId": "...",
+        "title": "Client Meeting",
+        "eventType": "Appointment",
+        "startDate": "2024-12-15T10:00:00Z",
+        "endDate": "2024-12-15T11:30:00Z"
+      }
+    ],
+    "Bob Wilson": []
+  }
+}
+```
+
+#### GET /api/calendar/events
+List all calendar events with filters
+
+**Query Parameters:**
+- `startDate`: Filter from date
+- `endDate`: Filter until date
+- `eventType`: Filter by event type
+- `attorney`: Filter by attorney
+- `caseId`: Filter by case
+- `status`: Filter by status
+- `days`: Number of upcoming days (default: 30)
+
+#### GET /api/calendar/events/:id
+Get detailed information about a specific event
 
 ---
 
