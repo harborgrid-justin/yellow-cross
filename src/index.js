@@ -111,6 +111,7 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log('All 15 enterprise features loaded successfully');
   });
+
 } else {
   console.log(`Yellow Cross Platform running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
