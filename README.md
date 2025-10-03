@@ -71,44 +71,79 @@ yellow-cross/
 
 ## 🚀 Getting Started
 
+### Quick Start (One Command!)
+
+```bash
+git clone https://github.com/harborgrid-justin/yellow-cross.git
+cd yellow-cross
+npm run setup
+```
+
+**That's it!** The setup is now 100% automated. This single command will:
+- ✅ Install all dependencies
+- ✅ Create `.env` configuration file (from .env.example)
+- ✅ Generate Prisma client
+- ✅ Prepare database migrations
+- ✅ Verify setup is complete
+
+Then start the application:
+
+```bash
+npm run docker:setup   # With Docker (recommended)
+# OR
+npm start              # Without Docker (requires PostgreSQL running)
+```
+
+**Access:**
+- Frontend & API: http://localhost:3000
+- Health Check: http://localhost:3000/health
+- Database GUI: `npm run prisma:studio`
+
+📖 **For detailed instructions, see [SETUP_GUIDE.md](./SETUP_GUIDE.md)**
+
+---
+
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- PostgreSQL (v15 or higher) **OR** Docker & Docker Compose
-- npm or yarn
+**Required:**
+- Node.js v18 or higher
+- npm v8 or higher
+- Git
 
-### Option 1: Quick Setup with Docker (Recommended)
+**Choose one database option:**
+- **Option A (Recommended):** Docker & Docker Compose
+- **Option B:** PostgreSQL 15+
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/harborgrid-justin/yellow-cross.git
-   cd yellow-cross
-   ```
+### Detailed Setup Options
 
-2. **Run the complete setup:**
-   ```bash
-   npm run setup
-   ```
-   This will:
-   - Install all dependencies
-   - Create your `.env` file interactively
-   - Generate Prisma client
-   - Set up the database
+#### Option 1: Automated Setup (Recommended)
 
-3. **Start with Docker:**
-   ```bash
-   npm run docker:setup
-   ```
-   This will:
-   - Build Docker images
-   - Start PostgreSQL and the backend
-   - Run database migrations
-   - Start the application
+**Complete setup in one command:**
+```bash
+npm run setup
+```
 
-4. **Access the application:**
-   - Backend API: `http://localhost:3000`
-   - Frontend: `http://localhost:3000` (static files served)
-   - Prisma Studio: `npm run prisma:studio` (database GUI)
+This runs:
+1. `npm run setup:install` - Installs dependencies
+2. `npm run setup:env` - Creates .env from .env.example
+3. `npm run setup:db` - Generates Prisma client & prepares migrations
+4. `npm run setup:verify` - Verifies setup (29 automated checks)
+
+**Then start with Docker:**
+```bash
+npm run docker:setup
+```
+
+#### Option 2: Interactive Configuration
+
+If you need custom configuration:
+```bash
+npm install
+npm run setup:env:interactive  # Prompts for custom values
+npm run prisma:generate
+npm run prisma:migrate
+npm start
+```
 
 ### Option 2: Manual Setup with Local PostgreSQL
 
@@ -353,36 +388,38 @@ npm test -- tests/case-management.test.js
 
 ## 🔍 Troubleshooting
 
-### Database Connection Issues
-
-**Problem**: Cannot connect to PostgreSQL
-```
-Error: P1001: Can't reach database server
+**Quick diagnosis:**
+```bash
+npm run setup:verify
 ```
 
-**Solution**:
-1. Check PostgreSQL is running: `pg_isready`
-2. Verify DATABASE_URL in `.env`
-3. Check PostgreSQL logs
-4. For Docker: `docker-compose logs postgres`
+This runs 29 automated checks to identify issues.
 
-### Prisma Client Issues
+### Common Issues
 
-**Problem**: `@prisma/client` not found
+**Setup incomplete:**
+```bash
+npm run setup  # Run complete setup
+```
 
-**Solution**:
+**Database connection fails:**
+```bash
+# For Docker
+docker-compose up -d postgres
+docker-compose logs postgres
+
+# For local PostgreSQL
+pg_isready
+```
+
+**Prisma Client not found:**
 ```bash
 npm run prisma:generate
 ```
 
-### Migration Issues
-
-**Problem**: Migration failed or out of sync
-
-**Solution**:
+**Migration fails:**
 ```bash
-# Reset database (⚠️ deletes all data)
-npm run prisma:reset
+npm run prisma:reset  # ⚠️ Deletes all data
 
 # Or force push schema
 cd backend && npx prisma db push --force-reset
@@ -404,12 +441,28 @@ cd backend && npx prisma db push --force-reset
    taskkill /PID <PID> /F
    ```
 
-## 📖 Additional Documentation
+## 📖 Documentation
 
-- [FEATURES.md](./FEATURES.md) - Detailed feature documentation
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
-- [API_REFERENCE.md](./API_REFERENCE.md) - Complete API reference
-- [FEATURE_SUMMARY.md](./FEATURE_SUMMARY.md) - Feature matrix
+### Setup & Installation
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete setup guide with detailed instructions
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
+- **[QUICK_START.txt](./QUICK_START.txt)** - Quick reference for common commands
+- **[SETUP_VERIFICATION.md](./SETUP_VERIFICATION.md)** - Verification checklist
+- **[ENTERPRISE_SETUP_COMPLETE.md](./ENTERPRISE_SETUP_COMPLETE.md)** - Setup completion summary
+
+### Features & Architecture
+- **[FEATURES.md](./FEATURES.md)** - Detailed feature documentation
+- **[ENTERPRISE_ARCHITECTURE.md](./ENTERPRISE_ARCHITECTURE.md)** - System architecture
+- **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete API reference
+- **[FEATURE_SUMMARY.md](./FEATURE_SUMMARY.md)** - Feature matrix
+
+### Database & Prisma
+- **[MIGRATION_NOTES.md](./MIGRATION_NOTES.md)** - Database migration guide
+- **Prisma Schema:** `backend/prisma/schema.prisma` - Complete database schema
+
+### Development
+- **[TYPESCRIPT_IMPLEMENTATION.md](./TYPESCRIPT_IMPLEMENTATION.md)** - TypeScript setup and usage
+- **[ISSUE_RESOLUTION.md](./ISSUE_RESOLUTION.md)** - Common issues and solutions
 
 ## 🤝 Contributing
 
