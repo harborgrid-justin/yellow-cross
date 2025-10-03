@@ -1,0 +1,369 @@
+/**
+ * ClientMessage Model - Mongoose Schema for Client Communication Portal
+ * Secure messaging between legal team and clients
+ */
+
+const mongoose = require('mongoose');
+
+const clientMessageSchema = new mongoose.Schema({
+  // Message Identification
+  messageId: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
+  },
+  
+  // Message Type
+  messageType: {
+    type: String,
+    enum: ['Message', 'Document Request', 'Status Update', 'Appointment', 'Payment Request', 'System'],
+    default: 'Message',
+    index: true
+  },
+  
+  // Message Content
+  subject: {
+    type: String,
+    trim: true,
+    maxlength: 200
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 10000
+  },
+  
+  // Sender Information
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'senderModel'
+  },
+  senderModel: {
+    type: String,
+    enum: ['User', 'Client'],
+    required: true
+  },
+  senderName: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  senderType: {
+    type: String,
+    enum: ['Attorney', 'Staff', 'Client', 'System'],
+    required: true,
+    index: true
+  },
+  
+  // Recipient Information
+  recipientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'recipientModel'
+  },
+  recipientModel: {
+    type: String,
+    enum: ['User', 'Client'],
+    required: true
+  },
+  recipientName: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  recipientType: {
+    type: String,
+    enum: ['Attorney', 'Staff', 'Client'],
+    required: true
+  },
+  
+  // Case/Matter Association
+  caseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Case',
+    required: true,
+    index: true
+  },
+  caseNumber: {
+    type: String,
+    required: true,
+    index: true
+  },
+  
+  // Client Information
+  clientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Client',
+    required: true,
+    index: true
+  },
+  clientName: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  
+  // Threading
+  threadId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ClientMessage',
+    index: true
+  },
+  parentMessageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ClientMessage'
+  },
+  isThreadStarter: {
+    type: Boolean,
+    default: true
+  },
+  replyCount: {
+    type: Number,
+    default: 0
+  },
+  
+  // Status & Tracking
+  status: {
+    type: String,
+    enum: ['Sent', 'Delivered', 'Read', 'Archived', 'Deleted'],
+    default: 'Sent',
+    index: true
+  },
+  isRead: {
+    type: Boolean,
+    default: false
+  },
+  readAt: Date,
+  
+  // Priority
+  priority: {
+    type: String,
+    enum: ['Low', 'Normal', 'High', 'Urgent'],
+    default: 'Normal'
+  },
+  requiresResponse: {
+    type: Boolean,
+    default: false
+  },
+  responseDeadline: Date,
+  
+  // Document Sharing
+  sharedDocuments: [{
+    documentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Document'
+    },
+    documentName: String,
+    sharedAt: {
+      type: Date,
+      default: Date.now
+    },
+    accessExpiry: Date
+  }],
+  
+  // File Attachments
+  attachments: [{
+    fileId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'SharedFile'
+    },
+    filename: String,
+    fileType: String,
+    fileSize: Number,
+    storagePath: String,
+    uploadedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  hasAttachments: {
+    type: Boolean,
+    default: false
+  },
+  
+  // Appointment Booking (for messageType: 'Appointment')
+  appointment: {
+    proposedDate: Date,
+    proposedTime: String,
+    duration: Number,
+    location: String,
+    meetingType: {
+      type: String,
+      enum: ['In Person', 'Video Conference', 'Phone Call']
+    },
+    status: {
+      type: String,
+      enum: ['Proposed', 'Confirmed', 'Declined', 'Rescheduled', 'Cancelled']
+    },
+    confirmedDate: Date,
+    confirmedBy: String
+  },
+  
+  // Payment Request (for messageType: 'Payment Request')
+  paymentRequest: {
+    amount: Number,
+    currency: {
+      type: String,
+      default: 'USD'
+    },
+    description: String,
+    dueDate: Date,
+    paymentMethod: String,
+    status: {
+      type: String,
+      enum: ['Pending', 'Paid', 'Overdue', 'Cancelled']
+    },
+    paidAt: Date,
+    transactionId: String
+  },
+  
+  // Security & Compliance
+  isEncrypted: {
+    type: Boolean,
+    default: true
+  },
+  isConfidential: {
+    type: Boolean,
+    default: false
+  },
+  
+  // Portal Settings
+  portalSettings: {
+    notifyByEmail: {
+      type: Boolean,
+      default: true
+    },
+    notifyBySMS: {
+      type: Boolean,
+      default: false
+    },
+    allowClientReply: {
+      type: Boolean,
+      default: true
+    }
+  },
+  
+  // Notifications
+  emailNotificationSent: {
+    type: Boolean,
+    default: false
+  },
+  emailNotificationSentAt: Date,
+  smsNotificationSent: {
+    type: Boolean,
+    default: false
+  },
+  smsNotificationSentAt: Date,
+  
+  // Tags & Organization
+  tags: [String],
+  category: String,
+  
+  // Auto-responses & Templates
+  isAutoGenerated: {
+    type: Boolean,
+    default: false
+  },
+  templateId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CommunicationTemplate'
+  },
+  templateName: String,
+  
+  // Audit Trail
+  createdBy: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    index: true
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  deletedBy: String,
+  deletedAt: Date
+}, {
+  timestamps: true
+});
+
+// Indexes for performance
+clientMessageSchema.index({ clientId: 1, createdAt: -1 });
+clientMessageSchema.index({ caseId: 1, createdAt: -1 });
+clientMessageSchema.index({ senderId: 1, senderModel: 1 });
+clientMessageSchema.index({ recipientId: 1, recipientModel: 1 });
+clientMessageSchema.index({ threadId: 1, createdAt: 1 });
+clientMessageSchema.index({ status: 1, isRead: 1 });
+
+// Static method: Find messages for client
+clientMessageSchema.statics.findByClient = function(clientId) {
+  return this.find({
+    clientId,
+    status: { $ne: 'Deleted' }
+  }).sort({ createdAt: -1 });
+};
+
+// Static method: Find messages for case
+clientMessageSchema.statics.findByCase = function(caseId) {
+  return this.find({
+    caseId,
+    status: { $ne: 'Deleted' }
+  }).sort({ createdAt: -1 });
+};
+
+// Static method: Find unread messages for client
+clientMessageSchema.statics.findUnreadByClient = function(clientId) {
+  return this.find({
+    recipientId: clientId,
+    recipientModel: 'Client',
+    isRead: false,
+    status: { $ne: 'Deleted' }
+  }).sort({ createdAt: -1 });
+};
+
+// Static method: Find messages requiring response
+clientMessageSchema.statics.findRequiringResponse = function() {
+  return this.find({
+    requiresResponse: true,
+    status: { $in: ['Sent', 'Delivered', 'Read'] },
+    responseDeadline: { $gte: new Date() }
+  }).sort({ responseDeadline: 1 });
+};
+
+// Instance method: Mark as read
+clientMessageSchema.methods.markAsRead = function() {
+  this.isRead = true;
+  this.status = 'Read';
+  this.readAt = new Date();
+  return this.save();
+};
+
+// Instance method: Add document
+clientMessageSchema.methods.addDocument = function(documentId, documentName, accessExpiry) {
+  this.sharedDocuments.push({
+    documentId,
+    documentName,
+    sharedAt: new Date(),
+    accessExpiry
+  });
+  return this.save();
+};
+
+// Instance method: Confirm appointment
+clientMessageSchema.methods.confirmAppointment = function(confirmedDate, confirmedBy) {
+  if (this.appointment) {
+    this.appointment.status = 'Confirmed';
+    this.appointment.confirmedDate = confirmedDate;
+    this.appointment.confirmedBy = confirmedBy;
+  }
+  return this.save();
+};
+
+const ClientMessage = mongoose.model('ClientMessage', clientMessageSchema);
+
+module.exports = ClientMessage;
