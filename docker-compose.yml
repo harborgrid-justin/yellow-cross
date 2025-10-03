@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: yellow-cross-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-yellowcross}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-yellowcross_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-yellowcross}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - yellow-cross-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yellowcross"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yellow-cross-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PORT:-3000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-yellowcross}:${POSTGRES_PASSWORD:-yellowcross_dev}@postgres:5432/${POSTGRES_DB:-yellowcross}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-this}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-24h}
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - ./backend:/app/backend
+      - /app/node_modules
+    networks:
+      - yellow-cross-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+
+networks:
+  yellow-cross-network:
+    driver: bridge

@@ -14,10 +14,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 
-// Connect to MongoDB (optional - will not fail if connection fails)
+// Connect to PostgreSQL via Prisma (optional - will not fail if connection fails)
 if (process.env.NODE_ENV !== 'test') {
   connectDB().catch(err => {
-    console.log('MongoDB connection failed, continuing without database:', err.message);
+    console.log('PostgreSQL connection failed, continuing without database:', err.message);
   });
 }
 
@@ -37,8 +37,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve static files from frontend directory
+app.use(express.static(path.join(__dirname, '../../frontend')));
 
 // Rate limiting
 const limiter = rateLimit({

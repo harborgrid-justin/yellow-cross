@@ -1,0 +1,413 @@
+// This is your Prisma schema file for Yellow Cross Enterprise Law Firm Platform
+// PostgreSQL database schema with all models
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Case Management
+model Case {
+  id              String   @id @default(uuid())
+  caseNumber      String   @unique
+  title           String
+  description     String?
+  clientName      String
+  clientId        String?
+  matterType      String
+  practiceArea    String
+  caseType        String?
+  priority        String   @default("Medium")
+  tags            String[]
+  status          String   @default("Open")
+  statusHistory   Json?
+  assignedTo      String?
+  assignmentHistory Json?
+  filingDate      DateTime?
+  openedDate      DateTime @default(now())
+  closedDate      DateTime?
+  dueDate         DateTime?
+  nextHearingDate DateTime?
+  estimatedValue  Float?
+  billingStatus   String   @default("Not Started")
+  outcome         String?
+  resolution      String?
+  archived        Boolean  @default(false)
+  archivedDate    DateTime?
+  archivedBy      String?
+  retentionDate   DateTime?
+  canReopen       Boolean  @default(true)
+  createdBy       String
+  lastModifiedBy  String?
+  customFields    Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  notes           CaseNote[]
+  timelineEvents  CaseTimelineEvent[]
+  documents       Document[]
+  tasks           Task[]
+
+  @@index([status])
+  @@index([caseNumber])
+  @@index([assignedTo])
+  @@index([archived])
+}
+
+model CaseNote {
+  id        String   @id @default(uuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  noteType  String
+  content   String
+  author    String
+  visibility String  @default("Team Only")
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([caseId])
+}
+
+model CaseTimelineEvent {
+  id          String   @id @default(uuid())
+  caseId      String
+  case        Case     @relation(fields: [caseId], references: [id])
+  eventType   String
+  title       String
+  description String?
+  eventDate   DateTime
+  createdBy   String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventDate])
+}
+
+// Document Management
+model Document {
+  id                String   @id @default(uuid())
+  documentNumber    String   @unique
+  filename          String
+  title             String?
+  description       String?
+  fileType          String
+  fileSize          Int
+  mimeType          String
+  storagePath       String?
+  cloudUrl          String?
+  checksum          String?
+  folderId          String?
+  folderPath        String   @default("/")
+  category          String   @default("Other")
+  tags              String[]
+  version           Int      @default(1)
+  isLatestVersion   Boolean  @default(true)
+  parentVersionId   String?
+  versionHistory    Json?
+  customMetadata    Json?
+  extractedText     String?
+  pageCount         Int?
+  caseId            String?
+  case              Case?    @relation(fields: [caseId], references: [id])
+  caseNumber        String?
+  clientId          String?
+  relatedDocuments  String[]
+  visibility        String   @default("Team Only")
+  permissions       Json?
+  encrypted         Boolean  @default(false)
+  encryptionKey     String?
+  watermarked       Boolean  @default(false)
+  accessLog         Json?
+  isLocked          Boolean  @default(false)
+  lockedBy          String?
+  lockedAt          DateTime?
+  checkoutBy        String?
+  checkoutAt        DateTime?
+  status            String   @default("Active")
+  isFavorite        Boolean  @default(false)
+  isPinned          Boolean  @default(false)
+  isTemplate        Boolean  @default(false)
+  templateCategory  String?
+  templateVariables Json?
+  practiceArea      String?
+  createdBy         String
+  lastModifiedBy    String?
+  lastModifiedAt    DateTime?
+  lastAccessedAt    DateTime?
+  archivedBy        String?
+  archivedAt        DateTime?
+  deletedBy         String?
+  deletedAt         DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  versions          DocumentVersion[]
+  reviews           DocumentReview[]
+
+  @@index([documentNumber])
+  @@index([caseId])
+  @@index([category])
+  @@index([status])
+  @@index([isTemplate])
+  @@index([isLatestVersion])
+}
+
+model DocumentVersion {
+  id                String   @id @default(uuid())
+  documentId        String
+  document          Document @relation(fields: [documentId], references: [id])
+  versionNumber     Int
+  changeDescription String?
+  createdBy         String
+  createdAt         DateTime @default(now())
+
+  @@index([documentId])
+}
+
+model DocumentReview {
+  id              String   @id @default(uuid())
+  documentId      String
+  document        Document @relation(fields: [documentId], references: [id])
+  assignedTo      String
+  reviewType      String
+  status          String   @default("Pending")
+  priority        String   @default("Medium")
+  dueDate         DateTime?
+  completedDate   DateTime?
+  reviewNotes     String?
+  reviewDecision  String?
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([documentId])
+  @@index([assignedTo])
+  @@index([status])
+}
+
+// Task & Workflow Management
+model Task {
+  id                    String   @id @default(uuid())
+  taskNumber            String   @unique
+  title                 String
+  description           String?
+  taskType              String   @default("Other")
+  category              String?
+  priority              String   @default("Medium")
+  tags                  String[]
+  status                String   @default("Not Started")
+  completionPercentage  Int      @default(0)
+  statusHistory         Json?
+  assignedTo            String?
+  assignedBy            String?
+  team                  Json?
+  assignmentHistory     Json?
+  createdDate           DateTime @default(now())
+  dueDate               DateTime?
+  startDate             DateTime?
+  completedDate         DateTime?
+  estimatedHours        Float?
+  actualHours           Float?
+  dependsOn             Json?
+  blockedBy             Json?
+  isBlocking            Boolean  @default(false)
+  caseId                String?
+  case                  Case?    @relation(fields: [caseId], references: [id])
+  caseNumber            String?
+  workflowId            String?
+  workflow              Workflow? @relation(fields: [workflowId], references: [id])
+  workflowName          String?
+  parentTaskId          String?
+  subtasks              String[]
+  fromTemplate          Boolean  @default(false)
+  templateId            String?
+  templateName          String?
+  slaEnabled            Boolean  @default(false)
+  slaDueDate            DateTime?
+  slaStatus             String   @default("Not Applicable")
+  isUrgent              Boolean  @default(false)
+  escalationLevel       Int      @default(0)
+  commentCount          Int      @default(0)
+  attachmentCount       Int      @default(0)
+  lastActivityDate      DateTime?
+  checklist             Json?
+  reminders             Json?
+  notifyOnCompletion    Boolean  @default(true)
+  notificationRecipients String[]
+  isRecurring           Boolean  @default(false)
+  recurrencePattern     Json?
+  createdBy             String
+  lastModifiedBy        String?
+  lastModifiedAt        DateTime?
+  completedBy           String?
+  cancelledBy           String?
+  cancelledAt           DateTime?
+  cancellationReason    String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  comments              TaskComment[]
+
+  @@index([taskNumber])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedTo])
+  @@index([caseId])
+  @@index([workflowId])
+  @@index([dueDate])
+}
+
+model TaskComment {
+  id          String   @id @default(uuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id])
+  comment     String
+  author      String
+  visibility  String   @default("Team")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([taskId])
+}
+
+model TaskTemplate {
+  id                String   @id @default(uuid())
+  templateName      String   @unique
+  description       String?
+  category          String?
+  taskType          String
+  defaultPriority   String   @default("Medium")
+  estimatedHours    Float?
+  checklist         Json?
+  tags              String[]
+  practiceArea      String?
+  isActive          Boolean  @default(true)
+  usageCount        Int      @default(0)
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([templateName])
+  @@index([category])
+  @@index([isActive])
+}
+
+model Workflow {
+  id              String   @id @default(uuid())
+  workflowName    String   @unique
+  description     String?
+  category        String?
+  practiceArea    String?
+  status          String   @default("Active")
+  stages          Json?
+  isTemplate      Boolean  @default(false)
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tasks           Task[]
+
+  @@index([workflowName])
+  @@index([status])
+  @@index([isTemplate])
+}
+
+// eDiscovery & Evidence Management
+model Evidence {
+  id                String   @id @default(uuid())
+  evidenceNumber    String   @unique
+  caseId            String
+  title             String
+  description       String?
+  evidenceType      String
+  custodian         String?
+  collectionDate    DateTime
+  collectionMethod  String
+  sourceLocation    String?
+  chainOfCustody    Json?
+  preservationStatus String  @default("Preserved")
+  hashValue         String?
+  fileSize          Int?
+  tags              String[]
+  metadata          Json?
+  status            String   @default("Collected")
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([evidenceNumber])
+  @@index([caseId])
+  @@index([evidenceType])
+}
+
+model PrivilegeLog {
+  id                    String   @id @default(uuid())
+  caseId                String
+  documentId            String?
+  privilegeType         String
+  batesNumber           String?
+  documentDescription   String
+  author                String?
+  recipient             String?
+  dateCreated           DateTime?
+  privilegeBasis        String
+  clawbackProtection    Boolean  @default(true)
+  loggedBy              String
+  reviewedBy            String?
+  reviewDate            DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([privilegeType])
+}
+
+model Production {
+  id              String   @id @default(uuid())
+  productionName  String
+  caseId          String
+  productionType  String
+  startBatesNumber String?
+  endBatesNumber   String?
+  documentCount   Int      @default(0)
+  totalPages      Int      @default(0)
+  format          String   @default("PDF")
+  loadFileGenerated Boolean @default(false)
+  producedTo      String
+  productionDate  DateTime
+  notes           String?
+  documents       Json?
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([productionDate])
+}
+
+model LegalHold {
+  id              String   @id @default(uuid())
+  holdName        String
+  caseId          String
+  description     String?
+  custodians      String[]
+  issueDate       DateTime
+  releaseDate     DateTime?
+  status          String   @default("Active")
+  acknowledgments Json?
+  escalations     Json?
+  issuedBy        String
+  releasedBy      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([status])
+}
