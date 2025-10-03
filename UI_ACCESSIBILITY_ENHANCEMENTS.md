@@ -193,25 +193,25 @@ This document details the comprehensive accessibility and performance enhancemen
 
 ### Files Modified
 
-1. **public/index.html**
+1. **frontend/index.html**
    - Added skip navigation link
    - ARIA roles and labels throughout
    - Meta description for SEO
    - Semantic HTML structure
 
-2. **public/login.html**
+2. **frontend/login.html**
    - Accessibility attributes on form elements
    - Autocomplete attributes
    - Skip link
    - Form validation hints
 
-3. **public/register.html**
+3. **frontend/register.html**
    - Enhanced form accessibility
    - Password strength indicator
    - ARIA descriptions
    - Autocomplete attributes
 
-4. **public/css/styles.css**
+4. **frontend/css/styles.css**
    - Skip link styles
    - Focus indicator styles
    - Visually-hidden class
@@ -219,7 +219,7 @@ This document details the comprehensive accessibility and performance enhancemen
    - Touch target sizing
    - Form hint styling
 
-5. **public/js/app.js**
+5. **frontend/js/app.js**
    - Debounce function for search
    - Lazy loading support
    - Keyboard navigation handlers
@@ -227,7 +227,7 @@ This document details the comprehensive accessibility and performance enhancemen
    - Hamburger menu with keyboard support
    - Focus management
 
-6. **public/js/auth.js**
+6. **frontend/js/auth.js**
    - Alert accessibility
    - Form focus management
    - Skip link handler

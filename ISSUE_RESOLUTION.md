@@ -391,7 +391,7 @@ $ curl http://localhost:3000/
 ```
 yellow-cross/
 ├── src/              # Mixed backend code
-├── public/           # Frontend files
+├── frontend/           # Frontend files
 ├── tests/            # Tests
 ├── package.json
 └── README.md

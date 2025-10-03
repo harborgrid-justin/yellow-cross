@@ -26,7 +26,7 @@
 ✅ All layouts tested and working
 ```
 
-**Files:** `public/css/styles.css` (lines 605-700)
+**Files:** `frontend/css/styles.css` (lines 605-700)
 
 ### 2. Accessibility (WCAG 2.1) ✅ COMPLETE
 
@@ -47,12 +47,12 @@
 **WCAG 2.1 Level AA Compliance: 19/19 criteria met**
 
 **Files:**
-- `public/index.html` (ARIA throughout)
-- `public/login.html` (accessible forms)
-- `public/register.html` (form hints)
-- `public/css/styles.css` (focus indicators, skip link)
-- `public/js/app.js` (keyboard handlers, screen reader support)
-- `public/js/auth.js` (alert accessibility)
+- `frontend/index.html` (ARIA throughout)
+- `frontend/login.html` (accessible forms)
+- `frontend/register.html` (form hints)
+- `frontend/css/styles.css` (focus indicators, skip link)
+- `frontend/js/app.js` (keyboard handlers, screen reader support)
+- `frontend/js/auth.js` (alert accessibility)
 
 ### 3. Performance Optimization ✅ COMPLETE
 
@@ -69,8 +69,8 @@
 ```
 
 **Files:**
-- `public/js/app.js` (debounce function, lazy loading)
-- `public/css/styles.css` (optimized selectors, variables)
+- `frontend/js/app.js` (debounce function, lazy loading)
+- `frontend/css/styles.css` (optimized selectors, variables)
 - `src/index.js` (static file caching)
 
 ---
