@@ -443,26 +443,32 @@ cd backend && npx prisma db push --force-reset
 
 ## 📖 Documentation
 
-### Setup & Installation
-- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete setup guide with detailed instructions
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
+### 🚀 Quick Start
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete setup guide (recommended starting point)
 - **[QUICK_START.txt](./QUICK_START.txt)** - Quick reference for common commands
+- **[COMMANDS_REFERENCE.md](./COMMANDS_REFERENCE.md)** - All npm commands explained
+
+### 🔧 Setup & Installation
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Detailed setup instructions
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
 - **[SETUP_VERIFICATION.md](./SETUP_VERIFICATION.md)** - Verification checklist
 - **[ENTERPRISE_SETUP_COMPLETE.md](./ENTERPRISE_SETUP_COMPLETE.md)** - Setup completion summary
+- **[ISSUE_RESOLUTION.md](./ISSUE_RESOLUTION.md)** - Common issues and solutions
 
-### Features & Architecture
+### 🗄️ Database & Prisma
+- **[PRISMA_GUIDE.md](./PRISMA_GUIDE.md)** - Complete Prisma ORM guide
+- **[MIGRATION_NOTES.md](./MIGRATION_NOTES.md)** - Database migration guide
+- **Prisma Schema:** `backend/prisma/schema.prisma` - Complete database schema (15+ models)
+
+### 🏗️ Features & Architecture
 - **[FEATURES.md](./FEATURES.md)** - Detailed feature documentation
 - **[ENTERPRISE_ARCHITECTURE.md](./ENTERPRISE_ARCHITECTURE.md)** - System architecture
 - **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete API reference
 - **[FEATURE_SUMMARY.md](./FEATURE_SUMMARY.md)** - Feature matrix
 
-### Database & Prisma
-- **[MIGRATION_NOTES.md](./MIGRATION_NOTES.md)** - Database migration guide
-- **Prisma Schema:** `backend/prisma/schema.prisma` - Complete database schema
-
-### Development
+### 💻 Development
 - **[TYPESCRIPT_IMPLEMENTATION.md](./TYPESCRIPT_IMPLEMENTATION.md)** - TypeScript setup and usage
-- **[ISSUE_RESOLUTION.md](./ISSUE_RESOLUTION.md)** - Common issues and solutions
+- **[COMMANDS_REFERENCE.md](./COMMANDS_REFERENCE.md)** - All available commands
 
 ## 🤝 Contributing
 

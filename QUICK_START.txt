@@ -12,41 +12,52 @@
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🚀 OPTION 1: DOCKER SETUP (RECOMMENDED)
+🚀 SUPER QUICK START (100% AUTOMATED!)
 
-Step 1: Clone and Install
+Step 1: Clone Repository
   git clone https://github.com/harborgrid-justin/yellow-cross.git
   cd yellow-cross
-  npm install
 
-Step 2: One Command Setup
-  npm run docker:setup
+Step 2: Run Setup (ONE COMMAND!)
+  npm run setup
   
   This will:
-  - Build Docker images
-  - Start PostgreSQL container
-  - Start backend container
-  - Run database migrations
-  - Make everything ready!
+  - Install all dependencies ✅
+  - Create .env configuration ✅
+  - Generate Prisma client ✅
+  - Prepare database migrations ✅
+  - Verify setup (29 checks) ✅
 
-Step 3: Access
+Step 3: Start Application
+  npm run docker:setup    # With Docker (recommended)
+  # OR
+  npm start               # Without Docker (needs PostgreSQL running)
+
+Step 4: Access
   🌐 Frontend:     http://localhost:3000
   💚 Health Check: http://localhost:3000/health
   🗄️  Database GUI: npm run prisma:studio
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📦 OPTION 2: MANUAL SETUP
+📦 DETAILED OPTIONS
 
-Step 1: Install PostgreSQL
+OPTION 1: Docker Setup (Recommended)
+  git clone https://github.com/harborgrid-justin/yellow-cross.git
+  cd yellow-cross
+  npm run setup           # Complete automated setup
+  npm run docker:setup    # Start with Docker
+
+OPTION 2: Manual Setup (Local PostgreSQL)
+  # 1. Install PostgreSQL
   Ubuntu: sudo apt-get install postgresql
   Mac:    brew install postgresql
   Windows: Download from postgresql.org
-
-Step 2: Create Database
+  
+  # 2. Create Database
   createdb yellowcross
-
-Step 3: Run Setup
+  
+  # 3. Run Setup
   npm run setup
   
   This will:
@@ -86,22 +97,12 @@ Docker:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📚 DOCUMENTATION
-
-README.md                      → Main setup guide
-ENTERPRISE_SETUP_COMPLETE.md   → Complete setup summary
-ISSUE_RESOLUTION.md            → Detailed issue resolution
-SETUP_VERIFICATION.md          → Verification checklist
-MIGRATION_NOTES.md             → Database migration guide
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 🔍 VERIFICATION
 
-Run tests:
-  npm test -- backend/tests/setup.test.js
+Automated verification:
+  npm run setup:verify
   
-Expected: ✅ 23/23 tests passing
+Expected: ✅ 29/29 checks passed
 
 Check server:
   npm start
@@ -112,6 +113,34 @@ Check health:
   curl http://localhost:3000/health
   
 Expected: {"status":"healthy","timestamp":"..."}
+
+Run tests:
+  npm test -- backend/tests/setup.test.js
+  
+Expected: ✅ 20/23 tests passing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION (NEW & IMPROVED!)
+
+Quick Start:
+  SETUP_GUIDE.md             → Complete setup guide (START HERE!)
+  QUICK_START.txt            → This file - quick reference
+  COMMANDS_REFERENCE.md      → All npm commands explained
+
+Setup & Troubleshooting:
+  TROUBLESHOOTING.md         → Comprehensive troubleshooting
+  SETUP_VERIFICATION.md      → Verification checklist
+  ISSUE_RESOLUTION.md        → Issue resolution
+
+Database:
+  PRISMA_GUIDE.md            → Complete Prisma guide
+  MIGRATION_NOTES.md         → Database migration guide
+  backend/prisma/schema.prisma → Database schema
+
+Main:
+  README.md                  → Main documentation
+  ENTERPRISE_SETUP_COMPLETE.md → Setup summary
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
