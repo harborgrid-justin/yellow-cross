@@ -1,6 +1,7 @@
 /**
  * TypeScript Implementation Verification Tests
  * Tests that verify TypeScript is properly configured and working
+ * Updated for enterprise-grade React + TypeScript with Vite
  */
 
 const fs = require('fs');
@@ -31,153 +32,146 @@ describe('TypeScript Implementation', () => {
       expect(packageJson.devDependencies).toHaveProperty('typescript');
     });
 
-    test('should have TypeScript build scripts', () => {
+    test('should have TypeScript build and lint scripts', () => {
       const packagePath = path.join(__dirname, '../../package.json');
       const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       
-      expect(packageJson.scripts).toHaveProperty('ts:build');
-      expect(packageJson.scripts).toHaveProperty('ts:watch');
       expect(packageJson.scripts).toHaveProperty('build');
+      expect(packageJson.scripts).toHaveProperty('build:react');
+      expect(packageJson.scripts).toHaveProperty('lint:frontend');
+    });
+
+    test('should have Vite configuration', () => {
+      const vitePath = path.join(__dirname, '../../vite.config.ts');
+      expect(fs.existsSync(vitePath)).toBe(true);
+      
+      const content = fs.readFileSync(vitePath, 'utf8');
+      expect(content).toContain('vite');
+      expect(content).toContain('react');
+    });
+
+    test('should have frontend tsconfig', () => {
+      const tsconfigPath = path.join(__dirname, '../../frontend/tsconfig.json');
+      expect(fs.existsSync(tsconfigPath)).toBe(true);
     });
   });
 
-  describe('TypeScript Source Files', () => {
-    test('should have frontend/ts directory', () => {
-      const tsDir = path.join(__dirname, '../../frontend/ts');
-      expect(fs.existsSync(tsDir)).toBe(true);
-      expect(fs.statSync(tsDir).isDirectory()).toBe(true);
+  describe('Frontend Source Structure', () => {
+    test('should have frontend/src directory', () => {
+      const srcDir = path.join(__dirname, '../../frontend/src');
+      expect(fs.existsSync(srcDir)).toBe(true);
+      expect(fs.statSync(srcDir).isDirectory()).toBe(true);
     });
 
-    test('should have types.ts', () => {
-      const typesPath = path.join(__dirname, '../../frontend/ts/types.ts');
-      expect(fs.existsSync(typesPath)).toBe(true);
+    test('should have app directory', () => {
+      const appDir = path.join(__dirname, '../../frontend/src/app');
+      expect(fs.existsSync(appDir)).toBe(true);
+      expect(fs.statSync(appDir).isDirectory()).toBe(true);
     });
 
-    test('should have app.ts', () => {
-      const appPath = path.join(__dirname, '../../frontend/ts/app.ts');
+    test('should have features directory', () => {
+      const featuresDir = path.join(__dirname, '../../frontend/src/features');
+      expect(fs.existsSync(featuresDir)).toBe(true);
+      expect(fs.statSync(featuresDir).isDirectory()).toBe(true);
+    });
+
+    test('should have shared directory', () => {
+      const sharedDir = path.join(__dirname, '../../frontend/src/shared');
+      expect(fs.existsSync(sharedDir)).toBe(true);
+      expect(fs.statSync(sharedDir).isDirectory()).toBe(true);
+    });
+  });
+
+  describe('Core TypeScript Files', () => {
+    test('should have App.tsx', () => {
+      const appPath = path.join(__dirname, '../../frontend/src/app/App.tsx');
       expect(fs.existsSync(appPath)).toBe(true);
       
       const content = fs.readFileSync(appPath, 'utf8');
-      expect(content).toContain('import type {');
-      expect(content).toContain('Feature,');
-      expect(content).toContain('async function fetchAPI');
+      expect(content).toContain('import React from');
+      expect(content).toContain('Router');
     });
 
-    test('should have auth.ts', () => {
-      const authPath = path.join(__dirname, '../../frontend/ts/auth.ts');
-      expect(fs.existsSync(authPath)).toBe(true);
+    test('should have main.tsx', () => {
+      const mainPath = path.join(__dirname, '../../frontend/src/app/main.tsx');
+      expect(fs.existsSync(mainPath)).toBe(true);
       
-      const content = fs.readFileSync(authPath, 'utf8');
-      expect(content).toContain('async function handleLogin');
-      expect(content).toContain('async function handleRegister');
+      const content = fs.readFileSync(mainPath, 'utf8');
+      expect(content).toContain('ReactDOM');
     });
 
-    test('should have cases.ts', () => {
-      const casesPath = path.join(__dirname, '../../frontend/ts/cases.ts');
-      expect(fs.existsSync(casesPath)).toBe(true);
+    test('should have shared types', () => {
+      const typesPath = path.join(__dirname, '../../frontend/src/shared/types/index.ts');
+      expect(fs.existsSync(typesPath)).toBe(true);
       
-      const content = fs.readFileSync(casesPath, 'utf8');
-      expect(content).toContain('import type {');
-      expect(content).toContain('Case,');
-      expect(content).toContain('CaseFilters');
-      expect(content).toContain('async function loadCases');
-    });
-  });
-
-  describe('Compiled JavaScript Files', () => {
-    test('should have compiled app.js', () => {
-      const appJsPath = path.join(__dirname, '../../frontend/js/app.js');
-      expect(fs.existsSync(appJsPath)).toBe(true);
+      const content = fs.readFileSync(typesPath, 'utf8');
+      expect(content).toContain('export interface');
     });
 
-    test('should have compiled auth.js', () => {
-      const authJsPath = path.join(__dirname, '../../frontend/js/auth.js');
-      expect(fs.existsSync(authJsPath)).toBe(true);
-    });
-
-    test('should have compiled cases.js', () => {
-      const casesJsPath = path.join(__dirname, '../../frontend/js/cases.js');
-      expect(fs.existsSync(casesJsPath)).toBe(true);
-    });
-
-    test('should have declaration files', () => {
-      const appDtsPath = path.join(__dirname, '../../frontend/js/app.d.ts');
-      const authDtsPath = path.join(__dirname, '../../frontend/js/auth.d.ts');
-      const casesDtsPath = path.join(__dirname, '../../frontend/js/cases.d.ts');
+    test('should have API client', () => {
+      const apiPath = path.join(__dirname, '../../frontend/src/shared/api/client.ts');
+      expect(fs.existsSync(apiPath)).toBe(true);
       
-      expect(fs.existsSync(appDtsPath)).toBe(true);
-      expect(fs.existsSync(authDtsPath)).toBe(true);
-      expect(fs.existsSync(casesDtsPath)).toBe(true);
+      const content = fs.readFileSync(apiPath, 'utf8');
+      expect(content).toContain('export');
+      expect(content).toContain('api');
     });
 
-    test('should have source maps', () => {
-      const appMapPath = path.join(__dirname, '../../frontend/js/app.js.map');
-      const authMapPath = path.join(__dirname, '../../frontend/js/auth.js.map');
-      const casesMapPath = path.join(__dirname, '../../frontend/js/cases.js.map');
+    test('should have vite-env type definitions', () => {
+      const envPath = path.join(__dirname, '../../frontend/src/vite-env.d.ts');
+      expect(fs.existsSync(envPath)).toBe(true);
       
-      expect(fs.existsSync(appMapPath)).toBe(true);
-      expect(fs.existsSync(authMapPath)).toBe(true);
-      expect(fs.existsSync(casesMapPath)).toBe(true);
+      const content = fs.readFileSync(envPath, 'utf8');
+      expect(content).toContain('ImportMeta');
     });
   });
 
   describe('TypeScript Features', () => {
-    test('should have type definitions', () => {
-      const typesPath = path.join(__dirname, '../../frontend/ts/types.ts');
-      const content = fs.readFileSync(typesPath, 'utf8');
+    test('should have feature pages', () => {
+      const featuresDir = path.join(__dirname, '../../frontend/src/features');
+      const features = fs.readdirSync(featuresDir);
       
-      expect(content).toContain('export interface Feature');
-      expect(content).toContain('export interface PlatformInfo');
-      expect(content).toContain('export interface HealthStatus');
-      expect(content).toContain('export type HTTPMethod');
-      expect(content).toContain('export interface Case');
-      expect(content).toContain('export interface CaseFilters');
-      expect(content).toContain('export type CaseStatus');
-      expect(content).toContain('export type CasePriority');
+      // Should have multiple features
+      expect(features.length).toBeGreaterThan(10);
+      
+      // Each feature should have at least one .tsx file
+      features.forEach(feature => {
+        const featurePath = path.join(featuresDir, feature);
+        if (fs.statSync(featurePath).isDirectory()) {
+          const files = fs.readdirSync(featurePath);
+          const tsxFiles = files.filter(f => f.endsWith('.tsx'));
+          expect(tsxFiles.length).toBeGreaterThan(0);
+        }
+      });
     });
 
-    test('should have typed functions in app.ts', () => {
-      const appPath = path.join(__dirname, '../../frontend/ts/app.ts');
-      const content = fs.readFileSync(appPath, 'utf8');
+    test('should have Layout component', () => {
+      const layoutPath = path.join(__dirname, '../../frontend/src/shared/components/Layout.tsx');
+      expect(fs.existsSync(layoutPath)).toBe(true);
       
-      // Check for type annotations
-      expect(content).toContain(': Promise<void>');
-      expect(content).toContain(': HTMLElement');
-      expect(content).toContain(': string');
-      expect(content).toContain('async function');
-    });
-
-    test('should have typed event handlers in auth.ts', () => {
-      const authPath = path.join(__dirname, '../../frontend/ts/auth.ts');
-      const content = fs.readFileSync(authPath, 'utf8');
-      
-      // Check for type annotations
-      expect(content).toContain('(e: Event)');
-      expect(content).toContain(': Promise<void>');
-      expect(content).toContain('AlertType');
-    });
-
-    test('should have typed case management in cases.ts', () => {
-      const casesPath = path.join(__dirname, '../../frontend/ts/cases.ts');
-      const content = fs.readFileSync(casesPath, 'utf8');
-      
-      // Check for type annotations
-      expect(content).toContain('cases: Case[]');
-      expect(content).toContain('filters: CaseFilters');
-      expect(content).toContain(': Promise<void>');
-      expect(content).toContain('function displayCases(casesToDisplay: Case[])');
-      expect(content).toContain('function filterCases(casesToFilter: Case[])');
+      const content = fs.readFileSync(layoutPath, 'utf8');
+      expect(content).toContain('React.FC');
+      expect(content).toContain('Outlet');
     });
   });
 
   describe('Documentation', () => {
-    test('should have TypeScript implementation documentation', () => {
-      const docPath = path.join(__dirname, '../../TYPESCRIPT_IMPLEMENTATION.md');
-      expect(fs.existsSync(docPath)).toBe(true);
+    test('should have frontend README', () => {
+      const readmePath = path.join(__dirname, '../../frontend/README.md');
+      expect(fs.existsSync(readmePath)).toBe(true);
       
-      const content = fs.readFileSync(docPath, 'utf8');
-      expect(content).toContain('TypeScript Implementation');
-      expect(content).toContain('100% complete');
+      const content = fs.readFileSync(readmePath, 'utf8');
+      expect(content).toContain('Frontend');
+      expect(content).toContain('Architecture');
+    });
+
+    test('should have enterprise architecture documentation', () => {
+      const archPath = path.join(__dirname, '../../ENTERPRISE_ARCHITECTURE.md');
+      expect(fs.existsSync(archPath)).toBe(true);
+      
+      const content = fs.readFileSync(archPath, 'utf8');
+      expect(content).toContain('Enterprise');
+      expect(content).toContain('Google');
     });
   });
 });
