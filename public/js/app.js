@@ -3,6 +3,36 @@
 // API Base URL
 const API_BASE = window.location.origin;
 
+// Performance: Debounce function for search optimization
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Performance: Lazy load images
+function lazyLoadImages() {
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                observer.unobserve(img);
+            }
+        });
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+}
+
 // Feature data with icons and categories
 const featuresData = [
     {
@@ -137,6 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // Initialize application
 async function initializeApp() {
     try {
+        // Performance: Initialize lazy loading
+        lazyLoadImages();
+        
         // Load platform info
         const platformInfo = await fetchAPI('/api');
         updatePlatformStats(platformInfo);
@@ -145,6 +178,18 @@ async function initializeApp() {
         loadFeatures();
         loadDashboard();
         loadAPIEndpoints();
+        
+        // Accessibility: Set focus on skip link when page loads
+        const skipLink = document.querySelector('.skip-link');
+        if (skipLink) {
+            skipLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(skipLink.getAttribute('href'));
+                if (target) {
+                    target.focus();
+                }
+            });
+        }
         
     } catch (error) {
         console.error('Error initializing app:', error);
@@ -279,16 +324,30 @@ function loadDashboard() {
         const card = document.createElement('div');
         card.className = 'dashboard-card';
         card.dataset.category = feature.category;
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'article');
+        card.setAttribute('aria-label', `${feature.name}. ${feature.description}. API endpoint: ${feature.endpoint}. Press Enter to test API`);
+        
         card.innerHTML = `
-            <h4><i class="fas ${feature.icon}"></i> ${feature.name}</h4>
+            <h4><i class="fas ${feature.icon}" aria-hidden="true"></i> ${feature.name}</h4>
             <p>${feature.description}</p>
             <span class="endpoint-badge">${feature.endpoint}</span>
         `;
         
-        card.addEventListener('click', () => {
+        const clickHandler = () => {
             window.location.hash = 'api';
             document.getElementById('api-url').value = feature.endpoint;
             sendAPIRequest();
+        };
+        
+        card.addEventListener('click', clickHandler);
+        
+        // Keyboard navigation
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                clickHandler();
+            }
         });
         
         dashboardGrid.appendChild(card);
@@ -317,13 +376,28 @@ function addAPIEndpoint(container, endpoint, label) {
     div.className = 'api-endpoint';
     div.textContent = endpoint;
     div.title = label;
+    div.setAttribute('role', 'menuitem');
+    div.setAttribute('tabindex', '0');
+    div.setAttribute('aria-label', `${label} - ${endpoint}`);
     
-    div.addEventListener('click', () => {
+    const clickHandler = () => {
         document.querySelectorAll('.api-endpoint').forEach(el => {
             el.classList.remove('active');
+            el.setAttribute('aria-selected', 'false');
         });
         div.classList.add('active');
+        div.setAttribute('aria-selected', 'true');
         document.getElementById('api-url').value = endpoint;
+    };
+    
+    div.addEventListener('click', clickHandler);
+    
+    // Keyboard navigation
+    div.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            clickHandler();
+        }
     });
     
     container.appendChild(div);
@@ -391,16 +465,6 @@ async function checkSystemStatus() {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Mobile menu toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-    }
-    
     // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -418,11 +482,17 @@ function setupEventListeners() {
         sendButton.addEventListener('click', sendAPIRequest);
     }
     
-    // Search features
+    // Search features with debouncing for performance
     const searchInput = document.getElementById('search-features');
     if (searchInput) {
+        const debouncedSearch = debounce((value) => {
+            filterDashboard(value, null);
+            // Announce results to screen readers
+            announceSearchResults();
+        }, 300);
+        
         searchInput.addEventListener('input', (e) => {
-            filterDashboard(e.target.value, null);
+            debouncedSearch(e.target.value);
         });
     }
     
@@ -443,6 +513,47 @@ function setupEventListeners() {
             }
         });
     }
+    
+    // Hamburger menu for mobile navigation
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    if (hamburger && navMenu) {
+        const toggleMenu = () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+            navMenu.style.display = navMenu.classList.contains('active') ? 'flex' : '';
+        };
+        
+        hamburger.addEventListener('click', toggleMenu);
+        
+        // Keyboard support for hamburger
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMenu();
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.setAttribute('aria-expanded', 'false');
+                navMenu.classList.remove('active');
+                navMenu.style.display = '';
+            }
+        });
+        
+        // Escape key closes menu
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                hamburger.setAttribute('aria-expanded', 'false');
+                navMenu.classList.remove('active');
+                navMenu.style.display = '';
+                hamburger.focus();
+            }
+        });
+    }
 }
 
 // Filter dashboard
@@ -451,6 +562,7 @@ function filterDashboard(searchTerm, category) {
     const search = searchTerm?.toLowerCase() || document.getElementById('search-features')?.value.toLowerCase() || '';
     const cat = category || document.getElementById('filter-category')?.value || 'all';
     
+    let visibleCount = 0;
     cards.forEach(card => {
         const text = card.textContent.toLowerCase();
         const cardCategory = card.dataset.category;
@@ -458,8 +570,25 @@ function filterDashboard(searchTerm, category) {
         const matchesSearch = !search || text.includes(search);
         const matchesCategory = cat === 'all' || cardCategory === cat;
         
-        card.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+        if (matchesSearch && matchesCategory) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
     });
+    
+    // Store count for accessibility announcements
+    window.lastSearchResultCount = visibleCount;
+}
+
+// Accessibility: Announce search results to screen readers
+function announceSearchResults() {
+    const dashboardGrid = document.getElementById('dashboard-grid');
+    if (dashboardGrid) {
+        const count = window.lastSearchResultCount || 0;
+        dashboardGrid.setAttribute('aria-label', `Feature cards. Showing ${count} results`);
+    }
 }
 
 // Utility: Format timestamp

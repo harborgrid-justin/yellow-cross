@@ -39,10 +39,8 @@ const connectDB = async () => {
     
   } catch (error) {
     console.error('Error connecting to MongoDB:', error.message);
-    // Don't exit in test mode, allow app to continue without DB
-    if (process.env.NODE_ENV !== 'test') {
-      process.exit(1);
-    }
+    // Allow app to continue without DB - warning only
+    console.log('Continuing without database connection...');
   }
 };
 
