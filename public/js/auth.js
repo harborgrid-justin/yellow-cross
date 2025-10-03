@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     setupAuthListeners();
+    setupAccessibility();
 });
 
 function setupAuthListeners() {
@@ -21,6 +22,26 @@ function setupAuthListeners() {
     document.querySelectorAll('.btn-social').forEach(btn => {
         btn.addEventListener('click', handleSocialAuth);
     });
+}
+
+// Accessibility: Setup skip link and focus management
+function setupAccessibility() {
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) {
+        skipLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(skipLink.getAttribute('href'));
+            if (target) {
+                target.focus();
+            }
+        });
+    }
+    
+    // Focus on first form field
+    const firstInput = document.querySelector('input[type="email"], input[type="text"]');
+    if (firstInput) {
+        firstInput.focus();
+    }
 }
 
 async function handleLogin(e) {
@@ -121,8 +142,10 @@ function showAlert(type, message) {
     // Create new alert
     const alert = document.createElement('div');
     alert.className = `alert alert-${type} show`;
+    alert.setAttribute('role', 'alert');
+    alert.setAttribute('aria-live', 'assertive');
     alert.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}" aria-hidden="true"></i>
         ${message}
     `;
     

@@ -3,57 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create an account with Yellow Cross - Enterprise Law Firm Practice Management Platform">
     <title>Register - Yellow Cross</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="auth-page">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <div class="auth-container">
         <div class="auth-box">
             <div class="auth-header">
-                <i class="fas fa-balance-scale"></i>
+                <i class="fas fa-balance-scale" aria-hidden="true"></i>
                 <h1>Yellow Cross</h1>
                 <p>Enterprise Law Firm Practice Management</p>
             </div>
             
-            <form id="register-form" class="auth-form">
-                <h2>Create Account</h2>
+            <form id="register-form" class="auth-form" role="form" aria-labelledby="register-heading">
+                <h2 id="register-heading" tabindex="-1">Create Account</h2>
                 
                 <div class="form-group">
                     <label for="name">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-user" aria-hidden="true"></i>
                         Full Name
                     </label>
                     <input type="text" id="name" name="name" required 
-                           placeholder="John Attorney">
+                           placeholder="John Attorney"
+                           autocomplete="name"
+                           aria-required="true">
                 </div>
                 
                 <div class="form-group">
                     <label for="email">
-                        <i class="fas fa-envelope"></i>
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
                         Email Address
                     </label>
                     <input type="email" id="email" name="email" required 
-                           placeholder="attorney@lawfirm.com">
+                           placeholder="attorney@lawfirm.com"
+                           autocomplete="email"
+                           aria-required="true">
                 </div>
                 
                 <div class="form-group">
                     <label for="password">
-                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-lock" aria-hidden="true"></i>
                         Password
                     </label>
                     <input type="password" id="password" name="password" required 
-                           placeholder="Create a strong password" minlength="8">
+                           placeholder="Create a strong password" minlength="8"
+                           autocomplete="new-password"
+                           aria-required="true"
+                           aria-describedby="password-hint">
+                    <span id="password-hint" class="form-hint">Minimum 8 characters</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirm-password">
-                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-lock" aria-hidden="true"></i>
                         Confirm Password
                     </label>
                     <input type="password" id="confirm-password" name="confirm-password" required 
-                           placeholder="Re-enter your password" minlength="8">
+                           placeholder="Re-enter your password" minlength="8"
+                           autocomplete="new-password"
+                           aria-required="true">
                 </div>
                 
                 <div class="form-options">
@@ -63,22 +76,22 @@
                     </label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-block" aria-label="Create your account">
                     Create Account
-                    <i class="fas fa-arrow-right"></i>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </button>
                 
-                <div class="auth-divider">
+                <div class="auth-divider" role="separator" aria-label="or">
                     <span>or</span>
                 </div>
                 
                 <div class="social-auth">
-                    <button type="button" class="btn-social btn-google">
-                        <i class="fab fa-google"></i>
+                    <button type="button" class="btn-social btn-google" aria-label="Sign up with Google">
+                        <i class="fab fa-google" aria-hidden="true"></i>
                         Sign up with Google
                     </button>
-                    <button type="button" class="btn-social btn-microsoft">
-                        <i class="fab fa-microsoft"></i>
+                    <button type="button" class="btn-social btn-microsoft" aria-label="Sign up with Microsoft">
+                        <i class="fab fa-microsoft" aria-hidden="true"></i>
                         Sign up with Microsoft
                     </button>
                 </div>
