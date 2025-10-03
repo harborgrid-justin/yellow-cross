@@ -1,3 +1,5 @@
+// Yellow Cross - React TypeScript Type Definitions
+
 /**
  * Feature data structure
  */
@@ -8,41 +10,57 @@ export interface Feature {
     category: 'management' | 'legal' | 'compliance' | 'analytics';
     description: string;
     subFeatureCount: number;
+    slug: string;
 }
+
+/**
+ * Sub-Feature structure
+ */
+export interface SubFeature {
+    id: number;
+    name: string;
+    description: string;
+    icon?: string;
+    slug: string;
+    featureSlug: string;
+}
+
 /**
  * API response types
  */
 export interface APIResponse<T = any> {
     [key: string]: T;
 }
+
 export interface PlatformInfo {
     name: string;
     version: string;
     description: string;
     features: Feature[];
 }
+
 export interface HealthStatus {
     status: 'healthy' | 'unhealthy' | 'degraded';
     timestamp: string;
 }
+
 export interface FeatureAPIData {
     subFeatures?: string[];
     [key: string]: any;
 }
+
 /**
  * HTTP method types
  */
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-/**
- * Debounced function type
- */
-export type DebouncedFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
+
 /**
  * Case Management Types
  */
 export type CaseStatus = 'Open' | 'In Progress' | 'Closed' | 'On Hold' | 'Pending Review' | 'Archived';
 export type CasePriority = 'Low' | 'Medium' | 'High' | 'Critical';
 export type MatterType = 'Civil' | 'Criminal' | 'Corporate' | 'Family' | 'Immigration' | 'Real Estate';
+
 export interface Case {
     caseNumber: string;
     title: string;
@@ -56,10 +74,27 @@ export interface Case {
     openedDate: string;
     tags: string[];
 }
+
 export interface CaseFilters {
     status: string;
     priority: string;
     matterType: string;
     search: string;
 }
-//# sourceMappingURL=types.d.ts.map
+
+/**
+ * User and Authentication Types
+ */
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    role: 'admin' | 'attorney' | 'paralegal' | 'staff';
+}
+
+export interface AuthContextType {
+    user: User | null;
+    login: (email: string, password: string) => Promise<void>;
+    logout: () => void;
+    isAuthenticated: boolean;
+}

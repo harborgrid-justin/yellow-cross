@@ -71,6 +71,17 @@ describe('TypeScript Implementation', () => {
       expect(content).toContain('async function handleLogin');
       expect(content).toContain('async function handleRegister');
     });
+
+    test('should have cases.ts', () => {
+      const casesPath = path.join(__dirname, '../../frontend/ts/cases.ts');
+      expect(fs.existsSync(casesPath)).toBe(true);
+      
+      const content = fs.readFileSync(casesPath, 'utf8');
+      expect(content).toContain('import type {');
+      expect(content).toContain('Case,');
+      expect(content).toContain('CaseFilters');
+      expect(content).toContain('async function loadCases');
+    });
   });
 
   describe('Compiled JavaScript Files', () => {
@@ -84,20 +95,29 @@ describe('TypeScript Implementation', () => {
       expect(fs.existsSync(authJsPath)).toBe(true);
     });
 
+    test('should have compiled cases.js', () => {
+      const casesJsPath = path.join(__dirname, '../../frontend/js/cases.js');
+      expect(fs.existsSync(casesJsPath)).toBe(true);
+    });
+
     test('should have declaration files', () => {
       const appDtsPath = path.join(__dirname, '../../frontend/js/app.d.ts');
       const authDtsPath = path.join(__dirname, '../../frontend/js/auth.d.ts');
+      const casesDtsPath = path.join(__dirname, '../../frontend/js/cases.d.ts');
       
       expect(fs.existsSync(appDtsPath)).toBe(true);
       expect(fs.existsSync(authDtsPath)).toBe(true);
+      expect(fs.existsSync(casesDtsPath)).toBe(true);
     });
 
     test('should have source maps', () => {
       const appMapPath = path.join(__dirname, '../../frontend/js/app.js.map');
       const authMapPath = path.join(__dirname, '../../frontend/js/auth.js.map');
+      const casesMapPath = path.join(__dirname, '../../frontend/js/cases.js.map');
       
       expect(fs.existsSync(appMapPath)).toBe(true);
       expect(fs.existsSync(authMapPath)).toBe(true);
+      expect(fs.existsSync(casesMapPath)).toBe(true);
     });
   });
 
@@ -110,6 +130,10 @@ describe('TypeScript Implementation', () => {
       expect(content).toContain('export interface PlatformInfo');
       expect(content).toContain('export interface HealthStatus');
       expect(content).toContain('export type HTTPMethod');
+      expect(content).toContain('export interface Case');
+      expect(content).toContain('export interface CaseFilters');
+      expect(content).toContain('export type CaseStatus');
+      expect(content).toContain('export type CasePriority');
     });
 
     test('should have typed functions in app.ts', () => {
@@ -131,6 +155,18 @@ describe('TypeScript Implementation', () => {
       expect(content).toContain('(e: Event)');
       expect(content).toContain(': Promise<void>');
       expect(content).toContain('AlertType');
+    });
+
+    test('should have typed case management in cases.ts', () => {
+      const casesPath = path.join(__dirname, '../../frontend/ts/cases.ts');
+      const content = fs.readFileSync(casesPath, 'utf8');
+      
+      // Check for type annotations
+      expect(content).toContain('cases: Case[]');
+      expect(content).toContain('filters: CaseFilters');
+      expect(content).toContain(': Promise<void>');
+      expect(content).toContain('function displayCases(casesToDisplay: Case[])');
+      expect(content).toContain('function filterCases(casesToFilter: Case[])');
     });
   });
 

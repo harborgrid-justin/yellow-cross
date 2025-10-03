@@ -45,3 +45,31 @@ export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
  * Debounced function type
  */
 export type DebouncedFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
+
+/**
+ * Case Management Types
+ */
+export type CaseStatus = 'Open' | 'In Progress' | 'Closed' | 'On Hold' | 'Pending Review' | 'Archived';
+export type CasePriority = 'Low' | 'Medium' | 'High' | 'Critical';
+export type MatterType = 'Civil' | 'Criminal' | 'Corporate' | 'Family' | 'Immigration' | 'Real Estate';
+
+export interface Case {
+    caseNumber: string;
+    title: string;
+    clientName: string;
+    matterType: MatterType;
+    priority: CasePriority;
+    status: CaseStatus;
+    assignedTo: string;
+    practiceArea: string;
+    description: string;
+    openedDate: string;
+    tags: string[];
+}
+
+export interface CaseFilters {
+    status: string;
+    priority: string;
+    matterType: string;
+    search: string;
+}
