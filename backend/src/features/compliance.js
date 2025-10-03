@@ -77,6 +77,639 @@ router.post('/create', async (req, res) => {
   }
 });
 
+// Get compliance item by ID
+router.get('/:id', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Get Compliance Item', message: 'Database not connected' });
+    }
+
+    const item = await ComplianceItem.findById(req.params.id)
+      .populate('caseId', 'caseNumber title')
+      .populate('clientId', 'name email');
+
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        error: 'Compliance item not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: item
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// List all compliance items with filtering
+router.get('/list/all', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'List Compliance Items', message: 'Database not connected' });
+    }
+
+    const { complianceType, status, priority, riskLevel, page = 1, limit = 20 } = req.query;
+    const filters = {};
+
+    if (complianceType) filters.complianceType = complianceType;
+    if (status) filters.status = status;
+    if (priority) filters.priority = priority;
+    if (riskLevel) filters.riskLevel = riskLevel;
+
+    const items = await ComplianceItem.find(filters)
+      .populate('caseId', 'caseNumber title')
+      .populate('clientId', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await ComplianceItem.countDocuments(filters);
+
+    res.json({
+      success: true,
+      data: {
+        items,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+        totalItems: count
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update compliance status
+router.put('/:id/status', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Update Compliance Status', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(updateComplianceStatusSchema, req.body);
+
+    const item = await ComplianceItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ success: false, error: 'Compliance item not found' });
+    }
+
+    const oldStatus = item.status;
+    item.status = validatedData.status;
+
+    // Add to history
+    item.statusHistory.push({
+      status: validatedData.status,
+      changedBy: validatedData.modifiedBy,
+      notes: validatedData.notes,
+      changedAt: new Date()
+    });
+
+    // Add audit trail
+    item.auditTrail.push({
+      action: 'Status Updated',
+      performedBy: validatedData.modifiedBy,
+      timestamp: new Date(),
+      details: `Status changed from ${oldStatus} to ${validatedData.status}`,
+      previousValue: oldStatus,
+      newValue: validatedData.status
+    });
+
+    if (validatedData.status === 'Remediated' || validatedData.status === 'Compliant') {
+      item.resolvedDate = new Date();
+    }
+
+    await item.save();
+
+    res.json({
+      success: true,
+      message: 'Compliance status updated successfully',
+      data: item
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add risk factor
+router.post('/:id/risk-factor', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Add Risk Factor', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(addRiskFactorSchema, req.body);
+
+    const item = await ComplianceItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ success: false, error: 'Compliance item not found' });
+    }
+
+    item.riskFactors.push(validatedData);
+    await item.calculateRiskScore();
+    await item.save();
+
+    res.json({
+      success: true,
+      message: 'Risk factor added successfully',
+      data: {
+        item,
+        newRiskScore: item.riskScore,
+        newRiskLevel: item.riskLevel
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Set remediation plan
+router.post('/:id/remediation', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Set Remediation Plan', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(remediationPlanSchema, req.body);
+
+    const item = await ComplianceItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ success: false, error: 'Compliance item not found' });
+    }
+
+    item.remediationPlan = {
+      plan: validatedData.plan,
+      startDate: validatedData.startDate || new Date(),
+      targetCompletionDate: validatedData.targetCompletionDate,
+      responsibleParty: validatedData.responsibleParty,
+      status: 'Planned',
+      notes: validatedData.notes
+    };
+
+    item.auditTrail.push({
+      action: 'Remediation Plan Created',
+      performedBy: validatedData.responsibleParty,
+      timestamp: new Date(),
+      details: 'Remediation plan has been set'
+    });
+
+    await item.save();
+
+    res.json({
+      success: true,
+      message: 'Remediation plan set successfully',
+      data: item
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 1: Ethics & Compliance Tracking
+router.get('/ethics/tracking', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Ethics & Compliance Tracking', message: 'Database not connected' });
+    }
+
+    const ethicsItems = await ComplianceItem.find({ complianceType: 'Ethics' })
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    const stats = {
+      total: ethicsItems.length,
+      byStatus: {},
+      byPriority: {},
+      avgRiskScore: 0
+    };
+
+    ethicsItems.forEach(item => {
+      stats.byStatus[item.status] = (stats.byStatus[item.status] || 0) + 1;
+      stats.byPriority[item.priority] = (stats.byPriority[item.priority] || 0) + 1;
+      stats.avgRiskScore += item.riskScore;
+    });
+
+    if (ethicsItems.length > 0) {
+      stats.avgRiskScore = stats.avgRiskScore / ethicsItems.length;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        items: ethicsItems,
+        statistics: stats
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 2: Risk Assessment Tools
+router.post('/risk-assessment', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Risk Assessment', message: 'Database not connected' });
+    }
+
+    const { caseId, clientId, riskFactors } = req.body;
+
+    // Calculate overall risk score
+    let totalRiskScore = 0;
+    let riskCount = 0;
+
+    if (riskFactors && riskFactors.length > 0) {
+      riskFactors.forEach(factor => {
+        const impactScore = { 'Critical': 100, 'High': 75, 'Medium': 50, 'Low': 25 }[factor.impact] || 50;
+        const likelihoodScore = { 'Very Likely': 1.0, 'Likely': 0.75, 'Possible': 0.5, 'Unlikely': 0.25 }[factor.likelihood] || 0.5;
+        totalRiskScore += impactScore * likelihoodScore;
+        riskCount++;
+      });
+    }
+
+    const avgRiskScore = riskCount > 0 ? totalRiskScore / riskCount : 50;
+    const riskLevel = avgRiskScore >= 75 ? 'Critical' :
+                      avgRiskScore >= 60 ? 'High' :
+                      avgRiskScore >= 40 ? 'Medium' : 'Low';
+
+    res.json({
+      success: true,
+      data: {
+        riskScore: Math.round(avgRiskScore),
+        riskLevel,
+        analysisDate: new Date(),
+        riskFactorsAnalyzed: riskCount,
+        recommendation: riskLevel === 'Critical' || riskLevel === 'High' ?
+          'Immediate action required' :
+          'Monitor and review regularly'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 3: Malpractice Prevention
+router.get('/malpractice-prevention', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Malpractice Prevention', message: 'Database not connected' });
+    }
+
+    const malpracticeItems = await ComplianceItem.find({ 
+      complianceType: 'Malpractice Prevention',
+      status: { $in: ['Active', 'Under Review'] }
+    }).sort({ priority: 1, dueDate: 1 });
+
+    // Check for high-risk cases
+    const highRiskCases = await ComplianceItem.find({
+      riskLevel: { $in: ['Critical', 'High'] },
+      status: { $ne: 'Remediated' }
+    }).limit(10);
+
+    res.json({
+      success: true,
+      data: {
+        activeItems: malpracticeItems,
+        highRiskAlerts: highRiskCases,
+        summary: {
+          totalActive: malpracticeItems.length,
+          criticalRisk: highRiskCases.filter(i => i.riskLevel === 'Critical').length,
+          highRisk: highRiskCases.filter(i => i.riskLevel === 'High').length
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Conflict check
+router.post('/conflict-check', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Conflict Check', message: 'Database not connected' });
+    }
+
+    const { clientName, opposingParty, caseType } = req.body;
+
+    // Search for potential conflicts
+    const conflicts = await ComplianceItem.find({
+      complianceType: 'Conflict Check',
+      $or: [
+        { 'conflictDetails.involvedParties': { $regex: clientName, $options: 'i' } },
+        { 'conflictDetails.involvedParties': { $regex: opposingParty, $options: 'i' } }
+      ]
+    });
+
+    const hasConflict = conflicts.length > 0;
+
+    res.json({
+      success: true,
+      data: {
+        hasConflict,
+        conflictCount: conflicts.length,
+        conflicts: conflicts.map(c => ({
+          id: c._id,
+          title: c.title,
+          status: c.status,
+          riskLevel: c.riskLevel,
+          details: c.conflictDetails
+        })),
+        checkDate: new Date(),
+        recommendation: hasConflict ? 'Review conflicts before proceeding' : 'No conflicts detected'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 4: Regulatory Compliance
+router.get('/regulatory', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Regulatory Compliance', message: 'Database not connected' });
+    }
+
+    const { regulatoryBody } = req.query;
+    const filters = { complianceType: 'Regulatory' };
+    if (regulatoryBody) filters.regulatoryBody = regulatoryBody;
+
+    const regulatoryItems = await ComplianceItem.find(filters)
+      .sort({ dueDate: 1 });
+
+    const upcoming = regulatoryItems.filter(item => {
+      const daysUntilDue = item.dueDate ? 
+        Math.ceil((new Date(item.dueDate) - new Date()) / (1000 * 60 * 60 * 24)) : 
+        999;
+      return daysUntilDue >= 0 && daysUntilDue <= 30;
+    });
+
+    const overdue = regulatoryItems.filter(item => {
+      return item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'Compliant';
+    });
+
+    res.json({
+      success: true,
+      data: {
+        allItems: regulatoryItems,
+        upcomingDeadlines: upcoming,
+        overdueItems: overdue,
+        summary: {
+          total: regulatoryItems.length,
+          upcoming: upcoming.length,
+          overdue: overdue.length,
+          compliant: regulatoryItems.filter(i => i.status === 'Compliant').length
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 5: Audit Trail & Logging
+router.get('/audit-trail', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Audit Trail', message: 'Database not connected' });
+    }
+
+    const { startDate, endDate, performedBy, action, page = 1, limit = 50 } = req.query;
+
+    // Aggregate audit trails from all compliance items
+    const filters = {};
+    if (startDate || endDate) {
+      filters['auditTrail.timestamp'] = {};
+      if (startDate) filters['auditTrail.timestamp'].$gte = new Date(startDate);
+      if (endDate) filters['auditTrail.timestamp'].$lte = new Date(endDate);
+    }
+
+    const items = await ComplianceItem.find(filters)
+      .select('complianceNumber title auditTrail')
+      .sort({ 'auditTrail.timestamp': -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    // Flatten audit trails
+    const auditEntries = [];
+    items.forEach(item => {
+      item.auditTrail.forEach(entry => {
+        if (!performedBy || entry.performedBy === performedBy) {
+          if (!action || entry.action.includes(action)) {
+            auditEntries.push({
+              complianceNumber: item.complianceNumber,
+              complianceTitle: item.title,
+              ...entry.toObject()
+            });
+          }
+        }
+      });
+    });
+
+    res.json({
+      success: true,
+      data: {
+        entries: auditEntries.slice(0, limit),
+        totalEntries: auditEntries.length,
+        currentPage: page
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 6: Data Privacy Compliance
+router.get('/data-privacy', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Data Privacy Compliance', message: 'Database not connected' });
+    }
+
+    const privacyItems = await ComplianceItem.find({ 
+      complianceType: 'Data Privacy',
+      status: { $in: ['Active', 'Under Review', 'Non-Compliant'] }
+    }).sort({ priority: 1 });
+
+    const regulations = ['GDPR', 'CCPA', 'HIPAA', 'State Privacy Laws'];
+    const complianceByRegulation = {};
+
+    regulations.forEach(reg => {
+      complianceByRegulation[reg] = {
+        total: privacyItems.filter(i => i.title.includes(reg) || i.description?.includes(reg)).length,
+        compliant: 0,
+        nonCompliant: 0
+      };
+    });
+
+    res.json({
+      success: true,
+      data: {
+        items: privacyItems,
+        complianceByRegulation,
+        summary: {
+          totalPrivacyItems: privacyItems.length,
+          nonCompliant: privacyItems.filter(i => i.status === 'Non-Compliant').length,
+          underReview: privacyItems.filter(i => i.status === 'Under Review').length
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 7: Professional Liability Management
+router.get('/liability', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Professional Liability', message: 'Database not connected' });
+    }
+
+    const liabilityItems = await ComplianceItem.find({ 
+      complianceType: 'Professional Liability'
+    }).sort({ createdAt: -1 });
+
+    const activeClaims = liabilityItems.filter(i => i.status === 'Active');
+    const highRiskItems = liabilityItems.filter(i => i.riskLevel === 'Critical' || i.riskLevel === 'High');
+
+    res.json({
+      success: true,
+      data: {
+        allLiabilityItems: liabilityItems,
+        activeClaims,
+        highRiskItems,
+        summary: {
+          total: liabilityItems.length,
+          active: activeClaims.length,
+          highRisk: highRiskItems.length,
+          resolved: liabilityItems.filter(i => i.status === 'Remediated').length
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Sub-Feature 8: Compliance Reporting
+router.post('/reports', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Compliance Reporting', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(complianceReportSchema, req.body);
+    const filters = {};
+
+    if (validatedData.complianceType) filters.complianceType = validatedData.complianceType;
+    if (validatedData.status) filters.status = validatedData.status;
+    if (validatedData.priority) filters.priority = validatedData.priority;
+
+    if (validatedData.startDate || validatedData.endDate) {
+      filters.createdAt = {};
+      if (validatedData.startDate) filters.createdAt.$gte = new Date(validatedData.startDate);
+      if (validatedData.endDate) filters.createdAt.$lte = new Date(validatedData.endDate);
+    }
+
+    if (!validatedData.includeResolved) {
+      filters.status = { $ne: 'Remediated' };
+    }
+
+    const items = await ComplianceItem.find(filters);
+
+    const report = {
+      generatedAt: new Date(),
+      filters: validatedData,
+      summary: {
+        totalItems: items.length,
+        byType: {},
+        byStatus: {},
+        byPriority: {},
+        byRiskLevel: {},
+        avgRiskScore: 0
+      },
+      items: items.map(item => ({
+        complianceNumber: item.complianceNumber,
+        title: item.title,
+        complianceType: item.complianceType,
+        status: item.status,
+        priority: item.priority,
+        riskLevel: item.riskLevel,
+        riskScore: item.riskScore,
+        dueDate: item.dueDate,
+        identifiedDate: item.identifiedDate
+      }))
+    };
+
+    items.forEach(item => {
+      report.summary.byType[item.complianceType] = (report.summary.byType[item.complianceType] || 0) + 1;
+      report.summary.byStatus[item.status] = (report.summary.byStatus[item.status] || 0) + 1;
+      report.summary.byPriority[item.priority] = (report.summary.byPriority[item.priority] || 0) + 1;
+      report.summary.byRiskLevel[item.riskLevel] = (report.summary.byRiskLevel[item.riskLevel] || 0) + 1;
+      report.summary.avgRiskScore += item.riskScore;
+    });
+
+    if (items.length > 0) {
+      report.summary.avgRiskScore = report.summary.avgRiskScore / items.length;
+    }
+
+    res.json({
+      success: true,
+      data: report
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Compliance overview
 router.get('/', (req, res) => {
   res.json({
@@ -94,11 +727,13 @@ router.get('/', (req, res) => {
     ],
     endpoints: {
       create: 'POST /api/compliance/create',
+      list: 'GET /api/compliance/list/all',
       getById: 'GET /api/compliance/:id',
       updateStatus: 'PUT /api/compliance/:id/status',
+      addRiskFactor: 'POST /api/compliance/:id/risk-factor',
       setRemediation: 'POST /api/compliance/:id/remediation',
-      ethics: 'GET /api/compliance/ethics',
-      riskAssessment: 'GET/POST /api/compliance/risk-assessment',
+      ethics: 'GET /api/compliance/ethics/tracking',
+      riskAssessment: 'POST /api/compliance/risk-assessment',
       malpracticePrevention: 'GET /api/compliance/malpractice-prevention',
       conflictCheck: 'POST /api/compliance/conflict-check',
       regulatory: 'GET /api/compliance/regulatory',
