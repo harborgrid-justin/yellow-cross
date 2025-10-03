@@ -35,28 +35,39 @@ The frontend is fully implemented in TypeScript with:
 
 ```
 yellow-cross/
-├── backend/                 # Backend application
+├── backend/                     # Backend application
 │   ├── src/
-│   │   ├── config/         # Configuration files
-│   │   ├── features/       # 15 feature modules
-│   │   ├── models/         # Legacy Mongoose models (for reference)
-│   │   ├── validators/     # Input validators
-│   │   ├── generated/      # Prisma generated client
-│   │   └── index.js        # Application entry point
-│   ├── tests/              # Test files
-│   └── prisma/             # Prisma schema and migrations
-│       └── schema.prisma   # Database schema
-├── frontend/               # Frontend application
-│   ├── ts/                # TypeScript source files
-│   ├── js/                # Compiled JavaScript files
-│   ├── css/               # Stylesheets
-│   └── *.html             # HTML pages
-├── scripts/               # Setup and utility scripts
-├── docker-compose.yml     # Docker Compose configuration
-├── Dockerfile            # Docker image definition
-├── .env.example          # Environment variables template
-└── package.json          # Project dependencies and scripts
+│   │   ├── config/             # Configuration files
+│   │   ├── features/           # 15 feature modules
+│   │   ├── models/             # Legacy Mongoose models (for reference)
+│   │   ├── validators/         # Input validators
+│   │   ├── generated/          # Prisma generated client
+│   │   └── index.js            # Application entry point
+│   ├── tests/                  # Test files
+│   └── prisma/                 # Prisma schema and migrations
+│       └── schema.prisma       # Database schema
+├── frontend/                    # Frontend application (React + TypeScript)
+│   ├── src/
+│   │   ├── app/                # Application core & routing
+│   │   ├── features/           # 15+ feature modules (feature-based organization)
+│   │   ├── shared/             # Shared components, types, utils, API client
+│   │   ├── assets/             # Styles and static assets
+│   │   └── config/             # Frontend configuration
+│   ├── public/                 # Public static files
+│   ├── dist/                   # Build output (gitignored)
+│   ├── index.html              # Entry HTML
+│   ├── vite.config.ts          # Vite configuration
+│   └── tsconfig.json           # TypeScript configuration
+├── scripts/                     # Setup and utility scripts
+├── docker-compose.yml          # Docker Compose configuration
+├── Dockerfile                  # Docker image definition
+├── .env.example                # Environment variables template
+├── vite.config.ts              # Root Vite configuration
+├── tsconfig.json               # Root TypeScript configuration
+└── package.json                # Project dependencies and scripts
 ```
+
+**See [ENTERPRISE_ARCHITECTURE.md](./ENTERPRISE_ARCHITECTURE.md) for detailed architecture documentation.**
 
 ## 🚀 Getting Started
 
