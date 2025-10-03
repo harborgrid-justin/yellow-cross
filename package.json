@@ -60,5 +60,11 @@
     "nodemon": "^2.0.22",
     "prisma": "^6.16.3",
     "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/backend/tests/**/*.test.js"],
+    "collectCoverageFrom": ["backend/src/**/*.js"],
+    "coveragePathIgnorePatterns": ["/node_modules/", "/backend/src/generated/"]
   }
 }
