@@ -5,11 +5,20 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  root: 'src/react',
-  publicDir: resolve(__dirname, 'frontend/css'),
+  root: 'frontend',
+  publicDir: 'public',
   build: {
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
+    sourcemap: true,
+    // Code splitting for better performance
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
   },
   server: {
     port: 3001,
@@ -22,12 +31,17 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src/react'),
-      '@components': resolve(__dirname, 'src/react/components'),
-      '@pages': resolve(__dirname, 'src/react/pages'),
-      '@types': resolve(__dirname, 'src/react/types'),
-      '@hooks': resolve(__dirname, 'src/react/hooks'),
-      '@utils': resolve(__dirname, 'src/react/utils'),
+      '@': resolve(__dirname, 'frontend/src'),
+      '@app': resolve(__dirname, 'frontend/src/app'),
+      '@features': resolve(__dirname, 'frontend/src/features'),
+      '@shared': resolve(__dirname, 'frontend/src/shared'),
+      '@components': resolve(__dirname, 'frontend/src/shared/components'),
+      '@types': resolve(__dirname, 'frontend/src/shared/types'),
+      '@utils': resolve(__dirname, 'frontend/src/shared/utils'),
+      '@api': resolve(__dirname, 'frontend/src/shared/api'),
+      '@hooks': resolve(__dirname, 'frontend/src/shared/hooks'),
+      '@assets': resolve(__dirname, 'frontend/src/assets'),
+      '@config': resolve(__dirname, 'frontend/src/config'),
     },
   },
 });

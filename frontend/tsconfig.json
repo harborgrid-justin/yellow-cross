@@ -42,22 +42,22 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./frontend/src/*"],
-      "@app/*": ["./frontend/src/app/*"],
-      "@features/*": ["./frontend/src/features/*"],
-      "@shared/*": ["./frontend/src/shared/*"],
-      "@components/*": ["./frontend/src/shared/components/*"],
-      "@types/*": ["./frontend/src/shared/types/*"],
-      "@utils/*": ["./frontend/src/shared/utils/*"],
-      "@api/*": ["./frontend/src/shared/api/*"],
-      "@hooks/*": ["./frontend/src/shared/hooks/*"],
-      "@assets/*": ["./frontend/src/assets/*"],
-      "@config/*": ["./frontend/src/config/*"]
+      "@/*": ["./src/*"],
+      "@app/*": ["./src/app/*"],
+      "@features/*": ["./src/features/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@components/*": ["./src/shared/components/*"],
+      "@types/*": ["./src/shared/types/*"],
+      "@utils/*": ["./src/shared/utils/*"],
+      "@api/*": ["./src/shared/api/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@config/*": ["./src/config/*"]
     },
 
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": ["frontend/src/**/*"],
-  "exclude": ["node_modules", "backend", "dist", "frontend-old", "src-old"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
