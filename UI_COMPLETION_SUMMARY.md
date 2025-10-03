@@ -27,7 +27,7 @@ The Yellow Cross Enterprise Law Firm Practice Management Platform now has **100%
 - ✅ Fluid typography and spacing
 - ✅ Tested on multiple viewport sizes
 
-**Code Location**: `public/css/styles.css` lines 605-700
+**Code Location**: `frontend/css/styles.css` lines 605-700
 
 #### Accessibility (WCAG 2.1 Compliance) ✅
 **Requirement**: Includes ARIA roles, keyboard navigation, proper contrast ratios, alt text, and screen-reader compatibility.
@@ -71,9 +71,9 @@ The Yellow Cross Enterprise Law Firm Practice Management Platform now has **100%
 - Hidden labels for form fields (`visually-hidden` class)
 
 **Code Locations**:
-- HTML: `public/index.html`, `public/login.html`, `public/register.html`
-- CSS: `public/css/styles.css` lines 30-95
-- JS: `public/js/app.js`, `public/js/auth.js`
+- HTML: `frontend/index.html`, `frontend/login.html`, `frontend/register.html`
+- CSS: `frontend/css/styles.css` lines 30-95
+- JS: `frontend/js/app.js`, `frontend/js/auth.js`
 
 #### Performance Optimization ✅
 **Requirement**: Use lazy loading, efficient image compression, code splitting, and caching to ensure optimal performance.
@@ -109,9 +109,9 @@ The Yellow Cross Enterprise Law Firm Practice Management Platform now has **100%
 - No render-blocking resources
 
 **Code Locations**:
-- Debounce: `public/js/app.js` lines 6-16
-- Lazy loading: `public/js/app.js` lines 18-31
-- Performance CSS: `public/css/styles.css` (CSS variables, transforms)
+- Debounce: `frontend/js/app.js` lines 6-16
+- Lazy loading: `frontend/js/app.js` lines 18-31
+- Performance CSS: `frontend/css/styles.css` (CSS variables, transforms)
 
 ---
 

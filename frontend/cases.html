@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Case Management System - Yellow Cross Law Firm Platform">
+    <title>Case Management - Yellow Cross</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/cases.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-balance-scale"></i>
+                <span>Yellow Cross</span>
+            </div>
+            <ul class="nav-menu" role="menubar">
+                <li role="none"><a href="/" role="menuitem">Home</a></li>
+                <li role="none"><a href="/cases.html" class="active" role="menuitem">Cases</a></li>
+                <li role="none"><a href="#" role="menuitem">Dashboard</a></li>
+                <li role="none"><a href="/login.html" class="btn-login" role="menuitem">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <header class="page-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-briefcase"></i> Case Management System</h1>
+                    <p class="subtitle">Comprehensive case lifecycle management for your law firm</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="create-case-btn" aria-label="Create new case">
+                        <i class="fas fa-plus"></i> New Case
+                    </button>
+                </div>
+            </header>
+
+            <!-- Quick Stats -->
+            <section class="stats-grid" aria-label="Case statistics">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-folder-open" style="color: #2196f3;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-cases">0</h3>
+                        <p>Total Cases</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0;">
+                        <i class="fas fa-clock" style="color: #ff9800;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="active-cases">0</h3>
+                        <p>Active Cases</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9;">
+                        <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="closed-cases">0</h3>
+                        <p>Closed Cases</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce4ec;">
+                        <i class="fas fa-exclamation-triangle" style="color: #e91e63;"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="urgent-cases">0</h3>
+                        <p>Urgent Cases</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters and Search -->
+            <section class="controls-section">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="case-search" placeholder="Search cases by number, title, or client..." aria-label="Search cases">
+                </div>
+                <div class="filter-group">
+                    <select id="status-filter" class="filter-select" aria-label="Filter by status">
+                        <option value="">All Statuses</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Pending Review">Pending Review</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                    <select id="priority-filter" class="filter-select" aria-label="Filter by priority">
+                        <option value="">All Priorities</option>
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <select id="matter-filter" class="filter-select" aria-label="Filter by matter type">
+                        <option value="">All Matter Types</option>
+                        <option value="Civil">Civil</option>
+                        <option value="Criminal">Criminal</option>
+                        <option value="Corporate">Corporate</option>
+                        <option value="Family">Family</option>
+                        <option value="Immigration">Immigration</option>
+                        <option value="Real Estate">Real Estate</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Cases List -->
+            <section class="cases-section">
+                <div class="section-header">
+                    <h2>All Cases</h2>
+                    <div class="view-toggle">
+                        <button class="toggle-btn active" data-view="grid" aria-label="Grid view">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="toggle-btn" data-view="list" aria-label="List view">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="cases-container" class="cases-grid" role="region" aria-live="polite" aria-label="Cases list">
+                    <!-- Cases will be dynamically loaded here -->
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading cases...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Create Case Modal -->
+    <div id="create-case-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"><i class="fas fa-folder-plus"></i> Case Creation & Intake</h2>
+                <button class="close-btn" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="create-case-form" class="case-form">
+                <div class="form-section">
+                    <h3>Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="case-title">Case Title *</label>
+                            <input type="text" id="case-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-name">Client Name *</label>
+                            <input type="text" id="client-name" name="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="matter-type">Matter Type *</label>
+                            <select id="matter-type" name="matterType" required>
+                                <option value="">Select type...</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Criminal">Criminal</option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Family">Family</option>
+                                <option value="Immigration">Immigration</option>
+                                <option value="Real Estate">Real Estate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority *</label>
+                            <select id="priority" name="priority" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Case Description</label>
+                        <textarea id="description" name="description" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Case Assignment & Distribution</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="assigned-to">Assigned Attorney *</label>
+                            <input type="text" id="assigned-to" name="assignedTo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="practice-area">Practice Area</label>
+                            <input type="text" id="practice-area" name="practiceArea">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Case Categorization & Tagging</h3>
+                    <div class="form-group">
+                        <label for="tags">Tags (comma-separated)</label>
+                        <input type="text" id="tags" name="tags" placeholder="e.g., urgent, pro-bono, litigation">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Timeline & Dates</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="filing-date">Filing Date</label>
+                            <input type="date" id="filing-date" name="filingDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="due-date">Due Date</label>
+                            <input type="date" id="due-date" name="dueDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-create-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Case</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Case Detail Modal -->
+    <div id="case-detail-modal" class="modal" role="dialog" aria-labelledby="detail-modal-title" aria-modal="true" hidden>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="detail-modal-title"><i class="fas fa-briefcase"></i> Case Details</h2>
+                <button class="close-btn" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="case-detail-container">
+                    <!-- Case info tabs -->
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="overview">Overview</button>
+                        <button class="tab-btn" data-tab="timeline">Timeline</button>
+                        <button class="tab-btn" data-tab="notes">Notes & Updates</button>
+                        <button class="tab-btn" data-tab="analytics">Analytics</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="overview-tab" class="tab-content active">
+                        <div id="case-overview">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div id="timeline-tab" class="tab-content">
+                        <div class="timeline-header">
+                            <h3>Case Timeline Management</h3>
+                            <button class="btn btn-sm btn-primary" id="add-timeline-event-btn">
+                                <i class="fas fa-plus"></i> Add Event
+                            </button>
+                        </div>
+                        <div id="case-timeline" class="timeline">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div id="notes-tab" class="tab-content">
+                        <div class="notes-header">
+                            <h3>Case Notes & Updates</h3>
+                            <button class="btn btn-sm btn-primary" id="add-note-btn">
+                                <i class="fas fa-plus"></i> Add Note
+                            </button>
+                        </div>
+                        <div id="case-notes">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div id="analytics-tab" class="tab-content">
+                        <h3>Case Analytics Dashboard</h3>
+                        <div id="case-analytics">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="edit-case-btn">
+                    <i class="fas fa-edit"></i> Edit Case
+                </button>
+                <button class="btn btn-warning" id="close-case-btn">
+                    <i class="fas fa-archive"></i> Close & Archive
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Yellow Cross</h4>
+                    <p>Enterprise Law Firm Practice Management Platform</p>
+                </div>
+                <div class="footer-section">
+                    <p>&copy; 2024 Yellow Cross. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/cases.js"></script>
+</body>
+</html>
