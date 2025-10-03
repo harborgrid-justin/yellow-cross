@@ -11,7 +11,8 @@ Yellow Cross is an all-in-one practice management solution that provides law fir
 - **Backend Framework**: Node.js with Express.js
 - **Database**: PostgreSQL 15+
 - **ORM**: Prisma
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Frontend**: TypeScript (ES2020), HTML5, CSS3
+- **Type Safety**: Full TypeScript implementation with strict mode
 - **Authentication**: JWT (JSON Web Tokens) with bcrypt
 - **Security**: Helmet.js, CORS, express-rate-limit
 - **Containerization**: Docker & Docker Compose
@@ -21,6 +22,14 @@ Yellow Cross is an all-in-one practice management solution that provides law fir
 - **PDF Generation**: PDFKit
 - **Date/Time**: Moment.js
 - **Validation**: Joi
+
+### TypeScript Frontend
+The frontend is fully implemented in TypeScript with:
+- ✅ Complete type safety with strict mode
+- ✅ Source maps for debugging
+- ✅ Type declaration files
+- ✅ Build scripts for compilation
+- 📄 See [TYPESCRIPT_IMPLEMENTATION.md](./TYPESCRIPT_IMPLEMENTATION.md) for details
 
 ## 📦 Project Structure
 
@@ -38,8 +47,9 @@ yellow-cross/
 │   └── prisma/             # Prisma schema and migrations
 │       └── schema.prisma   # Database schema
 ├── frontend/               # Frontend application
+│   ├── ts/                # TypeScript source files
+│   ├── js/                # Compiled JavaScript files
 │   ├── css/               # Stylesheets
-│   ├── js/                # JavaScript files
 │   └── *.html             # HTML pages
 ├── scripts/               # Setup and utility scripts
 ├── docker-compose.yml     # Docker Compose configuration
