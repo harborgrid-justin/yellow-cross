@@ -67,7 +67,7 @@ yellow-cross/
 └── package.json                # Project dependencies and scripts
 ```
 
-**See [ENTERPRISE_ARCHITECTURE.md](./ENTERPRISE_ARCHITECTURE.md) for detailed architecture documentation.**
+**See [ENTERPRISE_ARCHITECTURE.md](./docs/architecture/ENTERPRISE_ARCHITECTURE.md) for detailed architecture documentation.**
 
 ## 🚀 Getting Started
 
@@ -99,7 +99,7 @@ npm start              # Without Docker (requires PostgreSQL running)
 - Health Check: http://localhost:3000/health
 - Database GUI: `npm run prisma:studio`
 
-📖 **For detailed instructions, see [SETUP_GUIDE.md](./SETUP_GUIDE.md)**
+📖 **For detailed instructions, see [SETUP_GUIDE.md](./docs/deployment/SETUP_GUIDE.md)**
 
 ---
 
@@ -443,32 +443,33 @@ cd backend && npx prisma db push --force-reset
 
 ## 📖 Documentation
 
+**All documentation has been organized into a centralized `docs/` directory. See [docs/README.md](./docs/README.md) for complete navigation.**
+
 ### 🚀 Quick Start
-- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete setup guide (recommended starting point)
-- **[QUICK_START.txt](./QUICK_START.txt)** - Quick reference for common commands
-- **[COMMANDS_REFERENCE.md](./COMMANDS_REFERENCE.md)** - All npm commands explained
+- **[SETUP_GUIDE.md](./docs/deployment/SETUP_GUIDE.md)** - Complete setup guide (recommended starting point)
+- **[QUICK_START.txt](./docs/deployment/QUICK_START.txt)** - Quick reference for common commands
+- **[COMMANDS_REFERENCE.md](./docs/api/COMMANDS_REFERENCE.md)** - All npm commands explained
 
 ### 🔧 Setup & Installation
-- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Detailed setup instructions
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
-- **[SETUP_VERIFICATION.md](./SETUP_VERIFICATION.md)** - Verification checklist
-- **[ENTERPRISE_SETUP_COMPLETE.md](./ENTERPRISE_SETUP_COMPLETE.md)** - Setup completion summary
-- **[ISSUE_RESOLUTION.md](./ISSUE_RESOLUTION.md)** - Common issues and solutions
+- **[SETUP_GUIDE.md](./docs/deployment/SETUP_GUIDE.md)** - Detailed setup instructions
+- **[TROUBLESHOOTING.md](./docs/deployment/TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
+- **[SETUP_VERIFICATION.md](./docs/deployment/SETUP_VERIFICATION.md)** - Verification checklist
+- **[ENTERPRISE_SETUP_COMPLETE.md](./docs/deployment/ENTERPRISE_SETUP_COMPLETE.md)** - Setup completion summary
 
 ### 🗄️ Database & Prisma
-- **[PRISMA_GUIDE.md](./PRISMA_GUIDE.md)** - Complete Prisma ORM guide
-- **[MIGRATION_NOTES.md](./MIGRATION_NOTES.md)** - Database migration guide
+- **[PRISMA_GUIDE.md](./docs/guides/PRISMA_GUIDE.md)** - Complete Prisma ORM guide
+- **[MIGRATION_NOTES.md](./docs/architecture/MIGRATION_NOTES.md)** - Database migration guide
 - **Prisma Schema:** `backend/prisma/schema.prisma` - Complete database schema (15+ models)
 
 ### 🏗️ Features & Architecture
-- **[FEATURES.md](./FEATURES.md)** - Detailed feature documentation
-- **[ENTERPRISE_ARCHITECTURE.md](./ENTERPRISE_ARCHITECTURE.md)** - System architecture
-- **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete API reference
-- **[FEATURE_SUMMARY.md](./FEATURE_SUMMARY.md)** - Feature matrix
+- **[FEATURES.md](./docs/features/FEATURES.md)** - Detailed feature documentation
+- **[ENTERPRISE_ARCHITECTURE.md](./docs/architecture/ENTERPRISE_ARCHITECTURE.md)** - System architecture
+- **[API_REFERENCE.md](./docs/api/API_REFERENCE.md)** - Complete API reference
+- **[FEATURE_SUMMARY.md](./docs/features/FEATURE_SUMMARY.md)** - Feature matrix
 
 ### 💻 Development
-- **[TYPESCRIPT_IMPLEMENTATION.md](./TYPESCRIPT_IMPLEMENTATION.md)** - TypeScript setup and usage
-- **[COMMANDS_REFERENCE.md](./COMMANDS_REFERENCE.md)** - All available commands
+- **[TYPESCRIPT_IMPLEMENTATION.md](./docs/guides/TYPESCRIPT_IMPLEMENTATION.md)** - TypeScript setup and usage
+- **[FRONTEND_ACCESS.md](./docs/guides/FRONTEND_ACCESS.md)** - Frontend pages access guide
 
 ## 🤝 Contributing
 
@@ -476,7 +477,7 @@ Contributions are welcome! Please read our contributing guidelines before submit
 
 ## 📄 License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
 ## 🆘 Support
 
@@ -488,12 +489,24 @@ For support, please contact the development team or open an issue in the reposit
 - [x] Docker containerization
 - [x] Easy setup commands
 - [x] Separate frontend/backend structure
+- [x] Enterprise deployment preparation
+- [x] Comprehensive documentation organization
+- [x] Security hardening (0 vulnerabilities)
 - [ ] Mobile applications (iOS/Android)
 - [ ] Advanced AI/ML features for case prediction
 - [ ] Blockchain integration for document verification
 - [ ] Enhanced voice recognition for time tracking
 - [ ] Advanced business intelligence features
 - [ ] White-label solutions
+
+## 🏆 Enterprise Deployment Status
+
+✅ **PRODUCTION READY** - See [ENTERPRISE_DEPLOYMENT_READY.md](./ENTERPRISE_DEPLOYMENT_READY.md) for complete readiness report.
+
+**Quick Deployment:**
+- [Deployment Checklist](./DEPLOYMENT_CHECKLIST.md) - Pre-deployment verification
+- [Security Guidelines](./docs/security/SECURITY.md) - Enterprise security standards
+- [Deployment Guide](./docs/deployment/DEPLOYMENT.md) - Complete deployment instructions
 
 ---
 

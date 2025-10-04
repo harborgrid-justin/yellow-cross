@@ -166,7 +166,7 @@ describe('TypeScript Implementation', () => {
     });
 
     test('should have enterprise architecture documentation', () => {
-      const archPath = path.join(__dirname, '../../ENTERPRISE_ARCHITECTURE.md');
+      const archPath = path.join(__dirname, '../../docs/architecture/ENTERPRISE_ARCHITECTURE.md');
       expect(fs.existsSync(archPath)).toBe(true);
       
       const content = fs.readFileSync(archPath, 'utf8');
