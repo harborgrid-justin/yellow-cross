@@ -20,8 +20,8 @@ const {
   createVersionSchema,
   createTemplateSchema,
   automateDocumentSchema,
-  collaborateDocumentSchema,
-  batchOperationSchema
+  collaborateDocumentSchema
+  // batchOperationSchema // Reserved for future batch operations endpoint
 } = require('../validators/documentValidators');
 
 // Helper function to generate document number

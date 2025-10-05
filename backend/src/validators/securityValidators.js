@@ -11,7 +11,9 @@ const registerUserSchema = Joi.object({
   email: Joi.string().required().trim().lowercase().email(),
   password: Joi.string().required().min(8).max(100)
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .message('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+    .messages({
+      'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    }),
   firstName: Joi.string().required().trim().min(1).max(100),
   lastName: Joi.string().required().trim().min(1).max(100),
   jobTitle: Joi.string().trim().allow('').max(100),
@@ -33,9 +35,13 @@ const changePasswordSchema = Joi.object({
   currentPassword: Joi.string().required(),
   newPassword: Joi.string().required().min(8).max(100)
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .message('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+    .messages({
+      'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    }),
   confirmPassword: Joi.string().required().valid(Joi.ref('newPassword'))
-    .message('Passwords must match')
+    .messages({
+      'any.only': 'Passwords must match'
+    })
 });
 
 // Validation schema for password reset request
@@ -48,9 +54,13 @@ const resetPasswordSchema = Joi.object({
   token: Joi.string().required(),
   newPassword: Joi.string().required().min(8).max(100)
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .message('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+    .messages({
+      'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    }),
   confirmPassword: Joi.string().required().valid(Joi.ref('newPassword'))
-    .message('Passwords must match')
+    .messages({
+      'any.only': 'Passwords must match'
+    })
 });
 
 // Validation schema for role assignment

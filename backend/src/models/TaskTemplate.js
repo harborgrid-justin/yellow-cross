@@ -210,6 +210,7 @@ taskTemplateSchema.methods.incrementUsage = function() {
 
 // Instance method: Create task from template
 taskTemplateSchema.methods.createTask = function(customData = {}) {
+  // eslint-disable-next-line no-unused-vars
   const Task = require('./Task');
   
   const taskData = {

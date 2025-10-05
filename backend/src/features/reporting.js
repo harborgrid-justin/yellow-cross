@@ -18,9 +18,9 @@ const {
   createReportSchema,
   updateReportSchema,
   scheduleReportSchema,
-  analyticsQuerySchema,
-  customReportSchema,
-  dashboardConfigSchema
+  // analyticsQuerySchema, // Reserved for future analytics query endpoint
+  customReportSchema
+  // dashboardConfigSchema // Reserved for future dashboard config endpoint
 } = require('../validators/reportValidators');
 
 // Helper function to generate report number
@@ -664,13 +664,14 @@ router.post('/predictive/forecast', async (req, res) => {
       return res.json({ feature: 'Predictive Analytics', message: 'Database not connected' });
     }
 
-    const { metric, forecastPeriod = 'month' } = req.body;
+    const { metric: _metric, forecastPeriod = 'month' } = req.body;
 
     // Get historical data
     const cases = await Case.find().sort({ createdAt: 1 });
     const invoices = await Invoice.find().sort({ invoiceDate: 1 });
 
     // Simple trend analysis
+    // eslint-disable-next-line no-unused-vars
     const trends = {
       caseVolume: [],
       revenue: [],

@@ -17,16 +17,16 @@ const {
   registerUserSchema,
   loginSchema,
   changePasswordSchema,
-  resetPasswordRequestSchema,
-  resetPasswordSchema,
+  // resetPasswordRequestSchema, // Reserved for future password reset request endpoint
+  // resetPasswordSchema, // Reserved for future password reset endpoint
   assignRoleSchema,
   managePermissionSchema,
-  ipWhitelistSchema,
-  sessionSchema,
-  mfaSetupSchema,
-  mfaVerifySchema,
-  auditLogSchema,
-  updateUserSchema
+  ipWhitelistSchema
+  // sessionSchema, // Reserved for future session management endpoint
+  // mfaSetupSchema, // Reserved for future MFA setup endpoint
+  // mfaVerifySchema, // Reserved for future MFA verification endpoint
+  // auditLogSchema, // Reserved for future audit logging endpoint
+  // updateUserSchema // Reserved for future user update endpoint
 } = require('../validators/securityValidators');
 
 // Helper function to generate user ID

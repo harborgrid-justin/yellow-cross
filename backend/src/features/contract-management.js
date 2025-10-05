@@ -13,11 +13,11 @@ const { isConnected } = require('../config/database');
 const {
   createContractSchema,
   updateContractSchema,
-  addVersionSchema,
+  // addVersionSchema, // Reserved for future version management endpoint
   addNegotiationSchema,
   approveContractSchema,
-  addObligationSchema,
-  addSignatureSchema
+  // addObligationSchema, // Reserved for future obligation tracking endpoint
+  // addSignatureSchema // Reserved for future signature management endpoint
 } = require('../validators/contractValidators');
 
 // Helper function to generate contract number

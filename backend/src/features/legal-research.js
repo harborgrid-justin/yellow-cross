@@ -378,7 +378,7 @@ router.post('/citations', async (req, res) => {
       });
     }
 
-    const { researchId, citationType } = req.body;
+    const { researchId, citationType: _citationType } = req.body;
 
     if (!researchId) {
       return res.status(400).json({
@@ -712,7 +712,7 @@ router.post('/collaborate', async (req, res) => {
     let result;
 
     switch (action) {
-      case 'share':
+      case 'share': {
         // Validate share data
         const shareData = validateRequest(shareResearchSchema, { userId, permission: permission || 'View' });
         
@@ -726,8 +726,9 @@ router.post('/collaborate', async (req, res) => {
         
         result = { message: 'Research shared successfully', sharedWith: item.sharedWith };
         break;
+      }
 
-      case 'bookmark':
+      case 'bookmark': {
         // Validate bookmark data
         const bookmarkData = validateRequest(addBookmarkSchema, { userId, notes: notes || '' });
         
@@ -736,6 +737,7 @@ router.post('/collaborate', async (req, res) => {
         
         result = { message: 'Bookmark added successfully', bookmarks: item.bookmarks };
         break;
+      }
 
       case 'highlight':
         // Add highlight

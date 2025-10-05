@@ -15,8 +15,8 @@ const TaskComment = require('../models/TaskComment');
 const { isConnected } = require('../config/database');
 const {
   createTaskSchema,
-  assignTaskSchema,
-  updateTaskStatusSchema,
+  // assignTaskSchema, // Reserved for future task assignment endpoint
+  // updateTaskStatusSchema, // Reserved for future status update endpoint
   addDependencySchema,
   updatePrioritySchema,
   updateProgressSchema,
@@ -624,7 +624,7 @@ router.post('/:id/collaborate', async (req, res) => {
     let result = {};
 
     switch (validatedData.action) {
-      case 'comment':
+      case 'comment': {
         // Create a new comment
         const comment = new TaskComment({
           taskId: task._id,
@@ -653,6 +653,7 @@ router.post('/:id/collaborate', async (req, res) => {
 
         result = { comment, action: 'comment added' };
         break;
+      }
 
       case 'attach':
         // Add attachments
