@@ -218,7 +218,7 @@ integrationSchema.methods.addError = function(errorCode, errorMessage, request) 
   return this.save();
 };
 
-integrationSchema.methods.refreshToken = async function() {
+integrationSchema.methods.refreshAccessToken = async function() {
   // Stub for token refresh logic
   // In production, this would call the provider's token refresh endpoint
   this.tokenExpiresAt = new Date(Date.now() + 3600 * 1000); // 1 hour
