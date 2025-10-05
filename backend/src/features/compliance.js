@@ -15,7 +15,7 @@ const {
   updateComplianceStatusSchema,
   addRiskFactorSchema,
   remediationPlanSchema,
-  auditTrailSchema,
+  // auditTrailSchema, // Reserved for future audit trail endpoint
   complianceReportSchema
 } = require('../validators/complianceValidators');
 
@@ -333,7 +333,7 @@ router.post('/risk-assessment', async (req, res) => {
       return res.json({ feature: 'Risk Assessment', message: 'Database not connected' });
     }
 
-    const { caseId, clientId, riskFactors } = req.body;
+    const { caseId: _caseId, clientId: _clientId, riskFactors } = req.body;
 
     // Calculate overall risk score
     let totalRiskScore = 0;
@@ -418,7 +418,7 @@ router.post('/conflict-check', async (req, res) => {
       return res.json({ feature: 'Conflict Check', message: 'Database not connected' });
     }
 
-    const { clientName, opposingParty, caseType } = req.body;
+    const { clientName, opposingParty, caseType: _caseType } = req.body;
 
     // Search for potential conflicts
     const conflicts = await ComplianceItem.find({

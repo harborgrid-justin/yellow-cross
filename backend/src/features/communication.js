@@ -13,8 +13,8 @@ const CommunicationTemplate = require('../models/CommunicationTemplate');
 const { isConnected } = require('../config/database');
 const {
   createMessageSchema,
-  updateMessageSchema,
-  addAttachmentSchema,
+  // updateMessageSchema, // Reserved for future message update endpoint
+  // addAttachmentSchema, // Reserved for future attachment endpoint
   createTemplateSchema,
   updateTemplateSchema,
   renderTemplateSchema,

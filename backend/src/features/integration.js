@@ -8,7 +8,7 @@
 
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
+// const axios = require('axios'); // Reserved for future external API calls
 const Integration = require('../models/Integration');
 const Case = require('../models/Case');
 const Client = require('../models/Client');
@@ -19,7 +19,7 @@ const {
   createIntegrationSchema,
   updateIntegrationSchema,
   webhookSchema,
-  dataSyncSchema,
+  // dataSyncSchema, // Reserved for future data sync endpoint
   apiRequestSchema,
   dataTransferSchema
 } = require('../validators/integrationValidators');
@@ -45,7 +45,7 @@ const validateRequest = (schema, data) => {
 
 // Helper function for rate limiting check
 const checkRateLimit = (integration) => {
-  const now = new Date();
+  const _now = new Date();
   const stats = integration.statistics;
   
   if (!integration.rateLimit.enabled) {
@@ -402,7 +402,7 @@ router.get('/:id/webhooks', async (req, res) => {
 // Trigger webhook (simulate)
 router.post('/webhooks/:webhookId/trigger', async (req, res) => {
   try {
-    const { event, payload } = req.body;
+    const { event, payload: _payload } = req.body;
     
     // In production, actually send webhook POST request
     // For now, simulate webhook delivery
@@ -434,7 +434,7 @@ router.post('/data/import', async (req, res) => {
     }
 
     const validatedData = validateRequest(dataTransferSchema, req.body);
-    const { dataType, filters, mapping } = validatedData;
+    const { dataType, filters: _filters, mapping: _mapping } = validatedData;
 
     // Simulate data import
     const recordsProcessed = Math.floor(Math.random() * 100) + 1;
@@ -516,7 +516,7 @@ router.post('/data/export', async (req, res) => {
 // Sub-Feature 5: Legacy System Integration
 router.post('/legacy/connect', async (req, res) => {
   try {
-    const { systemName, connectionString, authType } = req.body;
+    const { systemName, connectionString: _connectionString, authType: _authType } = req.body;
 
     // Simulate legacy system connection
     res.json({
@@ -634,7 +634,7 @@ router.post('/accounting/:software/sync', async (req, res) => {
 // Sub-Feature 7: E-Signature Integration
 router.post('/e-signature/send', async (req, res) => {
   try {
-    const { provider = 'DocuSign', documentId, recipients, templateId } = req.body;
+    const { provider = 'DocuSign', documentId, recipients, templateId: _templateId } = req.body;
 
     // Simulate e-signature request
     const envelopeId = `ENV-${Date.now()}`;

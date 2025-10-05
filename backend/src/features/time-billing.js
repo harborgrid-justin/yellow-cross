@@ -20,7 +20,7 @@ const {
   createExpenseSchema,
   createInvoiceSchema,
   addPaymentSchema,
-  rateSchema,
+  // rateSchema, // Reserved for future rate management endpoint
   timeEntriesFilterSchema
 } = require('../validators/billingValidators');
 

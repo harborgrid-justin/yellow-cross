@@ -171,6 +171,50 @@ router.get('/:id/status', async (req, res) => {
   }
 });
 
+// Update case status
+router.put('/:id/status', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Update Case Status',
+        description: 'Update the status of a case',
+        endpoint: '/api/cases/:id/status',
+        capabilities: [
+          'Status updates',
+          'Status history tracking',
+          'Automated notifications',
+          'Audit trail'
+        ],
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const validatedData = validateRequest(updateStatusSchema, req.body);
+    const caseData = await Case.findById(req.params.id);
+
+    if (!caseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Case not found'
+      });
+    }
+
+    await caseData.updateStatus(validatedData.status, validatedData.updatedBy, validatedData.notes);
+
+    res.json({
+      success: true,
+      message: 'Case status updated successfully',
+      data: caseData
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating case status',
+      error: error.message
+    });
+  }
+});
+
 // Sub-Feature 3: Case Assignment & Distribution
 router.put('/:id/assign', async (req, res) => {
   try {
@@ -307,6 +351,56 @@ router.get('/:id/timeline', async (req, res) => {
     res.status(400).json({
       success: false,
       message: 'Error fetching timeline',
+      error: error.message
+    });
+  }
+});
+
+// Create timeline event
+router.post('/:id/timeline', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Create Timeline Event',
+        description: 'Add a new event to the case timeline',
+        endpoint: '/api/cases/:id/timeline',
+        capabilities: [
+          'Event creation',
+          'Deadline tracking',
+          'Event categorization',
+          'Automated notifications'
+        ],
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const validatedData = validateRequest(createTimelineEventSchema, req.body);
+    const caseData = await Case.findById(req.params.id);
+
+    if (!caseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Case not found'
+      });
+    }
+
+    const timelineEvent = new CaseTimelineEvent({
+      caseId: req.params.id,
+      caseNumber: caseData.caseNumber,
+      ...validatedData
+    });
+
+    await timelineEvent.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Timeline event created successfully',
+      data: timelineEvent
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error creating timeline event',
       error: error.message
     });
   }
