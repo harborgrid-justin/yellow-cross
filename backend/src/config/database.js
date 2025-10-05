@@ -3,7 +3,7 @@
  * PostgreSQL connection setup with Prisma ORM
  */
 
-const { PrismaClient } = require('../generated/prisma');
+const { PrismaClient } = require('@prisma/client');
 
 // Create a singleton Prisma client instance
 let prisma = null;
@@ -24,26 +24,10 @@ const connectDB = async () => {
     // Test the connection
     await client.$connect();
     
-    console.log('PostgreSQL Connected successfully via Prisma');
-    
-    // Graceful shutdown
-    process.on('SIGINT', async () => {
-      await client.$disconnect();
-      console.log('PostgreSQL connection closed through app termination');
-      process.exit(0);
-    });
-    
-    process.on('SIGTERM', async () => {
-      await client.$disconnect();
-      console.log('PostgreSQL connection closed through app termination');
-      process.exit(0);
-    });
-    
+    // Note: Graceful shutdown is handled by gracefulShutdown.js
     return client;
   } catch (error) {
-    console.error('Error connecting to PostgreSQL:', error.message);
     // Allow app to continue without DB - warning only
-    console.log('Continuing without database connection...');
     return null;
   }
 };
