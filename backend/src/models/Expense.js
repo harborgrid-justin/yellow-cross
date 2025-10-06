@@ -46,8 +46,7 @@ const expenseSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ['Travel', 'Filing Fees', 'Court Costs', 'Document Production', 'Expert Witness', 
-           'Research', 'Postage', 'Courier', 'Copying', 'Phone', 'Other'],
-    index: true
+           'Research', 'Postage', 'Courier', 'Copying', 'Phone', 'Other']
   },
   subcategory: {
     type: String,

@@ -15,7 +15,7 @@ const {
   updateComplianceStatusSchema,
   addRiskFactorSchema,
   remediationPlanSchema,
-  // auditTrailSchema, // Reserved for future audit trail endpoint
+  auditTrailSchema,
   complianceReportSchema
 } = require('../validators/complianceValidators');
 
@@ -551,6 +551,53 @@ router.get('/audit-trail', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add audit trail entry to compliance item
+router.post('/audit-trail/:complianceId', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Add Audit Trail', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(auditTrailSchema, req.body);
+    
+    const complianceItem = await ComplianceItem.findById(req.params.complianceId);
+    
+    if (!complianceItem) {
+      return res.status(404).json({
+        success: false,
+        error: 'Compliance item not found'
+      });
+    }
+
+    // Add audit trail entry
+    if (!complianceItem.auditTrail) {
+      complianceItem.auditTrail = [];
+    }
+
+    complianceItem.auditTrail.push({
+      timestamp: new Date(),
+      action: validatedData.action,
+      performedBy: validatedData.performedBy,
+      details: validatedData.details,
+      previousValue: validatedData.previousValue,
+      newValue: validatedData.newValue
+    });
+
+    await complianceItem.save();
+
+    res.json({
+      success: true,
+      message: 'Audit trail entry added successfully',
+      data: complianceItem.auditTrail[complianceItem.auditTrail.length - 1]
+    });
+  } catch (error) {
+    res.status(400).json({
       success: false,
       error: error.message
     });

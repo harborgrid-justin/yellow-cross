@@ -20,8 +20,8 @@ const {
   createVersionSchema,
   createTemplateSchema,
   automateDocumentSchema,
-  collaborateDocumentSchema
-  // batchOperationSchema // Reserved for future batch operations endpoint
+  collaborateDocumentSchema,
+  batchOperationSchema
 } = require('../validators/documentValidators');
 
 // Helper function to generate document number
@@ -1027,6 +1027,79 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({
       success: false,
       message: 'Failed to delete document',
+      error: error.message
+    });
+  }
+});
+
+// Batch operations on documents
+router.post('/batch', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Batch Operations', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = batchOperationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const { documentIds, operation, targetFolderPath, tags, category, performedBy } = validatedData;
+    const results = { successful: [], failed: [] };
+
+    for (const docId of documentIds) {
+      try {
+        const document = await Document.findById(docId);
+        
+        if (!document) {
+          results.failed.push({ docId, reason: 'Document not found' });
+          continue;
+        }
+
+        switch (operation) {
+          case 'move':
+            document.folderPath = targetFolderPath;
+            break;
+          case 'copy':
+            // Create a copy - not implemented fully here, would need new document
+            results.failed.push({ docId, reason: 'Copy operation needs full implementation' });
+            continue;
+          case 'delete':
+            document.status = 'Deleted';
+            document.deletedBy = performedBy;
+            document.deletedAt = new Date();
+            break;
+          case 'archive':
+            document.status = 'Archived';
+            document.archivedBy = performedBy;
+            document.archivedAt = new Date();
+            break;
+          case 'tag':
+            document.tags = [...new Set([...(document.tags || []), ...tags])];
+            break;
+          case 'categorize':
+            document.category = category;
+            break;
+        }
+
+        await document.save();
+        results.successful.push(docId);
+      } catch (err) {
+        results.failed.push({ docId, reason: err.message });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Batch ${operation} operation completed`,
+      data: results
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
       error: error.message
     });
   }

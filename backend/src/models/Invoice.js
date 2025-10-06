@@ -134,8 +134,7 @@ const invoiceSchema = new mongoose.Schema({
   paymentStatus: {
     type: String,
     enum: ['Unpaid', 'Partial', 'Paid', 'Overdue', 'Written Off'],
-    default: 'Unpaid',
-    index: true
+    default: 'Unpaid'
   },
   payments: [{
     paymentId: {

@@ -15,8 +15,8 @@ const TaskComment = require('../models/TaskComment');
 const { isConnected } = require('../config/database');
 const {
   createTaskSchema,
-  // assignTaskSchema, // Reserved for future task assignment endpoint
-  // updateTaskStatusSchema, // Reserved for future status update endpoint
+  assignTaskSchema,
+  updateTaskStatusSchema,
   addDependencySchema,
   updatePrioritySchema,
   updateProgressSchema,
@@ -874,6 +874,86 @@ router.get('/', (req, res) => {
       'Workflow Analytics'
     ]
   });
+});
+
+// Assign task to user
+router.post('/:id/assign', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Assign Task', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = assignTaskSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ success: false, error: 'Task not found' });
+    }
+
+    task.assignedTo = {
+      userId: validatedData.assignedTo,
+      name: validatedData.assignedToName,
+      assignedAt: new Date(),
+      assignedBy: validatedData.assignedBy
+    };
+
+    if (task.status === 'Not Started') {
+      task.status = 'In Progress';
+    }
+
+    await task.save();
+
+    res.json({ success: true, message: 'Task assigned successfully', data: task });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Update task status
+router.put('/:id/status', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Update Task Status', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = updateTaskStatusSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ success: false, error: 'Task not found' });
+    }
+
+    task.status = validatedData.status;
+    if (validatedData.completionPercentage !== undefined) {
+      task.completionPercentage = validatedData.completionPercentage;
+    }
+
+    if (validatedData.status === 'Completed') {
+      task.completedDate = new Date();
+      task.completionPercentage = 100;
+    }
+
+    // Add status change to activity log
+    if (!task.activityLog) task.activityLog = [];
+    task.activityLog.push({
+      timestamp: new Date(),
+      action: `Status changed to ${validatedData.status}`,
+      performedBy: validatedData.updatedBy,
+      details: validatedData.notes || ''
+    });
+
+    await task.save();
+
+    res.json({ success: true, message: 'Task status updated', data: task });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
 });
 
 module.exports = router;

@@ -149,7 +149,7 @@ const integrationSchema = new mongoose.Schema({
   },
   
   // Error Tracking
-  errors: [{
+  errorLog: [{
     timestamp: Date,
     errorCode: String,
     errorMessage: String,
@@ -160,8 +160,7 @@ const integrationSchema = new mongoose.Schema({
   // Metadata
   createdBy: {
     type: String,
-    required: true,
-    index: true
+    required: true
   },
   lastModifiedBy: String,
   tags: [String],
