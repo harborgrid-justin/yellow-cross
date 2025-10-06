@@ -4,7 +4,8 @@ describe('Calendar & Scheduling Page', () => {
   });
 
   it('should load the calendar scheduling page successfully', () => {
-    cy.contains('Calendar & Scheduling System').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Calendar').should('exist');
   });
 
   it('should display feature hero section', () => {

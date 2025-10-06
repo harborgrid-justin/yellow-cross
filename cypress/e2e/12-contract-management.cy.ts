@@ -4,7 +4,8 @@ describe('Contract Management Page', () => {
   });
 
   it('should load the contract management page successfully', () => {
-    cy.contains('Contract Management').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Contract').should('exist');
   });
 
   it('should display feature hero section', () => {

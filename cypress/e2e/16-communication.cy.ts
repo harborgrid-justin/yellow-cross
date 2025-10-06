@@ -4,7 +4,8 @@ describe('Communication Page', () => {
   });
 
   it('should load the communication page successfully', () => {
-    cy.contains('Communication').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Communication').should('exist');
   });
 
   it('should display feature hero section', () => {

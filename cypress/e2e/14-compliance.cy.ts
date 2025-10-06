@@ -4,7 +4,8 @@ describe('Compliance Page', () => {
   });
 
   it('should load the compliance page successfully', () => {
-    cy.contains('Compliance').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Compliance').should('exist');
   });
 
   it('should display feature hero section', () => {

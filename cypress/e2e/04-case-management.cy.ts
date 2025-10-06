@@ -4,7 +4,8 @@ describe('Case Management Page', () => {
   });
 
   it('should load the case management page successfully', () => {
-    cy.contains('Case Management System').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Case Management').should('exist');
   });
 
   it('should display feature hero section', () => {

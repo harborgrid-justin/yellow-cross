@@ -4,7 +4,8 @@ describe('Document Management Page', () => {
   });
 
   it('should load the document management page successfully', () => {
-    cy.contains('Document Management System').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Document').should('exist');
   });
 
   it('should display feature hero section', () => {

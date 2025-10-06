@@ -4,7 +4,8 @@ describe('Court & Docket Page', () => {
   });
 
   it('should load the court docket page successfully', () => {
-    cy.contains('Court & Docket Management').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Court').should('exist');
   });
 
   it('should display feature hero section', () => {

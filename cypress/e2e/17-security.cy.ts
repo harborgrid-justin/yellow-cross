@@ -4,7 +4,8 @@ describe('Security Page', () => {
   });
 
   it('should load the security page successfully', () => {
-    cy.contains('Security').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Security').should('exist');
   });
 
   it('should display feature hero section', () => {

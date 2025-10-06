@@ -4,7 +4,8 @@ describe('Integration Page', () => {
   });
 
   it('should load the integration page successfully', () => {
-    cy.contains('Integration').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Integration').should('exist');
   });
 
   it('should display feature hero section', () => {

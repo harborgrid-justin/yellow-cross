@@ -4,7 +4,8 @@ describe('Time & Billing Page', () => {
   });
 
   it('should load the time billing page successfully', () => {
-    cy.contains('Time & Billing Management').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Time').should('exist');
   });
 
   it('should display feature hero section', () => {

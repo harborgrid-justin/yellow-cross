@@ -14,7 +14,7 @@ describe('Login Page', () => {
   });
 
   it('should have link to register page', () => {
-    cy.contains('Sign Up').should('exist');
+    cy.contains('Create one').should('exist');
   });
 
   it('should have remember me checkbox', () => {
@@ -22,6 +22,6 @@ describe('Login Page', () => {
   });
 
   it('should display forgot password link', () => {
-    cy.contains('Forgot Password').should('exist');
+    cy.contains('Forgot password').should('exist');
   });
 });

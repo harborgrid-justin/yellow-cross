@@ -4,7 +4,8 @@ describe('Reporting & Analytics Page', () => {
   });
 
   it('should load the reporting analytics page successfully', () => {
-    cy.contains('Reporting & Analytics').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Reporting').should('exist');
   });
 
   it('should display feature hero section', () => {

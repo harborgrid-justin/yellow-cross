@@ -4,7 +4,7 @@ describe('Register Page', () => {
   });
 
   it('should load the register page successfully', () => {
-    cy.contains('Sign Up').should('be.visible');
+    cy.contains('Create Account').should('be.visible');
   });
 
   it('should display registration form elements', () => {
@@ -13,7 +13,7 @@ describe('Register Page', () => {
   });
 
   it('should have link to login page', () => {
-    cy.contains('Sign In').should('exist');
+    cy.contains('Sign in').should('exist');
   });
 
   it('should display terms and conditions', () => {

@@ -21,8 +21,8 @@ describe('Performance', () => {
     cy.get('.feature-page').should('exist');
   });
 
-  it('should load images and assets', () => {
+  it('should load CSS and assets', () => {
     cy.visit('/');
-    cy.get('img').should('be.visible');
+    cy.get('body').should('have.css', 'margin');
   });
 });

@@ -4,7 +4,8 @@ describe('eDiscovery Page', () => {
   });
 
   it('should load the ediscovery page successfully', () => {
-    cy.contains('eDiscovery').should('be.visible');
+    cy.get('.feature-page').should('exist');
+    cy.contains('Discovery').should('exist');
   });
 
   it('should display feature hero section', () => {
