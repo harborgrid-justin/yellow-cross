@@ -7,6 +7,7 @@ const { PrismaClient } = require('@prisma/client');
 
 // Create a singleton Prisma client instance
 let prisma = null;
+let connected = false;
 
 const getPrismaClient = () => {
   if (!prisma) {
@@ -23,24 +24,20 @@ const connectDB = async () => {
     
     // Test the connection
     await client.$connect();
+    connected = true;
     
     // Note: Graceful shutdown is handled by gracefulShutdown.js
     return client;
   } catch (error) {
+    connected = false;
     // Allow app to continue without DB - warning only
     return null;
   }
 };
 
-// Function to check if database is connected
-const isConnected = async () => {
-  try {
-    const client = getPrismaClient();
-    await client.$queryRaw`SELECT 1`;
-    return true;
-  } catch (error) {
-    return false;
-  }
+// Function to check if database is connected (synchronous)
+const isConnected = () => {
+  return connected;
 };
 
 // Function to disconnect
@@ -48,6 +45,7 @@ const disconnectDB = async () => {
   if (prisma) {
     await prisma.$disconnect();
     prisma = null;
+    connected = false;
   }
 };
 
