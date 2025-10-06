@@ -311,7 +311,7 @@ npm run docker:restart     # Restart containers
 ```bash
 $ npm run setup
 
-> yelllow-cross@2.0.0 setup
+> yellow-cross@2.0.0 setup
 > npm run setup:install && npm run setup:env && npm run setup:db
 
 ✓ Dependencies installed

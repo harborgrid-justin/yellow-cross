@@ -291,5 +291,5 @@ The frontend for Yellow Cross has been successfully completed with:
 
 **Completed By:** GitHub Copilot Coding Agent  
 **Date:** October 2024  
-**Repository:** harborgrid-justin/yelllow-cross  
+**Repository:** harborgrid-justin/yellow-cross  
 **Platform:** Yellow Cross Enterprise Law Firm Practice Management Platform
