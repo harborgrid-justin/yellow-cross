@@ -152,6 +152,20 @@ const timeEntriesFilterSchema = Joi.object({
   limit: Joi.number().integer().min(1).max(100).default(20)
 });
 
+// Validation schema for sending invoice
+const sendInvoiceSchema = Joi.object({
+  sentBy: Joi.string().required().trim().min(1).max(100),
+  sendMethod: Joi.string().valid('Email', 'Mail', 'Portal').default('Email'),
+  recipientEmail: Joi.string().email().optional(),
+  notes: Joi.string().trim().allow('').max(500)
+});
+
+// Validation schema for approving expense
+const approveExpenseSchema = Joi.object({
+  approvedBy: Joi.string().required().trim().min(1).max(100),
+  notes: Joi.string().trim().allow('').max(500)
+});
+
 module.exports = {
   createTimeEntrySchema,
   updateTimeEntrySchema,
@@ -161,5 +175,7 @@ module.exports = {
   createInvoiceSchema,
   addPaymentSchema,
   rateSchema,
-  timeEntriesFilterSchema
+  timeEntriesFilterSchema,
+  sendInvoiceSchema,
+  approveExpenseSchema
 };

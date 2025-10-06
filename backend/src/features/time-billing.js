@@ -21,7 +21,9 @@ const {
   createInvoiceSchema,
   addPaymentSchema,
   // rateSchema, // Reserved for future rate management endpoint
-  timeEntriesFilterSchema
+  timeEntriesFilterSchema,
+  sendInvoiceSchema,
+  approveExpenseSchema
 } = require('../validators/billingValidators');
 
 // Helper function to generate entry number
@@ -672,7 +674,9 @@ router.post('/invoices/:id/send', async (req, res) => {
       });
     }
 
-    const { sentBy } = req.body;
+    // Validate request data
+    const validatedData = validateRequest(sendInvoiceSchema, req.body);
+    const { sentBy } = validatedData;
     
     const invoice = await Invoice.findById(req.params.id);
     if (!invoice) {
@@ -819,7 +823,9 @@ router.post('/expenses/:id/approve', async (req, res) => {
       });
     }
 
-    const { approvedBy } = req.body;
+    // Validate request data
+    const validatedData = validateRequest(approveExpenseSchema, req.body);
+    const { approvedBy } = validatedData;
     
     const expense = await Expense.findById(req.params.id);
     if (!expense) {

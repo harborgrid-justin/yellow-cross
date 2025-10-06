@@ -166,6 +166,15 @@ const scheduleResourceSchema = Joi.object({
   requestedBy: Joi.string().required().trim()
 });
 
+// Validation schema for reminder creation
+const createReminderSchema = Joi.object({
+  eventId: Joi.string().required().pattern(/^[0-9a-fA-F]{24}$/),
+  reminderType: Joi.string().required().valid('Email', 'SMS', 'Push', 'System'),
+  minutesBefore: Joi.number().required().min(0).max(10080), // max 1 week in minutes
+  recipient: Joi.string().trim().allow('').max(100),
+  customMessage: Joi.string().trim().allow('').max(500)
+});
+
 module.exports = {
   createEventSchema,
   createDeadlineSchema,
@@ -174,5 +183,6 @@ module.exports = {
   completeDeadlineSchema,
   requestExtensionSchema,
   checkAvailabilitySchema,
-  scheduleResourceSchema
+  scheduleResourceSchema,
+  createReminderSchema
 };
