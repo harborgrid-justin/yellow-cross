@@ -18,9 +18,9 @@ const {
   createReportSchema,
   updateReportSchema,
   scheduleReportSchema,
-  // analyticsQuerySchema, // Reserved for future analytics query endpoint
-  customReportSchema
-  // dashboardConfigSchema // Reserved for future dashboard config endpoint
+  analyticsQuerySchema,
+  customReportSchema,
+  dashboardConfigSchema
 } = require('../validators/reportValidators');
 
 // Helper function to generate report number
@@ -851,6 +851,114 @@ router.get('/', (req, res) => {
       executive: 'GET /api/reports/executive/dashboard'
     }
   });
+});
+
+// Query analytics data
+router.post('/analytics/query', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Analytics Query', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = analyticsQuerySchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const { metric, dateRange, groupBy, filters } = validatedData;
+    
+    // Build query based on metric type
+    const query = {};
+    if (dateRange) {
+      query.createdAt = {
+        $gte: new Date(dateRange.startDate),
+        $lte: new Date(dateRange.endDate)
+      };
+    }
+    
+    if (filters) {
+      Object.assign(query, filters);
+    }
+
+    // Execute query based on metric (simplified implementation)
+    let data = [];
+    switch (metric) {
+      case 'caseVolume':
+        data = await Case.aggregate([
+          { $match: query },
+          { $group: { _id: groupBy ? `$${groupBy}` : null, count: { $sum: 1 } } }
+        ]);
+        break;
+      case 'revenue':
+        data = await Invoice.aggregate([
+          { $match: query },
+          { $group: { _id: groupBy ? `$${groupBy}` : null, total: { $sum: '$totalAmount' } } }
+        ]);
+        break;
+      default:
+        data = { message: 'Metric calculation not implemented for this type' };
+    }
+
+    res.json({
+      success: true,
+      data: {
+        metric,
+        results: data,
+        dateRange,
+        groupBy
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Save dashboard configuration
+router.post('/dashboard/config', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Dashboard Configuration', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = dashboardConfigSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const report = new Report({
+      reportNumber: generateReportNumber(),
+      title: validatedData.title,
+      reportType: 'Executive Dashboard',
+      data: {
+        widgets: validatedData.widgets,
+        refreshInterval: validatedData.refreshInterval
+      },
+      createdBy: validatedData.createdBy,
+      status: 'Published'
+    });
+
+    await report.save();
+
+    res.json({
+      success: true,
+      message: 'Dashboard configuration saved successfully',
+      data: report
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 module.exports = router;

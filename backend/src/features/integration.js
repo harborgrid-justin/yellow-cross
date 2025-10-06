@@ -19,7 +19,7 @@ const {
   createIntegrationSchema,
   updateIntegrationSchema,
   webhookSchema,
-  // dataSyncSchema, // Reserved for future data sync endpoint
+  dataSyncSchema,
   apiRequestSchema,
   dataTransferSchema
 } = require('../validators/integrationValidators');
@@ -831,5 +831,68 @@ router.get('/', (req, res) => {
     }
   });
 });
+
+// Configure data sync for integration
+router.post('/:id/sync-config', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Data Sync Configuration', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = dataSyncSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const integration = await Integration.findById(req.params.id);
+    
+    if (!integration) {
+      return res.status(404).json({
+        success: false,
+        error: 'Integration not found'
+      });
+    }
+
+    // Update sync configuration
+    integration.syncConfig = {
+      enabled: validatedData.enabled,
+      direction: validatedData.direction,
+      frequency: validatedData.frequency,
+      lastSync: integration.syncConfig?.lastSync || null,
+      nextSync: validatedData.enabled ? calculateNextSync(validatedData.frequency) : null
+    };
+
+    await integration.save();
+
+    res.json({
+      success: true,
+      message: 'Data sync configuration updated successfully',
+      data: integration.syncConfig
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Helper function to calculate next sync time
+function calculateNextSync(frequency) {
+  const now = new Date();
+  switch (frequency) {
+    case 'Hourly':
+      return new Date(now.getTime() + 60 * 60 * 1000);
+    case 'Daily':
+      return new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    case 'Weekly':
+      return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    default:
+      return null;
+  }
+}
 
 module.exports = router;

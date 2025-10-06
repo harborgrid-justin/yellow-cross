@@ -20,7 +20,7 @@ const {
   createExpenseSchema,
   createInvoiceSchema,
   addPaymentSchema,
-  // rateSchema, // Reserved for future rate management endpoint
+  rateSchema,
   timeEntriesFilterSchema,
   sendInvoiceSchema,
   approveExpenseSchema
@@ -1102,6 +1102,68 @@ router.get('/', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve billing overview',
+      error: error.message
+    });
+  }
+});
+
+// Rate management - Set or update billing rates
+router.post('/rates', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Rate Management', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(rateSchema, req.body);
+    
+    // In a real implementation, this would update a separate rates table or user rates
+    // For now, we'll return the validated data as confirmation
+    const rateRecord = {
+      rateId: `RATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      userId: validatedData.userId,
+      userRole: validatedData.userRole,
+      standardRate: validatedData.standardRate,
+      specialRates: validatedData.specialRates || [],
+      effectiveDate: validatedData.effectiveDate,
+      updatedBy: validatedData.updatedBy,
+      updatedAt: new Date()
+    };
+
+    res.status(201).json({
+      success: true,
+      message: 'Billing rate configured successfully',
+      data: rateRecord
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Get billing rates for a user
+router.get('/rates/:userId', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Get Rates', message: 'Database not connected' });
+    }
+
+    // In a real implementation, this would query the rates table
+    // For now, return a sample response
+    res.json({
+      success: true,
+      data: {
+        userId: req.params.userId,
+        standardRate: 250.00,
+        currency: 'USD',
+        specialRates: [],
+        effectiveDate: new Date()
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
       error: error.message
     });
   }

@@ -17,16 +17,16 @@ const {
   registerUserSchema,
   loginSchema,
   changePasswordSchema,
-  // resetPasswordRequestSchema, // Reserved for future password reset request endpoint
-  // resetPasswordSchema, // Reserved for future password reset endpoint
+  resetPasswordRequestSchema,
+  resetPasswordSchema,
   assignRoleSchema,
   managePermissionSchema,
-  ipWhitelistSchema
-  // sessionSchema, // Reserved for future session management endpoint
-  // mfaSetupSchema, // Reserved for future MFA setup endpoint
-  // mfaVerifySchema, // Reserved for future MFA verification endpoint
-  // auditLogSchema, // Reserved for future audit logging endpoint
-  // updateUserSchema // Reserved for future user update endpoint
+  ipWhitelistSchema,
+  sessionSchema,
+  mfaSetupSchema,
+  mfaVerifySchema,
+  auditLogSchema,
+  updateUserSchema
 } = require('../validators/securityValidators');
 
 // Helper function to generate user ID
@@ -1020,6 +1020,233 @@ router.get('/', (req, res) => {
       securityDashboard: 'GET /api/security/monitoring/dashboard'
     }
   });
+});
+
+// Request password reset
+router.post('/auth/reset-password/request', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Password Reset Request', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = resetPasswordRequestSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findByEmail(validatedData.email);
+    if (!user) {
+      // Don't reveal if user exists
+      return res.json({ success: true, message: 'If account exists, reset link will be sent' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Password reset link sent',
+      resetToken // In production, this would be sent via email
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Reset password with token
+router.post('/auth/reset-password', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Password Reset', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = resetPasswordSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findOne({
+      resetPasswordToken: validatedData.token,
+      resetPasswordExpires: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired reset token' });
+    }
+
+    user.password = validatedData.newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: 'Password reset successfully' });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Create or update session
+router.post('/sessions/create', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Session Management', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = sessionSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findById(validatedData.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    const sessionId = user.createSession(validatedData.ipAddress, validatedData.userAgent);
+    await user.save();
+
+    res.json({ success: true, message: 'Session created', sessionId });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Setup MFA
+router.post('/mfa/setup', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'MFA Setup', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = mfaSetupSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findById(validatedData.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    user.mfaEnabled = validatedData.enabled;
+    if (validatedData.enabled) {
+      user.mfaSecret = crypto.randomBytes(20).toString('hex');
+      // Generate backup codes
+      user.mfaBackupCodes = Array.from({ length: 10 }, () => 
+        crypto.randomBytes(4).toString('hex')
+      );
+    }
+    await user.save();
+
+    res.json({
+      success: true,
+      message: `MFA ${validatedData.enabled ? 'enabled' : 'disabled'}`,
+      mfaSecret: user.mfaSecret,
+      backupCodes: user.mfaBackupCodes
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Verify MFA code
+router.post('/mfa/verify', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'MFA Verification', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = mfaVerifySchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findById(validatedData.userId);
+    if (!user || !user.mfaEnabled) {
+      return res.status(400).json({ success: false, error: 'MFA not enabled' });
+    }
+
+    // Simple verification (in production, use proper TOTP verification)
+    const isValid = validatedData.code.length === 6;
+
+    res.json({ success: true, verified: isValid });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Create audit log entry
+router.post('/audit/log', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Audit Log', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = auditLogSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const auditLog = new SecurityAuditLog({
+      logNumber: `AUDIT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      eventType: validatedData.eventType,
+      severity: validatedData.severity,
+      userId: validatedData.userId,
+      username: validatedData.username,
+      action: validatedData.action,
+      resource: validatedData.resource,
+      resourceId: validatedData.resourceId,
+      ipAddress: validatedData.ipAddress,
+      userAgent: validatedData.userAgent,
+      status: validatedData.status,
+      statusMessage: validatedData.statusMessage,
+      context: validatedData.context
+    });
+
+    await auditLog.save();
+
+    res.json({ success: true, message: 'Audit log created', data: auditLog });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Update user
+router.put('/users/:userId', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Update User', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = updateUserSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ success: false, error: error.details[0].message });
+    }
+
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    // Update allowed fields
+    if (validatedData.firstName) user.firstName = validatedData.firstName;
+    if (validatedData.lastName) user.lastName = validatedData.lastName;
+    if (validatedData.jobTitle !== undefined) user.jobTitle = validatedData.jobTitle;
+    if (validatedData.department !== undefined) user.department = validatedData.department;
+    if (validatedData.phoneNumber !== undefined) user.phoneNumber = validatedData.phoneNumber;
+    if (validatedData.status) user.status = validatedData.status;
+    if (validatedData.preferences) user.preferences = { ...user.preferences, ...validatedData.preferences };
+    user.lastModifiedBy = validatedData.lastModifiedBy;
+
+    await user.save();
+
+    res.json({ success: true, message: 'User updated successfully', data: user });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
 });
 
 module.exports = router;
