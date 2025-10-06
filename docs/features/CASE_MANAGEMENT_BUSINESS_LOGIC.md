@@ -497,7 +497,7 @@ All endpoints use Joi validation schemas (`src/validators/caseValidators.js`):
 - Test mode support (no exit on failure)
 
 **Connection String:**
-- Default: `mongodb://localhost:27017/yelllow-cross`
+- Default: `mongodb://localhost:27017/yellow-cross`
 - Override with `MONGODB_URI` environment variable
 
 ### Fallback Behavior:

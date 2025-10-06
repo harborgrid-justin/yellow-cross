@@ -3,7 +3,7 @@
 ## 🎯 Issue Resolution
 
 **Issue:** Complete Case Management System in Full  
-**Repository:** harborgrid-justin/yelllow-cross  
+**Repository:** harborgrid-justin/yellow-cross  
 **Branch:** copilot/fix-a226024f-8cdc-4e87-a312-bce21bb38970  
 **Status:** ✅ COMPLETE  
 

@@ -425,7 +425,7 @@ Time:        ~1.2s
 
 ### Environment Variables
 ```bash
-MONGODB_URI=mongodb://localhost:27017/yelllow-cross
+MONGODB_URI=mongodb://localhost:27017/yellow-cross
 PORT=3000
 NODE_ENV=production
 ```
@@ -564,4 +564,4 @@ For questions or issues:
 **Implementation Date**: October 2024  
 **Status**: ✅ COMPLETE  
 **Version**: 1.0.0  
-**Repository**: harborgrid-justin/yelllow-cross  
+**Repository**: harborgrid-justin/yellow-cross  

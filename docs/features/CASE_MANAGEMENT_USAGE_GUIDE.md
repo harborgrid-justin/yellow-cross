@@ -13,13 +13,13 @@ This guide provides practical examples of how to use the Case Management System 
 Set the MongoDB connection string in your `.env` file:
 
 ```bash
-MONGODB_URI=mongodb://localhost:27017/yelllow-cross
+MONGODB_URI=mongodb://localhost:27017/yellow-cross
 ```
 
 Or use a cloud MongoDB instance:
 
 ```bash
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/yelllow-cross
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/yellow-cross
 ```
 
 ### 2. Start the Server

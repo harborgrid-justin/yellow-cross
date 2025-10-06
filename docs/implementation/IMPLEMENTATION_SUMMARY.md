@@ -326,5 +326,5 @@ The Case Management System for Yellow Cross is **fully implemented with 100% com
 
 **Implementation Date:** October 2024  
 **Verified By:** GitHub Copilot Coding Agent  
-**Repository:** harborgrid-justin/yelllow-cross  
+**Repository:** harborgrid-justin/yellow-cross  
 **Platform:** Yellow Cross Enterprise Law Firm Practice Management Platform

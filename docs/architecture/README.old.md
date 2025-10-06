@@ -169,8 +169,8 @@ Yellow Cross is an all-in-one practice management solution that provides law fir
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/harborgrid-justin/yelllow-cross.git
-cd yelllow-cross
+git clone https://github.com/harborgrid-justin/yellow-cross.git
+cd yellow-cross
 ```
 
 2. Install dependencies:
@@ -295,7 +295,7 @@ npm run dev
 ## 📦 Project Structure
 
 ```
-yelllow-cross/
+yellow-cross/
 ├── src/
 │   ├── features/          # 15 feature modules
 │   │   ├── case-management.js
