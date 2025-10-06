@@ -13,11 +13,11 @@ const { isConnected } = require('../config/database');
 const {
   createContractSchema,
   updateContractSchema,
-  // addVersionSchema, // Reserved for future version management endpoint
+  addVersionSchema,
   addNegotiationSchema,
   approveContractSchema,
-  // addObligationSchema, // Reserved for future obligation tracking endpoint
-  // addSignatureSchema // Reserved for future signature management endpoint
+  addObligationSchema,
+  addSignatureSchema
 } = require('../validators/contractValidators');
 
 // Helper function to generate contract number
@@ -318,6 +318,172 @@ router.post('/:id/negotiations', async (req, res) => {
       success: true,
       message: 'Negotiation recorded successfully',
       data: { contract }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add version to contract
+router.post('/:id/versions', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Add Contract Version', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = addVersionSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const contract = await Contract.findById(req.params.id);
+    if (!contract) {
+      return res.status(404).json({
+        success: false,
+        error: 'Contract not found'
+      });
+    }
+
+    // Add new version
+    if (!contract.versions) {
+      contract.versions = [];
+    }
+
+    const versionNumber = contract.versions.length + 1;
+    contract.versions.push({
+      versionNumber,
+      changes: validatedData.changes,
+      documentUrl: validatedData.documentUrl || '',
+      createdBy: validatedData.createdBy,
+      createdAt: new Date()
+    });
+
+    await contract.save();
+
+    res.json({
+      success: true,
+      message: 'Contract version added successfully',
+      data: contract.versions[contract.versions.length - 1]
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add obligation to contract
+router.post('/:id/obligations', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Add Contract Obligation', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = addObligationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const contract = await Contract.findById(req.params.id);
+    if (!contract) {
+      return res.status(404).json({
+        success: false,
+        error: 'Contract not found'
+      });
+    }
+
+    // Add obligation
+    if (!contract.obligations) {
+      contract.obligations = [];
+    }
+
+    contract.obligations.push({
+      obligationType: validatedData.obligationType,
+      description: validatedData.description,
+      responsibleParty: validatedData.responsibleParty,
+      dueDate: validatedData.dueDate,
+      status: validatedData.status || 'Not Started',
+      createdAt: new Date()
+    });
+
+    await contract.save();
+
+    res.json({
+      success: true,
+      message: 'Contract obligation added successfully',
+      data: contract.obligations[contract.obligations.length - 1]
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add signature to contract
+router.post('/:id/signatures', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Add Contract Signature', message: 'Database not connected' });
+    }
+
+    const { error, value: validatedData } = addSignatureSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: error.details[0].message
+      });
+    }
+
+    const contract = await Contract.findById(req.params.id);
+    if (!contract) {
+      return res.status(404).json({
+        success: false,
+        error: 'Contract not found'
+      });
+    }
+
+    // Add signature
+    if (!contract.signatures) {
+      contract.signatures = [];
+    }
+
+    contract.signatures.push({
+      signerName: validatedData.signerName,
+      signerRole: validatedData.signerRole || '',
+      signerEmail: validatedData.signerEmail,
+      signatureMethod: validatedData.signatureMethod,
+      signatureUrl: validatedData.signatureUrl || '',
+      signedAt: new Date(),
+      ipAddress: validatedData.ipAddress || ''
+    });
+
+    // Update contract status if all parties have signed
+    const allPartiesSigned = contract.parties.every(party => 
+      contract.signatures.some(sig => sig.signerName === party.name)
+    );
+    
+    if (allPartiesSigned && contract.status === 'Pending Signature') {
+      contract.status = 'Active';
+    }
+
+    await contract.save();
+
+    res.json({
+      success: true,
+      message: 'Contract signature added successfully',
+      data: contract.signatures[contract.signatures.length - 1]
     });
   } catch (error) {
     res.status(400).json({

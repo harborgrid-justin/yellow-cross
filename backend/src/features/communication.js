@@ -13,8 +13,8 @@ const CommunicationTemplate = require('../models/CommunicationTemplate');
 const { isConnected } = require('../config/database');
 const {
   createMessageSchema,
-  // updateMessageSchema, // Reserved for future message update endpoint
-  // addAttachmentSchema, // Reserved for future attachment endpoint
+  updateMessageSchema,
+  addAttachmentSchema,
   createTemplateSchema,
   updateTemplateSchema,
   renderTemplateSchema,
@@ -206,6 +206,94 @@ router.put('/messages/:id/read', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update message
+router.put('/messages/:id', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Update Message', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(updateMessageSchema, req.body);
+    
+    const message = await Message.findById(req.params.id);
+    
+    if (!message) {
+      return res.status(404).json({
+        success: false,
+        error: 'Message not found'
+      });
+    }
+
+    // Update allowed fields
+    if (validatedData.subject !== undefined) message.subject = validatedData.subject;
+    if (validatedData.body !== undefined) message.body = validatedData.body;
+    if (validatedData.status !== undefined) message.status = validatedData.status;
+    if (validatedData.isStarred !== undefined) message.isStarred = validatedData.isStarred;
+    if (validatedData.isFlagged !== undefined) message.isFlagged = validatedData.isFlagged;
+    if (validatedData.labels !== undefined) message.labels = validatedData.labels;
+    if (validatedData.tags !== undefined) message.tags = validatedData.tags;
+
+    await message.save();
+
+    res.json({
+      success: true,
+      message: 'Message updated successfully',
+      data: message
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Add attachment to message
+router.post('/messages/:id/attachments', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Add Attachment', message: 'Database not connected' });
+    }
+
+    const validatedData = validateRequest(addAttachmentSchema, req.body);
+    
+    const message = await Message.findById(req.params.id);
+    
+    if (!message) {
+      return res.status(404).json({
+        success: false,
+        error: 'Message not found'
+      });
+    }
+
+    // Add attachment
+    if (!message.attachments) {
+      message.attachments = [];
+    }
+    
+    message.attachments.push({
+      fileName: validatedData.fileName,
+      fileSize: validatedData.fileSize,
+      fileType: validatedData.fileType,
+      url: validatedData.url,
+      uploadedAt: new Date()
+    });
+
+    await message.save();
+
+    res.json({
+      success: true,
+      message: 'Attachment added successfully',
+      data: message
+    });
+  } catch (error) {
+    res.status(400).json({
       success: false,
       error: error.message
     });
