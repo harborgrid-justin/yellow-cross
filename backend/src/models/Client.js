@@ -46,8 +46,7 @@ const clientSchema = new mongoose.Schema({
   email: {
     type: String,
     trim: true,
-    lowercase: true,
-    index: true
+    lowercase: true
   },
   phone: {
     type: String,

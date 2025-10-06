@@ -161,8 +161,7 @@ const courtDocketSchema = new mongoose.Schema({
   caseId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Case',
-    required: true,
-    index: true
+    required: true
   },
   caseNumber: {
     type: String,

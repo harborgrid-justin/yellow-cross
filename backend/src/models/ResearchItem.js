@@ -83,8 +83,7 @@ const researchItemSchema = new mongoose.Schema({
   },
   topics: [{
     type: String,
-    trim: true,
-    index: true
+    trim: true
   }],
   legalIssues: [{
     type: String,

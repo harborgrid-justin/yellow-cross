@@ -45,8 +45,7 @@ const privilegeLogSchema = new mongoose.Schema({
   privilegeType: {
     type: String,
     required: true,
-    enum: ['Attorney-Client', 'Work Product', 'Trade Secret', 'Settlement Negotiations', 'Joint Defense', 'Other'],
-    index: true
+    enum: ['Attorney-Client', 'Work Product', 'Trade Secret', 'Settlement Negotiations', 'Joint Defense', 'Other']
   },
   privilegeBasis: {
     type: String,

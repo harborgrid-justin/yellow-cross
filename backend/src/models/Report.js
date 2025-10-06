@@ -97,8 +97,7 @@ const reportSchema = new mongoose.Schema({
   // Metadata
   createdBy: {
     type: String,
-    required: true,
-    index: true
+    required: true
   },
   lastModifiedBy: String,
   tags: [String],

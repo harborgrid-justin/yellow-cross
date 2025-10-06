@@ -86,8 +86,7 @@ const contractSchema = new mongoose.Schema({
     index: true
   },
   expirationDate: {
-    type: Date,
-    index: true
+    type: Date
   },
   signedDate: {
     type: Date
