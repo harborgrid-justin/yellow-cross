@@ -19,7 +19,8 @@ const {
   completeDeadlineSchema,
   requestExtensionSchema,
   checkAvailabilitySchema,
-  scheduleResourceSchema
+  scheduleResourceSchema,
+  createReminderSchema
 } = require('../validators/calendarValidators');
 
 // Helper function to generate event number
@@ -34,6 +35,15 @@ const generateDeadlineNumber = () => {
   const year = new Date().getFullYear();
   const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
   return `DL-${year}-${random}`;
+};
+
+// Helper function to validate and handle errors
+const validateRequest = (schema, data) => {
+  const { error, value } = schema.validate(data);
+  if (error) {
+    throw new Error(error.details[0].message);
+  }
+  return value;
 };
 
 // Sub-Feature 1: Court Date Management
@@ -524,14 +534,9 @@ router.post('/reminders', async (req, res) => {
       });
     }
 
-    const { eventId, reminderType, minutesBefore } = req.body;
-
-    if (!eventId || !reminderType || minutesBefore === undefined) {
-      return res.status(400).json({
-        success: false,
-        error: 'eventId, reminderType, and minutesBefore are required'
-      });
-    }
+    // Validate request data
+    const validatedData = validateRequest(createReminderSchema, req.body);
+    const { eventId, reminderType, minutesBefore } = validatedData;
 
     const event = await CalendarEvent.findById(eventId);
     if (!event) {
