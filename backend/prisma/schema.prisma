@@ -410,3 +410,77 @@ model LegalHold {
   @@index([caseId])
   @@index([status])
 }
+
+// User & Authentication Management
+model User {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  username              String   @unique
+  email                 String   @unique
+  password              String
+  passwordHistory       Json?
+  passwordExpiresAt     DateTime?
+  mustChangePassword    Boolean  @default(false)
+  
+  // Multi-Factor Authentication
+  mfaEnabled            Boolean  @default(false)
+  mfaSecret             String?
+  mfaBackupCodes        String[]
+  
+  // Profile Information
+  firstName             String?
+  lastName              String?
+  fullName              String?
+  jobTitle              String?
+  department            String?
+  phoneNumber           String?
+  profilePicture        String?
+  
+  // Roles & Permissions
+  roles                 String[]
+  permissions           String[]
+  
+  // Access Control
+  status                String   @default("Pending")
+  isVerified            Boolean  @default(false)
+  verificationToken     String?
+  verificationExpires   DateTime?
+  
+  // Session Management
+  sessions              Json?
+  currentSession        String?
+  
+  // Security Settings
+  allowedIPs            String[]
+  blockedIPs            String[]
+  loginAttempts         Int      @default(0)
+  lastLoginAttempt      DateTime?
+  lockedUntil           DateTime?
+  
+  // Login History
+  lastLogin             DateTime?
+  lastLoginIP           String?
+  lastLoginUserAgent    String?
+  loginHistory          Json?
+  
+  // Password Reset
+  resetPasswordToken    String?
+  resetPasswordExpires  DateTime?
+  
+  // Preferences
+  preferences           Json?
+  
+  // Metadata
+  createdBy             String?
+  lastModifiedBy        String?
+  notes                 String?
+  tags                  String[]
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([username])
+  @@index([email])
+  @@index([status])
+  @@index([roles])
+  @@index([lastLogin])
+}

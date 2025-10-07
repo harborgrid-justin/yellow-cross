@@ -231,9 +231,35 @@ npm run prisma:generate    # Generate Prisma client
 npm run prisma:migrate     # Run database migrations (dev)
 npm run prisma:migrate:deploy  # Deploy migrations (production)
 npm run prisma:studio      # Open Prisma Studio (database GUI)
-npm run prisma:seed        # Seed database with sample data
+npm run prisma:seed        # Seed database with default admin user
 npm run prisma:reset       # Reset database (⚠️ deletes all data)
 ```
+
+## 🔐 Default Login Credentials
+
+After setting up the database, seed it with the default admin user:
+
+```bash
+npm run prisma:seed
+```
+
+**Default Admin Credentials:**
+- **Username:** `admin`
+- **Email:** `admin@yellowcross.com`
+- **Password:** `Admin@123`
+
+⚠️ **IMPORTANT SECURITY NOTE:**
+- Change the default password immediately after first login
+- The seed script will skip creation if admin user already exists
+- Default password expires in 90 days
+- Password follows enterprise security requirements
+
+**First-time Setup:**
+1. Run migrations: `npm run prisma:migrate`
+2. Seed the database: `npm run prisma:seed`
+3. Start the application: `npm start`
+4. Login with default credentials
+5. Change password immediately in user settings
 
 ### Docker Commands
 ```bash

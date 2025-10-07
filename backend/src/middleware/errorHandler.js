@@ -63,8 +63,16 @@ const errorHandler = (err, req, res, _next) => {
 
 /**
  * Handle 404 - Not Found
+ * Serves index.html for non-API routes (SPA fallback)
  */
 const notFoundHandler = (req, res, next) => {
+  // Serve index.html for non-API routes (SPA fallback)
+  if (!req.path.startsWith('/api/') && !req.path.startsWith('/health')) {
+    const path = require('path');
+    return res.sendFile(path.join(__dirname, '../../../dist/index.html'));
+  }
+  
+  // For API routes, return 404 error
   const error = new ApiError(404, `Route ${req.originalUrl} not found`);
   next(error);
 };
