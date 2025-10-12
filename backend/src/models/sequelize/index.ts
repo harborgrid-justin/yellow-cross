@@ -3,21 +3,40 @@
  * Exports all Sequelize models
  */
 
-export { User } from './User';
-export { Case } from './Case';
-export { CaseNote } from './CaseNote';
-export { CaseTimelineEvent } from './CaseTimelineEvent';
-export { Document } from './Document';
-export { DocumentVersion } from './DocumentVersion';
-export { DocumentReview } from './DocumentReview';
-export { Task } from './Task';
-export { TaskComment } from './TaskComment';
-export { TaskTemplate } from './TaskTemplate';
-export { Workflow } from './Workflow';
-export { Evidence } from './Evidence';
-export { PrivilegeLog } from './PrivilegeLog';
-export { Production } from './Production';
-export { LegalHold } from './LegalHold';
+import { User } from './User';
+import { Case } from './Case';
+import { CaseNote } from './CaseNote';
+import { CaseTimelineEvent } from './CaseTimelineEvent';
+import { Document } from './Document';
+import { DocumentVersion } from './DocumentVersion';
+import { DocumentReview } from './DocumentReview';
+import { Task } from './Task';
+import { TaskComment } from './TaskComment';
+import { TaskTemplate } from './TaskTemplate';
+import { Workflow } from './Workflow';
+import { Evidence } from './Evidence';
+import { PrivilegeLog } from './PrivilegeLog';
+import { Production } from './Production';
+import { LegalHold } from './LegalHold';
+
+// Named exports
+export {
+  User,
+  Case,
+  CaseNote,
+  CaseTimelineEvent,
+  Document,
+  DocumentVersion,
+  DocumentReview,
+  Task,
+  TaskComment,
+  TaskTemplate,
+  Workflow,
+  Evidence,
+  PrivilegeLog,
+  Production,
+  LegalHold
+};
 
 // Export all models as a default object
 export default {
