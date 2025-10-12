@@ -3,7 +3,8 @@
  * Provides common CRUD operations for all services
  */
 
-import { Model, ModelCtor, FindOptions, WhereOptions } from 'sequelize-typescript';
+import { Model, ModelCtor } from 'sequelize-typescript';
+import { FindOptions, WhereOptions } from 'sequelize';
 
 export class BaseService<T extends Model> {
   protected model: ModelCtor<T>;

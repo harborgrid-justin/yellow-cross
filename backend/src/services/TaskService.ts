@@ -92,7 +92,7 @@ export class TaskService extends BaseService<Task> {
     task.status = status;
     task.lastModifiedBy = updatedBy;
     if (status === 'Completed') {
-      task.completionDate = new Date();
+      task.completedDate = new Date();
     }
     await task.save();
 
@@ -132,7 +132,7 @@ export class TaskService extends BaseService<Task> {
       return null;
     }
 
-    task.progress = progress;
+    task.completionPercentage = progress;
     task.lastModifiedBy = updatedBy;
     task.lastActivityDate = new Date();
     await task.save();
