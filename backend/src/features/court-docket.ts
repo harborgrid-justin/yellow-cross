@@ -1052,4 +1052,37 @@ router.get('/', (req, res) => {
   });
 });
 
+// Delete docket by ID
+router.delete('/dockets/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Docket', message: 'Database not connected' });
+    }
+
+    const docket = await CourtDocket.findByPk(req.params.id);
+    if (!docket) {
+      return res.status(404).json({
+        success: false,
+        message: 'Docket not found'
+      });
+    }
+
+    // Archive instead of delete for court records
+    await docket.update({
+      status: 'Archived',
+      lastModifiedBy: req.body.deletedBy || 'System'
+    });
+
+    res.json({
+      success: true,
+      message: 'Docket archived successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;

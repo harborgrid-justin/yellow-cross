@@ -718,6 +718,43 @@ router.get('/analytics', async (req, res) => {
   }
 });
 
+// Delete contract by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Contract', message: 'Database not connected' });
+    }
+
+    const contract = await Contract.findByPk(req.params.id);
+    if (!contract) {
+      return res.status(404).json({
+        success: false,
+        message: 'Contract not found'
+      });
+    }
+
+    // Only allow deletion if in Draft status
+    if (contract.status !== 'Draft') {
+      return res.status(400).json({
+        success: false,
+        message: 'Can only delete contracts in Draft status. Use archive for executed contracts.'
+      });
+    }
+
+    await contract.destroy();
+
+    res.json({
+      success: true,
+      message: 'Contract deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Contract overview
 router.get('/', (req, res) => {
   res.json({

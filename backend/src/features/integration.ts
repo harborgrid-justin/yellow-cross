@@ -880,6 +880,43 @@ router.post('/:id/sync-config', async (req, res) => {
   }
 });
 
+// Delete integration by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Integration', message: 'Database not connected' });
+    }
+
+    const integration = await Integration.findByPk(req.params.id);
+    if (!integration) {
+      return res.status(404).json({
+        success: false,
+        message: 'Integration not found'
+      });
+    }
+
+    // Only allow deletion if inactive
+    if (integration.status === 'Active') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete active integration. Deactivate it first.'
+      });
+    }
+
+    await integration.destroy();
+
+    res.json({
+      success: true,
+      message: 'Integration deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Helper function to calculate next sync time
 function calculateNextSync(frequency) {
   const now = new Date();
