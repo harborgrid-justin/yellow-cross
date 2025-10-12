@@ -10,7 +10,7 @@ import express from 'express';
 const router = express.Router();
 import { Document } from '../models/sequelize/Document';
 import { DocumentVersion } from '../models/sequelize/DocumentVersion';
-import { DocumentTemplate } from '../models/sequelize/DocumentTemplate';
+import DocumentTemplate from '../models/DocumentTemplate';
 import { isConnected } from '../config/database';
 import {
   uploadDocumentSchema,

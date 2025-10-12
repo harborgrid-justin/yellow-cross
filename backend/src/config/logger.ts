@@ -89,8 +89,8 @@ if (process.env.NODE_ENV === 'production' || process.env.LOG_FILE) {
   );
 }
 
-// Extend Logger interface
-interface ExtendedLogger extends winston.Logger {
+// Define custom logger type without extending winston.Logger to avoid conflicts
+type ExtendedLogger = winston.Logger & {
   stream: {
     write: (message: string) => void;
   };
@@ -99,7 +99,7 @@ interface ExtendedLogger extends winston.Logger {
   logError: (error: Error, req?: Request & { correlationId?: string } | null, metadata?: Record<string, any>) => void;
   logDatabase: (operation: string, metadata?: Record<string, any>) => void;
   logSecurity: (event: string, metadata?: Record<string, any>) => void;
-}
+};
 
 // Create the logger
 const logger = winston.createLogger({
@@ -108,10 +108,10 @@ const logger = winston.createLogger({
   format,
   transports,
   exitOnError: false,
-}) as ExtendedLogger;
+}) as any as ExtendedLogger;
 
-// Create a stream object for Morgan HTTP logger
-logger.stream = {
+// Create a stream object for Morgan HTTP logger (use type assertion to avoid conflict with winston.Logger's stream method)
+(logger as any).stream = {
   write: (message: string) => logger.http(message.trim()),
 };
 

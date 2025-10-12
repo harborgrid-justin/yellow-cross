@@ -4,8 +4,8 @@
   "description": "Enterprise grade platform for law firms to manage practices with PostgreSQL and Sequelize",
   "main": "backend/src/index.ts",
   "scripts": {
-    "start": "ts-node backend/src/index.ts",
-    "dev": "nodemon --exec ts-node backend/src/index.ts",
+    "start": "ts-node --transpile-only backend/src/index.ts",
+    "dev": "nodemon --exec ts-node --transpile-only backend/src/index.ts",
     "dev:react": "vite",
     "build:react": "vite build",
     "preview:react": "vite preview",

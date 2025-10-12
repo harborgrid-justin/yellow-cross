@@ -4,12 +4,18 @@
  */
 
 import logger from '../config/logger';
+import { Request, Response, NextFunction } from 'express';
+import path from 'path';
 
 /**
  * Custom error class for API errors
  */
 class ApiError extends Error {
-  constructor(statusCode, message, isOperational = true) {
+  statusCode: number;
+  isOperational: boolean;
+  details?: any;
+
+  constructor(statusCode: number, message: string, isOperational = true) {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = isOperational;
@@ -21,7 +27,7 @@ class ApiError extends Error {
  * Error handler middleware
  * Centralizes error handling and logging
  */
-const errorHandler = (err, req, res, _next) => {
+const errorHandler = (err: any, req: Request & { correlationId?: string }, res: Response, _next: NextFunction) => {
   let { statusCode, message } = err;
   
   // Default to 500 if no status code
@@ -39,7 +45,7 @@ const errorHandler = (err, req, res, _next) => {
   });
   
   // Prepare error response
-  const response = {
+  const response: any = {
     success: false,
     error: {
       code: statusCode,
@@ -65,10 +71,9 @@ const errorHandler = (err, req, res, _next) => {
  * Handle 404 - Not Found
  * Serves index.html for non-API routes (SPA fallback)
  */
-const notFoundHandler = (req, res, next) => {
+const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
   // Serve index.html for non-API routes (SPA fallback)
   if (!req.path.startsWith('/api/') && !req.path.startsWith('/health')) {
-    import path from 'path';
     return res.sendFile(path.join(__dirname, '../../../dist/index.html'));
   }
   
@@ -81,7 +86,7 @@ const notFoundHandler = (req, res, next) => {
  * Async error wrapper
  * Wraps async route handlers to catch errors
  */
-const asyncHandler = (fn) => (req, res, next) => {
+const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 

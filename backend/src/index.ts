@@ -90,6 +90,7 @@ import reportingAnalytics from './features/reporting-analytics';
 import communication from './features/communication';
 import security from './features/security';
 import integration from './features/integration';
+import authRouter from './routes/auth';
 
 // Register all feature routes
 app.use('/api/cases', caseManagement);
@@ -107,6 +108,9 @@ app.use('/api/reports', reportingAnalytics);
 app.use('/api/communication', communication);
 app.use('/api/security', security);
 app.use('/api/integrations', integration);
+
+// Authentication routes (convenience wrapper for security/auth endpoints)
+app.use('/api/auth', authRouter);
 
 // API info endpoint
 app.get('/api', (req, res) => {
