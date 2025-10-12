@@ -1,12 +1,11 @@
 /**
- * Prisma Database Seeding Script
+ * Sequelize Database Seeding Script
  * Seeds the database with default admin user and initial data
  */
 
-import { PrismaClient } from '@prisma/client';
+import { sequelize } from './database';
+import { User } from '../models/sequelize';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
 
 /**
  * Default admin credentials
@@ -41,10 +40,11 @@ const DEFAULT_ADMIN = {
       sms: false,
       push: true
     }
-  }
+  },
+  createdBy: 'system'
 };
 
-async function hashPassword(password) {
+async function hashPassword(password: string): Promise<string> {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
 }
@@ -53,7 +53,7 @@ async function seedUsers() {
   console.log('🌱 Seeding users...');
   
   // Check if admin user already exists
-  const existingAdmin = await prisma.user.findUnique({
+  const existingAdmin = await User.findOne({
     where: { username: DEFAULT_ADMIN.username }
   });
 
@@ -70,19 +70,15 @@ async function seedUsers() {
   passwordExpiresAt.setDate(passwordExpiresAt.getDate() + 90);
 
   // Create admin user
-  const admin = await prisma.user.create({
-    data: {
-      ...DEFAULT_ADMIN,
-      password: hashedPassword,
-      passwordExpiresAt,
-      createdBy: 'system'
-    }
+  const admin = await User.create({
+    ...DEFAULT_ADMIN,
+    password: hashedPassword,
+    passwordExpiresAt
   });
 
   console.log('✅ Admin user created successfully!');
   console.log('📧 Email:', DEFAULT_ADMIN.email);
   console.log('👤 Username:', DEFAULT_ADMIN.username);
-  console.log('🔑 Password: Admin@123 (Please change after first login)');
   
   return admin;
 }
@@ -91,6 +87,14 @@ async function main() {
   console.log('🚀 Starting database seeding...\n');
 
   try {
+    // Connect to database
+    await sequelize.authenticate();
+    console.log('✅ Database connected');
+
+    // Sync models (create tables if they don\'t exist)
+    await sequelize.sync({ alter: false });
+    console.log('✅ Database models synchronized');
+
     // Seed users
     await seedUsers();
 
@@ -104,14 +108,19 @@ async function main() {
   } catch (error) {
     console.error('❌ Error during seeding:', error);
     throw error;
+  } finally {
+    await sequelize.close();
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// Run if executed directly
+if (require.main === module) {
+  main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
+}
+
+export default main;

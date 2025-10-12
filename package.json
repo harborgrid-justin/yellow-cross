@@ -1,7 +1,7 @@
 {
   "name": "yellow-cross",
   "version": "2.0.0",
-  "description": "Enterprise grade platform for law firms to manage practices with PostgreSQL and Prisma",
+  "description": "Enterprise grade platform for law firms to manage practices with PostgreSQL and Sequelize",
   "main": "backend/src/index.ts",
   "scripts": {
     "start": "ts-node backend/src/index.ts",
@@ -21,21 +21,16 @@
     "setup:install": "npm install",
     "setup:env": "ts-node scripts/setup-env.ts --non-interactive",
     "setup:env:interactive": "ts-node scripts/setup-env.ts",
-    "setup:db": "npm run prisma:generate && npm run prisma:migrate:safe",
+    "setup:db": "npm run db:seed",
     "setup:verify": "ts-node scripts/verify-setup.ts",
-    "prisma:generate": "cd backend && npx prisma generate",
-    "prisma:migrate": "cd backend && npx prisma migrate dev --name init",
-    "prisma:migrate:safe": "cd backend && npx prisma migrate dev --name init --skip-seed || echo 'Database migration skipped. Make sure PostgreSQL is running and DATABASE_URL is correct in .env'",
-    "prisma:migrate:deploy": "cd backend && npx prisma migrate deploy",
-    "prisma:studio": "cd backend && npx prisma studio",
-    "prisma:seed": "cd backend && npx prisma db seed",
-    "prisma:reset": "cd backend && npx prisma migrate reset",
+    "db:seed": "ts-node backend/src/config/seed.ts",
+    "db:sync": "ts-node -e \"require('./backend/src/config/database').connectDB()\"",
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "docker:restart": "docker-compose restart",
-    "docker:setup": "npm run docker:build && npm run docker:up && echo 'Waiting for database...' && sleep 10 && npm run prisma:migrate:deploy"
+    "docker:setup": "npm run docker:build && npm run docker:up && echo 'Waiting for database...' && sleep 10 && npm run db:seed"
   },
   "keywords": [
     "law firm",
@@ -43,13 +38,13 @@
     "legal",
     "enterprise",
     "practice management",
-    "prisma",
+    "sequelize",
     "postgresql"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^6.17.0",
+    "@types/validator": "^13.15.3",
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -68,6 +63,9 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.3",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6",
     "socket.io": "^4.8.1",
     "winston": "^3.18.3"
   },
@@ -93,15 +91,11 @@
     "eslint": "^9.37.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
-    "prisma": "^6.17.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vite": "^7.1.9"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
     "testEnvironment": "node",

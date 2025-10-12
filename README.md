@@ -1,6 +1,6 @@
 # Yellow Cross - Enterprise Law Firm Practice Management Platform
 
-A comprehensive, full-featured **Google-scale enterprise-grade** platform designed for law firms to manage their practices effectively. Built with PostgreSQL, Prisma ORM, and modern best practices for security, scalability, and performance.
+A comprehensive, full-featured **Google-scale enterprise-grade** platform designed for law firms to manage their practices effectively. Built with PostgreSQL, Sequelize ORM, and modern best practices for security, scalability, and performance.
 
 ## 🌟 Enterprise Capabilities
 
@@ -24,8 +24,8 @@ Yellow Cross is an all-in-one practice management solution that provides law fir
 ## 🛠️ Technology Stack
 
 - **Backend Framework**: Node.js with Express.js
-- **Database**: PostgreSQL 15+
-- **ORM**: Prisma
+- **Database**: PostgreSQL 15+ (Neon DB)
+- **ORM**: Sequelize with TypeScript
 - **Frontend**: TypeScript (ES2020), HTML5, CSS3
 - **Type Safety**: Full TypeScript implementation with strict mode
 - **Authentication**: JWT (JSON Web Tokens) with bcrypt
@@ -54,13 +54,12 @@ yellow-cross/
 │   ├── src/
 │   │   ├── config/             # Configuration files
 │   │   ├── features/           # 15 feature modules
-│   │   ├── models/             # Legacy Mongoose models (for reference)
+│   │   ├── models/             # Database models
+│   │   │   ├── sequelize/     # Sequelize models (current)
+│   │   │   └── *.ts           # Legacy Mongoose models (for reference)
 │   │   ├── validators/         # Input validators
-│   │   ├── generated/          # Prisma generated client
 │   │   └── index.js            # Application entry point
-│   ├── tests/                  # Test files
-│   └── prisma/                 # Prisma schema and migrations
-│       └── schema.prisma       # Database schema
+│   └── tests/                  # Test files
 ├── frontend/                    # Frontend application (React + TypeScript)
 │   ├── src/
 │   │   ├── app/                # Application core & routing
@@ -97,8 +96,9 @@ npm run setup
 **That's it!** The setup is now 100% automated. This single command will:
 - ✅ Install all dependencies
 - ✅ Create `.env` configuration file (from .env.example)
-- ✅ Generate Prisma client
-- ✅ Prepare database migrations
+- ✅ Connect to PostgreSQL database (Neon DB)
+- ✅ Sync database models (create tables)
+- ✅ Seed initial data
 - ✅ Verify setup is complete
 
 Then start the application:
@@ -112,7 +112,7 @@ npm start              # Without Docker (requires PostgreSQL running)
 **Access:**
 - Frontend & API: http://localhost:3000
 - Health Check: http://localhost:3000/health
-- Database GUI: `npm run prisma:studio`
+- Database: PostgreSQL on Neon DB (cloud-hosted)
 
 📖 **For detailed instructions, see [SETUP_GUIDE.md](./docs/deployment/SETUP_GUIDE.md)**
 

@@ -1,28 +1,10 @@
 /**
- * Database Configuration
+ * Sequelize Configuration
  * PostgreSQL connection setup with Sequelize ORM
  */
 
-import 'reflect-metadata';
 import { Sequelize } from 'sequelize-typescript';
 import path from 'path';
-
-// Import all models
-import { User } from '../models/sequelize/User';
-import { Case } from '../models/sequelize/Case';
-import { CaseNote } from '../models/sequelize/CaseNote';
-import { CaseTimelineEvent } from '../models/sequelize/CaseTimelineEvent';
-import { Document } from '../models/sequelize/Document';
-import { DocumentVersion } from '../models/sequelize/DocumentVersion';
-import { DocumentReview } from '../models/sequelize/DocumentReview';
-import { Task } from '../models/sequelize/Task';
-import { TaskComment } from '../models/sequelize/TaskComment';
-import { TaskTemplate } from '../models/sequelize/TaskTemplate';
-import { Workflow } from '../models/sequelize/Workflow';
-import { Evidence } from '../models/sequelize/Evidence';
-import { PrivilegeLog } from '../models/sequelize/PrivilegeLog';
-import { Production } from '../models/sequelize/Production';
-import { LegalHold } from '../models/sequelize/LegalHold';
 
 // Database connection URL
 const DATABASE_URL = process.env.DATABASE_URL || 
@@ -38,12 +20,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
     }
   },
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
-  models: [
-    User, Case, CaseNote, CaseTimelineEvent,
-    Document, DocumentVersion, DocumentReview,
-    Task, TaskComment, TaskTemplate, Workflow,
-    Evidence, PrivilegeLog, Production, LegalHold
-  ],
+  models: [path.join(__dirname, '../models')], // Auto-load models from models directory
   pool: {
     max: 5,
     min: 0,
@@ -57,7 +34,7 @@ let connected = false;
 /**
  * Connect to database
  */
-const connectDB = async () => {
+export const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully');
@@ -80,14 +57,14 @@ const connectDB = async () => {
 /**
  * Check if database is connected
  */
-const isConnected = () => {
+export const isConnected = () => {
   return connected;
 };
 
 /**
  * Disconnect from database
  */
-const disconnectDB = async () => {
+export const disconnectDB = async () => {
   if (sequelize) {
     await sequelize.close();
     connected = false;
@@ -96,26 +73,10 @@ const disconnectDB = async () => {
 };
 
 /**
- * Get Sequelize instance (backward compatible with getPrismaClient)
- */
-const getPrismaClient = () => {
-  return sequelize;
-};
-
-/**
  * Get Sequelize instance
  */
-const getSequelize = () => {
+export const getSequelize = () => {
   return sequelize;
-};
-
-export {
-  connectDB, 
-  isConnected, 
-  disconnectDB,
-  getPrismaClient,
-  getSequelize,
-  sequelize
 };
 
 export default sequelize;
