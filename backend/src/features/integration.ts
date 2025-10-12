@@ -10,9 +10,9 @@ import express from 'express';
 const router = express.Router();
 // import axios from 'axios'; // Reserved for future external API calls
 import Integration from '../models/Integration';
-import Case from '../models/Case';
+import { Case } from '../models/sequelize/Case';
 import Client from '../models/Client';
-import Document from '../models/Document';
+import { Document } from '../models/sequelize/Document';
 import Invoice from '../models/Invoice';
 import { isConnected } from '../config/database';
 import {
@@ -144,7 +144,7 @@ router.get('/:id', async (req, res) => {
       return res.json({ feature: 'Get Integration', message: 'Database not connected' });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -207,7 +207,7 @@ router.post('/:id/test', async (req, res) => {
       return res.json({ feature: 'Test Integration', message: 'Database not connected' });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -262,7 +262,7 @@ router.post('/api/request', async (req, res) => {
 
     const validatedData = validateRequest(apiRequestSchema, req.body);
 
-    const integration = await Integration.findById(validatedData.integrationId);
+    const integration = await Integration.findByPk(validatedData.integrationId);
     
     if (!integration) {
       return res.status(404).json({
@@ -333,7 +333,7 @@ router.post('/:id/webhooks', async (req, res) => {
 
     const validatedData = validateRequest(webhookSchema, req.body);
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -375,7 +375,7 @@ router.get('/:id/webhooks', async (req, res) => {
       return res.json({ feature: 'List Webhooks', message: 'Database not connected' });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -690,7 +690,7 @@ router.get('/security/rate-limits/:id', async (req, res) => {
       return res.json({ feature: 'Get Rate Limits', message: 'Database not connected' });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -728,7 +728,7 @@ router.put('/security/rate-limits/:id', async (req, res) => {
 
     const { requestsPerMinute, requestsPerHour, requestsPerDay } = req.body;
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -765,7 +765,7 @@ router.get('/security/api-keys/:id', async (req, res) => {
       return res.json({ feature: 'Get API Keys', message: 'Database not connected' });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({
@@ -847,7 +847,7 @@ router.post('/:id/sync-config', async (req, res) => {
       });
     }
 
-    const integration = await Integration.findById(req.params.id);
+    const integration = await Integration.findByPk(req.params.id);
     
     if (!integration) {
       return res.status(404).json({

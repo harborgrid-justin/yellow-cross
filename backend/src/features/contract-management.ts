@@ -78,7 +78,7 @@ router.post('/create', async (req, res) => {
       data: {
         contract,
         contractNumber: contract.contractNumber,
-        contractId: contract._id
+        contractId: contract.id
       }
     });
   } catch (error) {
@@ -159,7 +159,7 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -250,7 +250,7 @@ router.post('/:id/review', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -304,7 +304,7 @@ router.post('/:id/negotiations', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -342,7 +342,7 @@ router.post('/:id/versions', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -394,7 +394,7 @@ router.post('/:id/obligations', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -446,7 +446,7 @@ router.post('/:id/signatures', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -512,7 +512,7 @@ router.get('/:id/lifecycle', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,
@@ -613,7 +613,7 @@ router.get('/:id/compliance', async (req, res) => {
       });
     }
 
-    const contract = await Contract.findById(req.params.id);
+    const contract = await Contract.findByPk(req.params.id);
     if (!contract) {
       return res.status(404).json({
         success: false,

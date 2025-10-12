@@ -75,7 +75,7 @@ router.get('/integrations', async (req, res) => {
       data: {
         totalResearchItems: totalItems,
         externalSources: externalSources.map(s => ({
-          source: s._id,
+          source: s.id,
           count: s.count
         })),
         recentIntegrated,
@@ -169,7 +169,7 @@ router.get('/knowledge-base', async (req, res) => {
         count: items.length,
         statistics: {
           byPracticeArea: statsByArea.map(s => ({
-            practiceArea: s._id,
+            practiceArea: s.id,
             count: s.count
           })),
           mostPopular: popular
@@ -388,7 +388,7 @@ router.post('/citations', async (req, res) => {
     }
 
     // Find the research item
-    const item = await ResearchItem.findById(researchId);
+    const item = await ResearchItem.findByPk(researchId);
 
     if (!item) {
       return res.status(404).json({
@@ -520,7 +520,7 @@ router.get('/practice-areas/:area', async (req, res) => {
     ]);
 
     // Get most popular resources
-    const popular = await ResearchItem.find({ practiceArea, status: 'Active' })
+    const popular = await ResearchItem.findAll({ where: { practiceArea, status: 'Active' } })
       .sort({ accessCount: -1 })
       .limit(10)
       .select('researchNumber title itemType accessCount');
@@ -541,9 +541,9 @@ router.get('/practice-areas/:area', async (req, res) => {
         resources,
         count: resources.length,
         statistics: {
-          byType: statsByType.map(s => ({ type: s._id, count: s.count })),
+          byType: statsByType.map(s => ({ type: s.id, count: s.count })),
           popular,
-          commonTopics: commonTopics.map(t => ({ topic: t._id, count: t.count }))
+          commonTopics: commonTopics.map(t => ({ topic: t.id, count: t.count }))
         }
       }
     });
@@ -576,7 +576,7 @@ router.get('/practice-areas', async (req, res) => {
       success: true,
       data: {
         practiceAreas: practiceAreas.map(p => ({
-          name: p._id,
+          name: p.id,
           resourceCount: p.count,
           types: p.types
         }))
@@ -658,8 +658,8 @@ router.get('/updates', async (req, res) => {
         count: updates.length,
         period: `Last ${days} days`,
         statistics: {
-          byType: updatesByType.map(u => ({ type: u._id, count: u.count })),
-          byPracticeArea: updatesByArea.map(u => ({ practiceArea: u._id, count: u.count }))
+          byType: updatesByType.map(u => ({ type: u.id, count: u.count })),
+          byPracticeArea: updatesByArea.map(u => ({ practiceArea: u.id, count: u.count }))
         }
       }
     });
@@ -700,7 +700,7 @@ router.post('/collaborate', async (req, res) => {
       });
     }
 
-    const item = await ResearchItem.findById(researchId);
+    const item = await ResearchItem.findByPk(researchId);
 
     if (!item) {
       return res.status(404).json({
@@ -786,7 +786,7 @@ router.get('/collaborate/:id', async (req, res) => {
       return res.json({ feature: 'Research Collaboration', message: 'Database not connected' });
     }
 
-    const item = await ResearchItem.findById(req.params.id)
+    const item = await ResearchItem.findByPk(req.params.id)
       .select('researchNumber title sharedWith bookmarks highlights');
 
     if (!item) {
@@ -923,7 +923,7 @@ router.get('/:id', async (req, res) => {
       return res.json({ feature: 'Get Research Item', message: 'Database not connected' });
     }
 
-    const item = await ResearchItem.findById(req.params.id);
+    const item = await ResearchItem.findByPk(req.params.id);
 
     if (!item) {
       return res.status(404).json({

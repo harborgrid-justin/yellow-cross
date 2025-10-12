@@ -84,7 +84,7 @@ router.get('/:id', async (req, res) => {
       return res.json({ feature: 'Get Compliance Item', message: 'Database not connected' });
     }
 
-    const item = await ComplianceItem.findById(req.params.id)
+    const item = await ComplianceItem.findByPk(req.params.id)
       .populate('caseId', 'caseNumber title')
       .populate('clientId', 'name email');
 
@@ -158,7 +158,7 @@ router.put('/:id/status', async (req, res) => {
 
     const validatedData = validateRequest(updateComplianceStatusSchema, req.body);
 
-    const item = await ComplianceItem.findById(req.params.id);
+    const item = await ComplianceItem.findByPk(req.params.id);
     if (!item) {
       return res.status(404).json({ success: false, error: 'Compliance item not found' });
     }
@@ -212,7 +212,7 @@ router.post('/:id/risk-factor', async (req, res) => {
 
     const validatedData = validateRequest(addRiskFactorSchema, req.body);
 
-    const item = await ComplianceItem.findById(req.params.id);
+    const item = await ComplianceItem.findByPk(req.params.id);
     if (!item) {
       return res.status(404).json({ success: false, error: 'Compliance item not found' });
     }
@@ -247,7 +247,7 @@ router.post('/:id/remediation', async (req, res) => {
 
     const validatedData = validateRequest(remediationPlanSchema, req.body);
 
-    const item = await ComplianceItem.findById(req.params.id);
+    const item = await ComplianceItem.findByPk(req.params.id);
     if (!item) {
       return res.status(404).json({ success: false, error: 'Compliance item not found' });
     }
@@ -290,7 +290,7 @@ router.get('/ethics/tracking', async (req, res) => {
       return res.json({ feature: 'Ethics & Compliance Tracking', message: 'Database not connected' });
     }
 
-    const ethicsItems = await ComplianceItem.find({ complianceType: 'Ethics' })
+    const ethicsItems = await ComplianceItem.findAll({ where: { complianceType: 'Ethics' } })
       .sort({ createdAt: -1 })
       .limit(50);
 
@@ -437,7 +437,7 @@ router.post('/conflict-check', async (req, res) => {
         hasConflict,
         conflictCount: conflicts.length,
         conflicts: conflicts.map(c => ({
-          id: c._id,
+          id: c.id,
           title: c.title,
           status: c.status,
           riskLevel: c.riskLevel,
@@ -566,7 +566,7 @@ router.post('/audit-trail/:complianceId', async (req, res) => {
 
     const validatedData = validateRequest(auditTrailSchema, req.body);
     
-    const complianceItem = await ComplianceItem.findById(req.params.complianceId);
+    const complianceItem = await ComplianceItem.findByPk(req.params.complianceId);
     
     if (!complianceItem) {
       return res.status(404).json({
@@ -654,9 +654,9 @@ router.get('/liability', async (req, res) => {
       return res.json({ feature: 'Professional Liability', message: 'Database not connected' });
     }
 
-    const liabilityItems = await ComplianceItem.find({ 
+    const liabilityItems = await ComplianceItem.findAll({ where: { 
       complianceType: 'Professional Liability'
-    }).sort({ createdAt: -1 });
+    } }).sort({ createdAt: -1 });
 
     const activeClaims = liabilityItems.filter(i => i.status === 'Active');
     const highRiskItems = liabilityItems.filter(i => i.riskLevel === 'Critical' || i.riskLevel === 'High');

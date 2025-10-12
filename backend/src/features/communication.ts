@@ -148,7 +148,7 @@ router.get('/messages/:id', async (req, res) => {
       return res.json({ feature: 'Get Message', message: 'Database not connected' });
     }
 
-    const message = await Message.findById(req.params.id)
+    const message = await Message.findByPk(req.params.id)
       .populate('inReplyTo')
       .populate('caseId', 'caseNumber title')
       .populate('clientId', 'name email');
@@ -188,7 +188,7 @@ router.put('/messages/:id/read', async (req, res) => {
       });
     }
 
-    const message = await Message.findById(req.params.id);
+    const message = await Message.findByPk(req.params.id);
     
     if (!message) {
       return res.status(404).json({
@@ -221,7 +221,7 @@ router.put('/messages/:id', async (req, res) => {
 
     const validatedData = validateRequest(updateMessageSchema, req.body);
     
-    const message = await Message.findById(req.params.id);
+    const message = await Message.findByPk(req.params.id);
     
     if (!message) {
       return res.status(404).json({
@@ -263,7 +263,7 @@ router.post('/messages/:id/attachments', async (req, res) => {
 
     const validatedData = validateRequest(addAttachmentSchema, req.body);
     
-    const message = await Message.findById(req.params.id);
+    const message = await Message.findByPk(req.params.id);
     
     if (!message) {
       return res.status(404).json({
@@ -368,7 +368,7 @@ router.get('/email/:id/track', async (req, res) => {
       return res.json({ feature: 'Track Email', message: 'Database not connected' });
     }
 
-    const email = await Message.findById(req.params.id);
+    const email = await Message.findByPk(req.params.id);
     
     if (!email || email.messageType !== 'Email') {
       return res.status(404).json({
@@ -380,7 +380,7 @@ router.get('/email/:id/track', async (req, res) => {
     res.json({
       success: true,
       data: {
-        emailId: email._id,
+        emailId: email.id,
         sentAt: email.sentAt,
         deliveredAt: email.deliveredAt,
         status: email.status,
@@ -526,7 +526,7 @@ router.post('/files/share', async (req, res) => {
     await message.save();
 
     // Generate shareable link
-    const shareLink = `https://yellow-cross.share/${message._id}`;
+    const shareLink = `https://yellow-cross.share/${message.id}`;
 
     res.status(201).json({
       success: true,
@@ -552,7 +552,7 @@ router.get('/files/:id/downloads', async (req, res) => {
       return res.json({ feature: 'Track Downloads', message: 'Database not connected' });
     }
 
-    const message = await Message.findById(req.params.id);
+    const message = await Message.findByPk(req.params.id);
     
     if (!message || message.messageType !== 'File Share') {
       return res.status(404).json({
@@ -564,7 +564,7 @@ router.get('/files/:id/downloads', async (req, res) => {
     res.json({
       success: true,
       data: {
-        fileId: message._id,
+        fileId: message.id,
         fileName: message.attachments[0]?.fileName,
         sharedAt: message.createdAt,
         accessCount: message.readReceipts.length,
@@ -619,9 +619,9 @@ router.get('/workspaces/:workspaceId/messages', async (req, res) => {
     }
 
     // Use threadId to track workspace messages
-    const messages = await Message.find({
+    const messages = await Message.findAll({ where: {
       threadId: req.params.workspaceId
-    }).sort({ createdAt: 1 });
+    } }).sort({ createdAt: 1 });
 
     res.json({
       success: true,
@@ -726,7 +726,7 @@ router.get('/external/track', async (req, res) => {
 
     // Build timeline
     const timeline = communications.map(comm => ({
-      id: comm._id,
+      id: comm.id,
       type: comm.messageType,
       timestamp: comm.createdAt,
       subject: comm.subject,
@@ -833,7 +833,7 @@ router.get('/templates/:id', async (req, res) => {
       return res.json({ feature: 'Get Template', message: 'Database not connected' });
     }
 
-    const template = await CommunicationTemplate.findById(req.params.id);
+    const template = await CommunicationTemplate.findByPk(req.params.id);
     
     if (!template) {
       return res.status(404).json({
@@ -863,7 +863,7 @@ router.post('/templates/render', async (req, res) => {
 
     const validatedData = validateRequest(renderTemplateSchema, req.body);
 
-    const template = await CommunicationTemplate.findById(validatedData.templateId);
+    const template = await CommunicationTemplate.findByPk(validatedData.templateId);
     
     if (!template) {
       return res.status(404).json({
@@ -879,7 +879,7 @@ router.post('/templates/render', async (req, res) => {
       success: true,
       data: {
         template: {
-          id: template._id,
+          id: template.id,
           name: template.name
         },
         rendered
@@ -902,7 +902,7 @@ router.put('/templates/:id', async (req, res) => {
 
     const validatedData = validateRequest(updateTemplateSchema, req.body);
 
-    const template = await CommunicationTemplate.findById(req.params.id);
+    const template = await CommunicationTemplate.findByPk(req.params.id);
     
     if (!template) {
       return res.status(404).json({

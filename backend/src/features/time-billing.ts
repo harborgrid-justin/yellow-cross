@@ -79,7 +79,7 @@ router.post('/time-entry', async (req, res) => {
       success: true,
       message: 'Time entry created successfully',
       data: {
-        entryId: timeEntry._id,
+        entryId: timeEntry.id,
         entryNumber: timeEntry.entryNumber,
         date: timeEntry.date,
         duration: timeEntry.duration,
@@ -186,7 +186,7 @@ router.put('/time-entry/:id', async (req, res) => {
 
     const validatedData = validateRequest(updateTimeEntrySchema, req.body);
     
-    const timeEntry = await TimeEntry.findById(req.params.id);
+    const timeEntry = await TimeEntry.findByPk(req.params.id);
     if (!timeEntry) {
       return res.status(404).json({
         success: false,
@@ -236,7 +236,7 @@ router.post('/time-entry/:id/approve', async (req, res) => {
 
     const validatedData = validateRequest(approveTimeEntrySchema, req.body);
     
-    const timeEntry = await TimeEntry.findById(req.params.id);
+    const timeEntry = await TimeEntry.findByPk(req.params.id);
     if (!timeEntry) {
       return res.status(404).json({
         success: false,
@@ -250,7 +250,7 @@ router.post('/time-entry/:id/approve', async (req, res) => {
       success: true,
       message: 'Time entry approved successfully',
       data: {
-        entryId: timeEntry._id,
+        entryId: timeEntry.id,
         status: timeEntry.status,
         approvedBy: timeEntry.approvedBy,
         approvedDate: timeEntry.approvedDate
@@ -368,7 +368,7 @@ router.post('/time-entry/:id/write-off', async (req, res) => {
 
     const validatedData = validateRequest(writeOffSchema, req.body);
     
-    const timeEntry = await TimeEntry.findById(req.params.id);
+    const timeEntry = await TimeEntry.findByPk(req.params.id);
     if (!timeEntry) {
       return res.status(404).json({
         success: false,
@@ -386,7 +386,7 @@ router.post('/time-entry/:id/write-off', async (req, res) => {
       success: true,
       message: 'Write-off applied successfully',
       data: {
-        entryId: timeEntry._id,
+        entryId: timeEntry.id,
         originalAmount: timeEntry.amount,
         writeOffAmount: timeEntry.writeOffAmount,
         adjustedAmount: timeEntry.adjustedAmount,
@@ -456,7 +456,7 @@ router.post('/invoices', async (req, res) => {
       internalNotes: validatedData.internalNotes,
       createdBy: validatedData.createdBy,
       timeEntries: timeEntries.map(te => ({
-        timeEntryId: te._id,
+        timeEntryId: te.id,
         date: te.date,
         description: te.description,
         hours: te.duration / 60,
@@ -464,7 +464,7 @@ router.post('/invoices', async (req, res) => {
         amount: te.adjustedAmount || te.amount
       })),
       expenses: expenses.map(ex => ({
-        expenseId: ex._id,
+        expenseId: ex.id,
         date: ex.date,
         description: ex.description,
         amount: ex.billedAmount || ex.amount
@@ -480,7 +480,7 @@ router.post('/invoices', async (req, res) => {
         { 
           $set: { 
             invoiced: true,
-            invoiceId: invoice._id,
+            invoiceId: invoice.id,
             invoiceNumber: invoice.invoiceNumber,
             invoiceDate: invoice.invoiceDate,
             status: 'Invoiced'
@@ -495,7 +495,7 @@ router.post('/invoices', async (req, res) => {
         { 
           $set: { 
             invoiced: true,
-            invoiceId: invoice._id,
+            invoiceId: invoice.id,
             invoiceNumber: invoice.invoiceNumber,
             invoiceDate: invoice.invoiceDate,
             status: 'Invoiced'
@@ -508,7 +508,7 @@ router.post('/invoices', async (req, res) => {
       success: true,
       message: 'Invoice created successfully',
       data: {
-        invoiceId: invoice._id,
+        invoiceId: invoice.id,
         invoiceNumber: invoice.invoiceNumber,
         clientName: invoice.clientName,
         invoiceDate: invoice.invoiceDate,
@@ -584,7 +584,7 @@ router.get('/invoices/:id', async (req, res) => {
       });
     }
 
-    const invoice = await Invoice.findById(req.params.id);
+    const invoice = await Invoice.findByPk(req.params.id);
     if (!invoice) {
       return res.status(404).json({
         success: false,
@@ -626,7 +626,7 @@ router.post('/invoices/:id/payments', async (req, res) => {
 
     const validatedData = validateRequest(addPaymentSchema, req.body);
     
-    const invoice = await Invoice.findById(req.params.id);
+    const invoice = await Invoice.findByPk(req.params.id);
     if (!invoice) {
       return res.status(404).json({
         success: false,
@@ -647,7 +647,7 @@ router.post('/invoices/:id/payments', async (req, res) => {
       success: true,
       message: 'Payment recorded successfully',
       data: {
-        invoiceId: invoice._id,
+        invoiceId: invoice.id,
         invoiceNumber: invoice.invoiceNumber,
         paymentAmount: payment.amount,
         amountPaid: invoice.amountPaid,
@@ -678,7 +678,7 @@ router.post('/invoices/:id/send', async (req, res) => {
     const validatedData = validateRequest(sendInvoiceSchema, req.body);
     const { sentBy } = validatedData;
     
-    const invoice = await Invoice.findById(req.params.id);
+    const invoice = await Invoice.findByPk(req.params.id);
     if (!invoice) {
       return res.status(404).json({
         success: false,
@@ -692,7 +692,7 @@ router.post('/invoices/:id/send', async (req, res) => {
       success: true,
       message: 'Invoice sent successfully',
       data: {
-        invoiceId: invoice._id,
+        invoiceId: invoice.id,
         invoiceNumber: invoice.invoiceNumber,
         status: invoice.status,
         sentDate: invoice.sentDate
@@ -743,7 +743,7 @@ router.post('/expenses', async (req, res) => {
       success: true,
       message: 'Expense created successfully',
       data: {
-        expenseId: expense._id,
+        expenseId: expense.id,
         expenseNumber: expense.expenseNumber,
         date: expense.date,
         category: expense.category,
@@ -827,7 +827,7 @@ router.post('/expenses/:id/approve', async (req, res) => {
     const validatedData = validateRequest(approveExpenseSchema, req.body);
     const { approvedBy } = validatedData;
     
-    const expense = await Expense.findById(req.params.id);
+    const expense = await Expense.findByPk(req.params.id);
     if (!expense) {
       return res.status(404).json({
         success: false,
@@ -841,7 +841,7 @@ router.post('/expenses/:id/approve', async (req, res) => {
       success: true,
       message: 'Expense approved successfully',
       data: {
-        expenseId: expense._id,
+        expenseId: expense.id,
         status: expense.status,
         approvedBy: expense.approvedBy,
         approvedDate: expense.approvedDate

@@ -84,7 +84,7 @@ router.post('/create', async (req, res) => {
       success: true,
       message: 'Client created successfully',
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         status: client.status,
@@ -173,7 +173,7 @@ router.get('/search', async (req, res) => {
       success: true,
       data: {
         clients: clients.map(c => ({
-          clientId: c._id,
+          clientId: c.id,
           clientNumber: c.clientNumber,
           fullName: c.fullName,
           type: c.type,
@@ -221,7 +221,7 @@ router.get('/analytics', async (req, res) => {
     const analytics = await Client.getAnalytics();
     
     // Get top clients by lifetime value
-    const topClients = await Client.find({ status: 'Active' })
+    const topClients = await Client.findAll({ where: { status: 'Active' } })
       .sort({ lifetimeValue: -1 })
       .limit(10)
       .select('clientNumber fullName lifetimeValue totalCases activeCases');
@@ -311,7 +311,7 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -343,7 +343,7 @@ router.put('/:id', async (req, res) => {
 
     const validatedData = validateRequest(updateClientSchema, req.body);
     
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -394,7 +394,7 @@ router.get('/:id/communications', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -403,12 +403,12 @@ router.get('/:id/communications', async (req, res) => {
     }
     
     const limit = parseInt(req.query.limit) || 50;
-    const communications = await ClientCommunication.getClientHistory(client._id, limit);
+    const communications = await ClientCommunication.getClientHistory(client.id, limit);
     
     res.json({
       success: true,
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         communications: communications,
@@ -433,7 +433,7 @@ router.post('/:id/communications', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -444,7 +444,7 @@ router.post('/:id/communications', async (req, res) => {
     const validatedData = validateRequest(createCommunicationSchema, req.body);
     
     const communication = new ClientCommunication({
-      clientId: client._id,
+      clientId: client.id,
       clientNumber: client.clientNumber,
       ...validatedData
     });
@@ -507,7 +507,7 @@ router.put('/:id/portal', async (req, res) => {
 
     const validatedData = validateRequest(portalAccessSchema, req.body);
     
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -519,7 +519,7 @@ router.put('/:id/portal', async (req, res) => {
     if (validatedData.enabled && validatedData.username) {
       const existingClient = await Client.findOne({
         'portalAccess.username': validatedData.username,
-        _id: { $ne: client._id }
+        _id: { $ne: client.id }
       });
       
       if (existingClient) {
@@ -542,7 +542,7 @@ router.put('/:id/portal', async (req, res) => {
       success: true,
       message: 'Portal access updated successfully',
       data: {
-        clientId: client._id,
+        clientId: client.id,
         portalAccess: client.portalAccess
       }
     });
@@ -564,7 +564,7 @@ router.get('/:id/portal/status', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -575,7 +575,7 @@ router.get('/:id/portal/status', async (req, res) => {
     res.json({
       success: true,
       data: {
-        clientId: client._id,
+        clientId: client.id,
         portalAccess: client.portalAccess
       }
     });
@@ -645,7 +645,7 @@ router.post('/intake', async (req, res) => {
     
     // Record intake communication
     const communication = new ClientCommunication({
-      clientId: client._id,
+      clientId: client.id,
       clientNumber: client.clientNumber,
       type: 'Meeting',
       direction: 'Inbound',
@@ -664,7 +664,7 @@ router.post('/intake', async (req, res) => {
       success: true,
       message: 'Client intake completed successfully',
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         status: client.status,
@@ -705,7 +705,7 @@ router.get('/:id/billing', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -716,7 +716,7 @@ router.get('/:id/billing', async (req, res) => {
     res.json({
       success: true,
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         billingPreference: client.billingPreference,
@@ -750,7 +750,7 @@ router.put('/:id/billing', async (req, res) => {
 
     const validatedData = validateRequest(billingInfoSchema, req.body);
     
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -771,7 +771,7 @@ router.put('/:id/billing', async (req, res) => {
       success: true,
       message: 'Billing information updated successfully',
       data: {
-        clientId: client._id,
+        clientId: client.id,
         billingPreference: client.billingPreference,
         paymentTerms: client.paymentTerms,
         paymentMethod: client.paymentMethod,
@@ -809,7 +809,7 @@ router.post('/:id/conflict-check', async (req, res) => {
 
     const validatedData = validateRequest(conflictCheckSchema, req.body);
     
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -830,7 +830,7 @@ router.post('/:id/conflict-check', async (req, res) => {
             type: 'Opposing Party',
             party,
             matches: conflictingClients.map(c => ({
-              clientId: c._id,
+              clientId: c.id,
               clientNumber: c.clientNumber,
               fullName: c.fullName
             }))
@@ -855,7 +855,7 @@ router.post('/:id/conflict-check', async (req, res) => {
       success: true,
       message: conflictDetected ? 'Potential conflicts detected' : 'No conflicts detected',
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         conflictCheckStatus: client.conflictCheckStatus,
@@ -904,7 +904,7 @@ router.post('/:id/feedback', async (req, res) => {
 
     const validatedData = validateRequest(clientFeedbackSchema, req.body);
     
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -914,7 +914,7 @@ router.post('/:id/feedback', async (req, res) => {
     
     // Create feedback record
     const feedback = new ClientFeedback({
-      clientId: client._id,
+      clientId: client.id,
       clientNumber: client.clientNumber,
       ...validatedData
     });
@@ -934,8 +934,8 @@ router.post('/:id/feedback', async (req, res) => {
       success: true,
       message: 'Feedback submitted successfully',
       data: {
-        feedbackId: feedback._id,
-        clientId: client._id,
+        feedbackId: feedback.id,
+        clientId: client.id,
         overallSatisfaction: feedback.overallSatisfaction,
         npsScore: feedback.npsScore,
         status: feedback.status,
@@ -960,7 +960,7 @@ router.get('/:id/feedback', async (req, res) => {
       });
     }
 
-    const client = await Client.findById(req.params.id);
+    const client = await Client.findByPk(req.params.id);
     if (!client) {
       return res.status(404).json({
         success: false,
@@ -968,15 +968,15 @@ router.get('/:id/feedback', async (req, res) => {
       });
     }
     
-    const feedbacks = await ClientFeedback.find({ clientId: client._id })
+    const feedbacks = await ClientFeedback.findAll({ where: { clientId: client.id } })
       .sort({ feedbackDate: -1 });
     
-    const metrics = await ClientFeedback.getClientMetrics(client._id);
+    const metrics = await ClientFeedback.getClientMetrics(client.id);
     
     res.json({
       success: true,
       data: {
-        clientId: client._id,
+        clientId: client.id,
         clientNumber: client.clientNumber,
         fullName: client.fullName,
         feedbacks: feedbacks,
@@ -1045,7 +1045,7 @@ router.get('/', async (req, res) => {
       ],
       data: {
         clients: clients.map(c => ({
-          clientId: c._id,
+          clientId: c.id,
           clientNumber: c.clientNumber,
           fullName: c.type === 'Business' ? c.companyName : `${c.firstName} ${c.lastName}`,
           type: c.type,

@@ -8,10 +8,10 @@
 
 import express from 'express';
 const router = express.Router();
-import Task from '../models/Task';
-import Workflow from '../models/Workflow';
-import TaskTemplate from '../models/TaskTemplate';
-import TaskComment from '../models/TaskComment';
+import { Task } from '../models/sequelize/Task';
+import { Workflow } from '../models/sequelize/Workflow';
+import { TaskTemplate } from '../models/sequelize/TaskTemplate';
+import { TaskComment } from '../models/sequelize/TaskComment';
 import { isConnected } from '../config/database';
 import {
   createTaskSchema,
@@ -109,7 +109,7 @@ router.post('/create', async (req, res) => {
       data: {
         task: newTask,
         taskNumber: newTask.taskNumber,
-        taskId: newTask._id
+        taskId: newTask.id
       }
     });
   } catch (error) {
@@ -167,7 +167,7 @@ router.post('/workflows', async (req, res) => {
     } else if (action === 'execute') {
       // Execute workflow automation
       const validatedData = validateRequest(automateWorkflowSchema, req.body);
-      const workflow = await Workflow.findById(validatedData.workflowId);
+      const workflow = await Workflow.findByPk(validatedData.workflowId);
 
       if (!workflow) {
         return res.status(404).json({
@@ -196,7 +196,7 @@ router.post('/workflows', async (req, res) => {
             priority: step.taskTemplate.priority || 'Medium',
             assignedTo: step.assignTo,
             estimatedHours: step.estimatedDuration,
-            workflowId: workflow._id,
+            workflowId: workflow.id,
             workflowName: workflow.name,
             caseId: validatedData.caseId,
             caseNumber: validatedData.caseNumber,
@@ -205,8 +205,7 @@ router.post('/workflows', async (req, res) => {
             createdDate: new Date()
           };
 
-          const newTask = new Task(taskData);
-          await newTask.save();
+          await Task.create(taskData);
           createdTasks.push(newTask);
         }
       }
@@ -263,7 +262,7 @@ router.put('/:id/dependencies', async (req, res) => {
     const validatedData = validateRequest(addDependencySchema, req.body);
 
     // Find the task
-    const task = await Task.findById(taskId);
+    const task = await Task.findByPk(taskId);
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -272,7 +271,7 @@ router.put('/:id/dependencies', async (req, res) => {
     }
 
     // Check if dependent task exists
-    const dependentTask = await Task.findById(validatedData.dependentTaskId);
+    const dependentTask = await Task.findByPk(validatedData.dependentTaskId);
     if (!dependentTask) {
       return res.status(404).json({
         success: false,
@@ -331,7 +330,7 @@ router.put('/:id/priority', async (req, res) => {
     const validatedData = validateRequest(updatePrioritySchema, req.body);
 
     // Find the task
-    const task = await Task.findById(taskId);
+    const task = await Task.findByPk(taskId);
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -411,7 +410,7 @@ router.get('/templates', async (req, res) => {
     } else if (category) {
       templates = await TaskTemplate.findByCategory(category);
     } else {
-      templates = await TaskTemplate.find({ status: 'Active' }).sort({ name: 1 });
+      templates = await TaskTemplate.findAll({ where: { status: 'Active' } }).sort({ name: 1 });
     }
 
     res.status(200).json({
@@ -488,7 +487,7 @@ router.get('/:id/progress', async (req, res) => {
     }
 
     const taskId = req.params.id;
-    const task = await Task.findById(taskId)
+    const task = await Task.findByPk(taskId)
       .populate('dependsOn.taskId', 'taskNumber title status completionPercentage')
       .populate('subtasks', 'taskNumber title status completionPercentage');
 
@@ -556,7 +555,7 @@ router.put('/:id/progress', async (req, res) => {
     const taskId = req.params.id;
     const validatedData = validateRequest(updateProgressSchema, req.body);
 
-    const task = await Task.findById(taskId);
+    const task = await Task.findByPk(taskId);
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -613,7 +612,7 @@ router.post('/:id/collaborate', async (req, res) => {
     const validatedData = validateRequest(collaborateSchema, req.body);
 
     // Find the task
-    const task = await Task.findById(taskId);
+    const task = await Task.findByPk(taskId);
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -627,7 +626,7 @@ router.post('/:id/collaborate', async (req, res) => {
       case 'comment': {
         // Create a new comment
         const comment = new TaskComment({
-          taskId: task._id,
+          taskId: task.id,
           taskNumber: task.taskNumber,
           content: validatedData.content,
           commentType: 'Comment',
@@ -659,7 +658,7 @@ router.post('/:id/collaborate', async (req, res) => {
         // Add attachments
         if (validatedData.attachments && validatedData.attachments.length > 0) {
           const attachmentComment = new TaskComment({
-            taskId: task._id,
+            taskId: task.id,
             taskNumber: task.taskNumber,
             content: `${validatedData.attachments.length} file(s) attached`,
             commentType: 'Attachment',
@@ -888,7 +887,7 @@ router.post('/:id/assign', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findByPk(req.params.id);
     if (!task) {
       return res.status(404).json({ success: false, error: 'Task not found' });
     }
@@ -924,7 +923,7 @@ router.put('/:id/status', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findByPk(req.params.id);
     if (!task) {
       return res.status(404).json({ success: false, error: 'Task not found' });
     }

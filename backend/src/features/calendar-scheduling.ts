@@ -89,7 +89,7 @@ router.post('/court-dates', async (req, res) => {
       data: {
         courtDate,
         eventNumber: courtDate.eventNumber,
-        eventId: courtDate._id
+        eventId: courtDate.id
       }
     });
   } catch (error) {
@@ -181,7 +181,7 @@ router.post('/deadlines', async (req, res) => {
       data: {
         deadline,
         deadlineNumber: deadline.deadlineNumber,
-        deadlineId: deadline._id,
+        deadlineId: deadline.id,
         daysUntilDue: deadline.daysUntilDue,
         isCritical: deadline.isCritical
       }
@@ -281,7 +281,7 @@ router.post('/deadlines/:id/complete', async (req, res) => {
       });
     }
 
-    const deadline = await Deadline.findById(req.params.id);
+    const deadline = await Deadline.findByPk(req.params.id);
     if (!deadline) {
       return res.status(404).json({
         success: false,
@@ -330,7 +330,7 @@ router.post('/deadlines/:id/extension', async (req, res) => {
       });
     }
 
-    const deadline = await Deadline.findById(req.params.id);
+    const deadline = await Deadline.findByPk(req.params.id);
     if (!deadline) {
       return res.status(404).json({
         success: false,
@@ -401,7 +401,7 @@ router.post('/appointments', async (req, res) => {
       data: {
         appointment,
         eventNumber: appointment.eventNumber,
-        eventId: appointment._id
+        eventId: appointment.id
       }
     });
   } catch (error) {
@@ -538,7 +538,7 @@ router.post('/reminders', async (req, res) => {
     const validatedData = validateRequest(createReminderSchema, req.body);
     const { eventId, reminderType, minutesBefore } = validatedData;
 
-    const event = await CalendarEvent.findById(eventId);
+    const event = await CalendarEvent.findByPk(eventId);
     if (!event) {
       return res.status(404).json({
         success: false,
@@ -628,7 +628,7 @@ router.post('/sync', async (req, res) => {
       });
     }
 
-    const event = await CalendarEvent.findById(eventId);
+    const event = await CalendarEvent.findByPk(eventId);
     if (!event) {
       return res.status(404).json({
         success: false,
@@ -873,7 +873,7 @@ router.get('/conflicts', async (req, res) => {
     }
 
     if (eventId) {
-      query._id = { $ne: eventId };
+      query.id = { $ne: eventId };
     }
 
     const conflicts = await CalendarEvent.find(query).sort({ startDate: 1 });

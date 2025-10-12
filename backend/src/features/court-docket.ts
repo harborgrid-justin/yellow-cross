@@ -162,7 +162,7 @@ router.get('/dockets/:id', async (req, res) => {
       return res.json({ feature: 'Get Docket', message: 'Database not connected' });
     }
 
-    const docket = await CourtDocket.findById(req.params.id);
+    const docket = await CourtDocket.findByPk(req.params.id);
 
     if (!docket) {
       return res.status(404).json({
@@ -196,7 +196,7 @@ router.post('/dockets/:id/entries', async (req, res) => {
     // Validate input
     const validatedData = validateRequest(addDocketEntrySchema, req.body);
 
-    const docket = await CourtDocket.findById(req.params.id);
+    const docket = await CourtDocket.findByPk(req.params.id);
 
     if (!docket) {
       return res.status(404).json({
@@ -256,7 +256,7 @@ router.post('/e-filing', async (req, res) => {
     // Validate e-filing data
     const validatedData = validateRequest(eFilingSchema, req.body);
 
-    const docket = await CourtDocket.findById(docketId);
+    const docket = await CourtDocket.findByPk(docketId);
 
     if (!docket) {
       return res.status(404).json({
@@ -308,7 +308,7 @@ router.get('/e-filing/:docketId', async (req, res) => {
       return res.json({ feature: 'E-Filing Status', message: 'Database not connected' });
     }
 
-    const docket = await CourtDocket.findById(req.params.docketId)
+    const docket = await CourtDocket.findByPk(req.params.docketId)
       .select('docketNumber eFiling');
 
     if (!docket) {
@@ -357,9 +357,9 @@ router.get('/rules/:court', async (req, res) => {
     const courtName = req.params.court;
 
     // Get dockets for this court to extract applicable rules
-    const dockets = await CourtDocket.find({
+    const dockets = await CourtDocket.findAll({ where: {
       'courtInfo.courtName': courtName
-    })
+    } })
       .select('applicableRules')
       .limit(100);
 
@@ -409,7 +409,7 @@ router.post('/rules/:docketId', async (req, res) => {
       });
     }
 
-    const docket = await CourtDocket.findById(req.params.docketId);
+    const docket = await CourtDocket.findByPk(req.params.docketId);
 
     if (!docket) {
       return res.status(404).json({
@@ -521,7 +521,7 @@ router.post('/opposing-counsel/:docketId', async (req, res) => {
     // Validate input
     const validatedData = validateRequest(addOpposingCounselSchema, req.body);
 
-    const docket = await CourtDocket.findById(req.params.docketId);
+    const docket = await CourtDocket.findByPk(req.params.docketId);
 
     if (!docket) {
       return res.status(404).json({
@@ -576,9 +576,9 @@ router.get('/judges/:id', async (req, res) => {
     const judgeName = decodeURIComponent(req.params.id);
 
     // Find all dockets with this judge
-    const dockets = await CourtDocket.find({
+    const dockets = await CourtDocket.findAll({ where: {
       'judge.name': judgeName
-    })
+    } })
       .select('docketNumber title judge courtInfo caseType status filingDate')
       .sort({ filingDate: -1 })
       .limit(50);
@@ -641,7 +641,7 @@ router.get('/judges', async (req, res) => {
       success: true,
       data: {
         judges: judges.map(j => ({
-          name: j._id,
+          name: j.id,
           info: j.judge,
           caseCount: j.caseCount,
           courts: j.courts
@@ -752,7 +752,7 @@ router.post('/calendar/:docketId', async (req, res) => {
     // Validate input
     const validatedData = validateRequest(addHearingSchema, req.body);
 
-    const docket = await CourtDocket.findById(req.params.docketId);
+    const docket = await CourtDocket.findByPk(req.params.docketId);
 
     if (!docket) {
       return res.status(404).json({
@@ -809,7 +809,7 @@ router.post('/alerts', async (req, res) => {
       });
     }
 
-    const docket = await CourtDocket.findById(docketId);
+    const docket = await CourtDocket.findByPk(docketId);
 
     if (!docket) {
       return res.status(404).json({
@@ -850,7 +850,7 @@ router.get('/alerts/:docketId', async (req, res) => {
       return res.json({ feature: 'Alert Settings', message: 'Database not connected' });
     }
 
-    const docket = await CourtDocket.findById(req.params.docketId)
+    const docket = await CourtDocket.findByPk(req.params.docketId)
       .select('docketNumber alerts');
 
     if (!docket) {
@@ -899,7 +899,7 @@ router.get('/documents/:id', async (req, res) => {
 
     // Find dockets with this document in entries
     const docket = await CourtDocket.findOne({
-      'entries._id': documentId
+      'entries.id': documentId
     }).select('docketNumber entries');
 
     if (!docket) {
@@ -950,7 +950,7 @@ router.get('/documents/docket/:docketId', async (req, res) => {
       return res.json({ feature: 'Docket Documents', message: 'Database not connected' });
     }
 
-    const docket = await CourtDocket.findById(req.params.docketId)
+    const docket = await CourtDocket.findByPk(req.params.docketId)
       .select('docketNumber entries');
 
     if (!docket) {
