@@ -9,7 +9,7 @@
 import express from 'express';
 const router = express.Router();
 import Report from '../models/Report';
-import Case from '../models/Case';
+import { Case } from '../models/sequelize/Case';
 import Client from '../models/Client';
 import Invoice from '../models/Invoice';
 import TimeEntry from '../models/TimeEntry';
@@ -76,7 +76,7 @@ router.get('/:id', async (req, res) => {
       return res.json({ feature: 'Get Report', message: 'Database not connected' });
     }
 
-    const report = await Report.findById(req.params.id);
+    const report = await Report.findByPk(req.params.id);
     
     if (!report) {
       return res.status(404).json({
@@ -188,7 +188,7 @@ router.post('/:id/schedule', async (req, res) => {
 
     const validatedData = validateRequest(scheduleReportSchema, req.body);
 
-    const report = await Report.findById(req.params.id);
+    const report = await Report.findByPk(req.params.id);
     if (!report) {
       return res.status(404).json({ success: false, error: 'Report not found' });
     }
@@ -232,7 +232,7 @@ router.get('/case-analytics/data', async (req, res) => {
     if (endDate) dateFilter.$lte = new Date(endDate);
 
     const cases = dateFilter.$gte || dateFilter.$lte ? 
-      await Case.find({ createdAt: dateFilter }) :
+      await Case.findAll({ where: { createdAt: dateFilter } }) :
       await Case.find();
 
     // Calculate metrics
@@ -306,12 +306,12 @@ router.get('/financial/dashboard', async (req, res) => {
 
     // Get invoices
     const invoices = dateFilter.$gte || dateFilter.$lte ?
-      await Invoice.find({ invoiceDate: dateFilter }) :
+      await Invoice.findAll({ where: { invoiceDate: dateFilter } }) :
       await Invoice.find();
 
     // Get time entries
     const timeEntries = dateFilter.$gte || dateFilter.$lte ?
-      await TimeEntry.find({ date: dateFilter }) :
+      await TimeEntry.findAll({ where: { date: dateFilter } }) :
       await TimeEntry.find();
 
     // Calculate metrics
@@ -379,14 +379,14 @@ router.get('/attorney-performance/metrics', async (req, res) => {
     if (endDate) dateFilter.$lte = new Date(endDate);
     if (attorneyId) attorneyFilter.attorneyId = attorneyId;
 
-    const timeEntries = await TimeEntry.find({
+    const timeEntries = await TimeEntry.findAll({ where: {
       ...attorneyFilter,
-      ...(Object.keys(dateFilter).length && { date: dateFilter })
+      ...(Object.keys(dateFilter).length && { date: dateFilter } })
     });
 
-    const cases = await Case.find({
+    const cases = await Case.findAll({ where: {
       ...attorneyFilter,
-      ...(Object.keys(dateFilter).length && { createdAt: dateFilter })
+      ...(Object.keys(dateFilter).length && { createdAt: dateFilter } })
     });
 
     // Group by attorney
@@ -456,7 +456,7 @@ router.get('/client-analytics/data', async (req, res) => {
     if (endDate) dateFilter.$lte = new Date(endDate);
 
     const clients = dateFilter.$gte || dateFilter.$lte ?
-      await Client.find({ createdAt: dateFilter }) :
+      await Client.findAll({ where: { createdAt: dateFilter } }) :
       await Client.find();
 
     // Calculate metrics

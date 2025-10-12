@@ -1,6 +1,6 @@
 /**
  * Enterprise Setup Verification Tests
- * Tests that verify the new PostgreSQL/Prisma setup is working
+ * Tests that verify the new PostgreSQL/Sequelize setup is working
  */
 
 import request from 'supertest';
@@ -21,9 +21,9 @@ describe('Enterprise Setup Verification', () => {
       expect(fs.existsSync(frontendPath)).toBe(true);
     });
 
-    test('should have Prisma schema', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      expect(fs.existsSync(schemaPath)).toBe(true);
+    test('should have Sequelize models', () => {
+      const modelsPath = path.join(__dirname, '../src/models/sequelize');
+      expect(fs.existsSync(modelsPath)).toBe(true);
     });
 
     test('should have docker-compose.yml', () => {
@@ -37,55 +37,41 @@ describe('Enterprise Setup Verification', () => {
     });
   });
 
-  describe('Prisma Configuration', () => {
-    test('should have Prisma schema with PostgreSQL datasource', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-      
-      expect(schemaContent).toContain('datasource db');
-      expect(schemaContent).toContain('provider = "postgresql"');
+  describe('Sequelize Configuration', () => {
+    test('should have Sequelize models directory', () => {
+      const modelsPath = path.join(__dirname, '../src/models/sequelize');
+      expect(fs.existsSync(modelsPath)).toBe(true);
+      expect(fs.statSync(modelsPath).isDirectory()).toBe(true);
     });
 
-    test('should have Case model in schema', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-      
-      expect(schemaContent).toContain('model Case');
-      expect(schemaContent).toContain('caseNumber');
+    test('should have Case model', () => {
+      const modelPath = path.join(__dirname, '../src/models/sequelize/Case.ts');
+      expect(fs.existsSync(modelPath)).toBe(true);
     });
 
-    test('should have Document model in schema', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-      
-      expect(schemaContent).toContain('model Document');
-      expect(schemaContent).toContain('documentNumber');
+    test('should have Document model', () => {
+      const modelPath = path.join(__dirname, '../src/models/sequelize/Document.ts');
+      expect(fs.existsSync(modelPath)).toBe(true);
     });
 
-    test('should have Task model in schema', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-      
-      expect(schemaContent).toContain('model Task');
-      expect(schemaContent).toContain('taskNumber');
+    test('should have Task model', () => {
+      const modelPath = path.join(__dirname, '../src/models/sequelize/Task.ts');
+      expect(fs.existsSync(modelPath)).toBe(true);
     });
 
-    test('should have Evidence model in schema', () => {
-      const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-      const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-      
-      expect(schemaContent).toContain('model Evidence');
-      expect(schemaContent).toContain('evidenceNumber');
+    test('should have Evidence model', () => {
+      const modelPath = path.join(__dirname, '../src/models/sequelize/Evidence.ts');
+      expect(fs.existsSync(modelPath)).toBe(true);
     });
   });
 
   describe('Database Configuration', () => {
-    test('should export Prisma client getter', () => {
-      import { prisma, getPrismaClient } from '../src/config/database';
+    test('should export Sequelize instance', () => {
+      import { sequelize, getSequelize } from '../src/config/database';
       
-      expect(getPrismaClient).toBeDefined();
-      expect(typeof getPrismaClient).toBe('function');
-      expect(prisma).toBeDefined();
+      expect(getSequelize).toBeDefined();
+      expect(typeof getSequelize).toBe('function');
+      expect(sequelize).toBeDefined();
     });
 
     test('should have connectDB function', () => {
@@ -112,7 +98,7 @@ describe('Enterprise Setup Verification', () => {
     });
 
     afterAll(async () => {
-      // Clean up Prisma client to allow Jest to exit
+      // Clean up Sequelize connection to allow Jest to exit
       import { disconnectDB } from '../src/config/database';
       await disconnectDB();
     });
@@ -143,12 +129,12 @@ describe('Enterprise Setup Verification', () => {
   });
 
   describe('Package Configuration', () => {
-    test('should have Prisma in dependencies', () => {
+    test('should have Sequelize in dependencies', () => {
       const packagePath = path.join(__dirname, '../../package.json');
       const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       
-      expect(packageJson.dependencies).toHaveProperty('@prisma/client');
-      expect(packageJson.devDependencies).toHaveProperty('prisma');
+      expect(packageJson.dependencies).toHaveProperty('sequelize');
+      expect(packageJson.dependencies).toHaveProperty('sequelize-typescript');
     });
 
     test('should have PostgreSQL driver in dependencies', () => {
@@ -162,9 +148,8 @@ describe('Enterprise Setup Verification', () => {
       const packagePath = path.join(__dirname, '../../package.json');
       const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
       
-      expect(packageJson.scripts).toHaveProperty('setup');
-      expect(packageJson.scripts).toHaveProperty('prisma:generate');
-      expect(packageJson.scripts).toHaveProperty('prisma:migrate');
+      expect(packageJson.scripts).toHaveProperty('db:seed');
+      expect(packageJson.scripts).toHaveProperty('db:sync');
       expect(packageJson.scripts).toHaveProperty('docker:setup');
     });
 

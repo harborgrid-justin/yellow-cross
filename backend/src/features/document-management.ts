@@ -8,9 +8,9 @@
 
 import express from 'express';
 const router = express.Router();
-import Document from '../models/Document';
-import DocumentVersion from '../models/DocumentVersion';
-import DocumentTemplate from '../models/DocumentTemplate';
+import { Document } from '../models/sequelize/Document';
+import { DocumentVersion } from '../models/sequelize/DocumentVersion';
+import { DocumentTemplate } from '../models/sequelize/DocumentTemplate';
 import { isConnected } from '../config/database';
 import {
   uploadDocumentSchema,
@@ -99,7 +99,7 @@ router.post('/upload', async (req, res) => {
       data: {
         document: newDocument,
         documentNumber: newDocument.documentNumber,
-        documentId: newDocument._id,
+        documentId: newDocument.id,
         fileSizeFormatted: newDocument.fileSizeFormatted
       }
     });
@@ -136,7 +136,7 @@ router.put('/:id/organize', async (req, res) => {
     const validatedData = validateRequest(organizeDocumentSchema, req.body);
 
     // Find document
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -184,7 +184,7 @@ router.put('/:id/organize', async (req, res) => {
       success: true,
       message: 'Document organized successfully',
       data: {
-        documentId: document._id,
+        documentId: document.id,
         documentNumber: document.documentNumber,
         folderPath: document.folderPath,
         category: document.category,
@@ -327,7 +327,7 @@ router.get('/:id/versions', async (req, res) => {
       });
     }
 
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -336,12 +336,12 @@ router.get('/:id/versions', async (req, res) => {
     }
 
     // Get all versions of this document
-    const allVersions = await Document.find({
+    const allVersions = await Document.findAll({ where: {
       documentNumber: document.documentNumber
-    }).sort({ version: -1 });
+    } }).sort({ version: -1 });
 
     // Get detailed version history from DocumentVersion collection
-    const versionHistory = await DocumentVersion.getVersionHistory(document._id);
+    const versionHistory = await DocumentVersion.getVersionHistory(document.id);
 
     res.json({
       success: true,
@@ -375,7 +375,7 @@ router.post('/:id/versions', async (req, res) => {
 
     const validatedData = validateRequest(createVersionSchema, req.body);
     
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -392,7 +392,7 @@ router.post('/:id/versions', async (req, res) => {
 
     // Create version record in DocumentVersion collection
     const versionRecord = new DocumentVersion({
-      documentId: newVersion._id,
+      documentId: newVersion.id,
       documentNumber: newVersion.documentNumber,
       versionNumber: newVersion.version,
       changeType: validatedData.changeType,
@@ -403,7 +403,7 @@ router.post('/:id/versions', async (req, res) => {
       fileType: validatedData.fileType,
       checksum: validatedData.checksum,
       storagePath: validatedData.storagePath,
-      previousVersionId: document._id,
+      previousVersionId: document.id,
       isCurrent: true,
       createdBy: validatedData.createdBy
     });
@@ -541,7 +541,7 @@ router.post('/:id/collaborate', async (req, res) => {
 
     const validatedData = validateRequest(collaborateDocumentSchema, req.body);
     
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -656,7 +656,7 @@ router.put('/:id/permissions', async (req, res) => {
 
     const validatedData = validateRequest(permissionsSchema, req.body);
     
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -684,7 +684,7 @@ router.put('/:id/permissions', async (req, res) => {
       success: true,
       message: 'Permission granted successfully',
       data: {
-        documentId: document._id,
+        documentId: document.id,
         permissions: document.permissions,
         totalPermissions: document.permissions.length
       }
@@ -707,7 +707,7 @@ router.get('/:id/permissions', async (req, res) => {
       });
     }
 
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -718,7 +718,7 @@ router.get('/:id/permissions', async (req, res) => {
     res.json({
       success: true,
       data: {
-        documentId: document._id,
+        documentId: document.id,
         documentNumber: document.documentNumber,
         visibility: document.visibility,
         permissions: document.permissions,
@@ -837,7 +837,7 @@ router.post('/automate', async (req, res) => {
         generatedContent: populatedContent,
         outputFormat: validatedData.outputFormat,
         generatedDocument: generatedDocument ? {
-          documentId: generatedDocument._id,
+          documentId: generatedDocument.id,
           documentNumber: generatedDocument.documentNumber,
           filename: generatedDocument.filename
         } : null
@@ -873,7 +873,7 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -1002,7 +1002,7 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findByPk(req.params.id);
     if (!document) {
       return res.status(404).json({
         success: false,
@@ -1019,7 +1019,7 @@ router.delete('/:id', async (req, res) => {
       success: true,
       message: 'Document deleted successfully',
       data: {
-        documentId: document._id,
+        documentId: document.id,
         documentNumber: document.documentNumber
       }
     });
@@ -1052,7 +1052,7 @@ router.post('/batch', async (req, res) => {
 
     for (const docId of documentIds) {
       try {
-        const document = await Document.findById(docId);
+        const document = await Document.findByPk(docId);
         
         if (!document) {
           results.failed.push({ docId, reason: 'Document not found' });

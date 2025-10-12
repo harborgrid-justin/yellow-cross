@@ -10,7 +10,7 @@ import express from 'express';
 const router = express.Router();
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import User from '../models/User';
+import { User } from '../models/sequelize/User';
 import SecurityAuditLog from '../models/SecurityAuditLog';
 import { isConnected } from '../config/database';
 import {
@@ -106,15 +106,13 @@ router.post('/auth/register', async (req, res) => {
     }
 
     // Create user
-    const user = new User({
+    await User.create({
       ...validatedData,
       userId,
       fullName: `${validatedData.firstName} ${validatedData.lastName}`,
       status: 'Pending',
       isVerified: false
     });
-
-    await user.save();
 
     // Create audit log
     await createAuditLog({
@@ -964,7 +962,7 @@ router.get('/monitoring/dashboard', async (req, res) => {
     });
 
     // Get active users
-    const activeUsers = await User.find({ status: 'Active' });
+    const activeUsers = await User.findAll({ where: { status: 'Active' } });
 
     res.json({
       success: true,
@@ -1100,7 +1098,7 @@ router.post('/sessions/create', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const user = await User.findById(validatedData.userId);
+    const user = await User.findByPk(validatedData.userId);
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -1126,7 +1124,7 @@ router.post('/mfa/setup', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const user = await User.findById(validatedData.userId);
+    const user = await User.findByPk(validatedData.userId);
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -1164,7 +1162,7 @@ router.post('/mfa/verify', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const user = await User.findById(validatedData.userId);
+    const user = await User.findByPk(validatedData.userId);
     if (!user || !user.mfaEnabled) {
       return res.status(400).json({ success: false, error: 'MFA not enabled' });
     }
@@ -1226,7 +1224,7 @@ router.put('/users/:userId', async (req, res) => {
       return res.status(400).json({ success: false, error: error.details[0].message });
     }
 
-    const user = await User.findById(req.params.userId);
+    const user = await User.findByPk(req.params.userId);
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }

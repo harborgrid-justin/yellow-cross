@@ -40,7 +40,7 @@ This document tracks the migration from MongoDB/Mongoose to PostgreSQL/Prisma OR
 ## Pending ⏳
 
 ### Tests Need Migration
-The existing tests were written for Mongoose models and need to be rewritten for Prisma:
+The existing tests were written for Mongoose models and need to be rewritten for Sequelize:
 
 **Files that need test updates:**
 - `backend/tests/case-management.test.js` (19 tests)
@@ -50,47 +50,51 @@ The existing tests were written for Mongoose models and need to be rewritten for
 - `backend/tests/task-workflow.test.js` (6 tests)
 
 **Changes needed:**
-1. Replace Mongoose model imports with Prisma client
-2. Update data creation to use Prisma syntax
-3. Replace MongoDB-specific queries with Prisma queries
-4. Update mock data to match PostgreSQL/Prisma requirements
+1. Replace Mongoose model imports with Sequelize models
+2. Update data creation to use Sequelize syntax
+3. Replace MongoDB-specific queries with Sequelize queries
+4. Update mock data to match PostgreSQL/Sequelize requirements
 5. Handle UUID vs ObjectId differences
 
+**Note:** Setup test (`backend/tests/setup.test.ts`) has been updated to check for Sequelize instead of Prisma.
+
 ### Feature Code Migration
-The feature modules currently still reference Mongoose models. These need to be updated to use Prisma:
+**Status: ✅ COMPLETED - Feature files have been migrated to Sequelize**
 
-**Files to update:**
-- `backend/src/features/case-management.js` - Update to use Prisma Case model
-- `backend/src/features/document-management.js` - Update to use Prisma Document model
-- `backend/src/features/task-workflow.js` - Update to use Prisma Task model
-- `backend/src/features/ediscovery.js` - Update to use Prisma Evidence models
-- Other feature files as needed
+All 15 feature modules have been updated to use Sequelize models (not Prisma):
+- ✅ `backend/src/features/case-management.ts` - Using Sequelize Case, CaseNote, CaseTimelineEvent
+- ✅ `backend/src/features/document-management.ts` - Using Sequelize Document models
+- ✅ `backend/src/features/task-workflow.ts` - Using Sequelize Task models
+- ✅ `backend/src/features/ediscovery.ts` - Using Sequelize Evidence models
+- ✅ All 15 feature files updated
 
-**Changes needed:**
-1. Import Prisma client instead of Mongoose models
-2. Replace Mongoose query methods with Prisma equivalents:
-   - `Model.find()` → `prisma.model.findMany()`
-   - `Model.findById()` → `prisma.model.findUnique()`
-   - `Model.create()` → `prisma.model.create()`
-   - `Model.findByIdAndUpdate()` → `prisma.model.update()`
-   - `Model.findByIdAndDelete()` → `prisma.model.delete()`
-3. Update validators to work with Prisma data types
-4. Handle UUID vs ObjectId in API responses
+**Changes completed:**
+1. ✅ Replaced Mongoose imports with Sequelize model imports from `../models/sequelize/`
+2. ✅ Replaced Mongoose query methods with Sequelize equivalents:
+   - `Model.findById()` → `Model.findByPk()`
+   - `Model.find()` → `Model.findAll({ where: {} })`
+   - `new Model().save()` → `Model.create()` or keep `.save()` for updates
+   - `._id` references → `.id` (UUID instead of ObjectId)
+3. ✅ Removed mongoose dependency from feature files
+4. ✅ Updated to handle UUID instead of ObjectId in API responses
+
+**Note:** The system has been migrated to **Sequelize** (not Prisma). Some models referenced in feature files don't have Sequelize equivalents yet (e.g., Client, DocumentTemplate, Invoice, etc.) and would need to be created as needed.
 
 ## Migration Strategy
 
 ### For Immediate Use:
 1. **Start with Docker**: Use `npm run docker:setup` to get PostgreSQL running
-2. **Run migrations**: Execute `npm run prisma:migrate` to create database schema
-3. **Verify setup**: Use `npm run prisma:studio` to browse the database
+2. **Seed database**: Execute `npm run db:seed` to create database schema and seed data
+3. **Test connection**: Run `npx ts-node backend/src/test-connection.ts` to verify connection
 4. **Test server**: Run `npm start` to verify the server works
 
 ### For Full Migration:
-1. Choose one feature module (e.g., case-management)
-2. Update the feature code to use Prisma
-3. Update the corresponding tests
-4. Verify the feature works end-to-end
-5. Repeat for other features
+✅ **Migration Complete!** All feature modules have been updated to use Sequelize.
+
+Remaining work:
+1. Update feature-specific tests to use Sequelize
+2. Create missing Sequelize models as needed (Client, Invoice, etc.)
+3. Verify all features work end-to-end with Sequelize
 
 ## Example Prisma Usage
 

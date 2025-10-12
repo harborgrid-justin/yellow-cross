@@ -8,9 +8,9 @@
 
 import express from 'express';
 const router = express.Router();
-import Case from '../models/Case';
-import CaseNote from '../models/CaseNote';
-import CaseTimelineEvent from '../models/CaseTimelineEvent';
+import { Case } from '../models/sequelize/Case';
+import { CaseNote } from '../models/sequelize/CaseNote';
+import { CaseTimelineEvent } from '../models/sequelize/CaseTimelineEvent';
 import { isConnected } from '../config/database';
 import {
   createCaseSchema,
@@ -65,18 +65,16 @@ router.post('/create', async (req, res) => {
     const caseNumber = generateCaseNumber();
 
     // Create new case
-    const newCase = new Case({
+    const newCase = await Case.create({
       ...validatedData,
       caseNumber,
       status: 'Open',
       openedDate: new Date()
     });
 
-    await newCase.save();
-
     // Create initial timeline event
-    const timelineEvent = new CaseTimelineEvent({
-      caseId: newCase._id,
+    await CaseTimelineEvent.create({
+      caseId: newCase.id,
       caseNumber: newCase.caseNumber,
       title: 'Case Created',
       description: `Case ${newCase.caseNumber} created`,
@@ -85,15 +83,13 @@ router.post('/create', async (req, res) => {
       createdBy: validatedData.createdBy
     });
 
-    await timelineEvent.save();
-
     res.status(201).json({
       success: true,
       message: 'Case created successfully',
       data: {
         case: newCase,
         caseNumber: newCase.caseNumber,
-        caseId: newCase._id
+        caseId: newCase.id
       }
     });
   } catch (error) {
@@ -126,7 +122,7 @@ router.get('/:id/status', async (req, res) => {
     }
 
     const caseId = req.params.id;
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -136,9 +132,11 @@ router.get('/:id/status', async (req, res) => {
     }
 
     // Get recent timeline events
-    const recentEvents = await CaseTimelineEvent.find({ caseId })
-      .sort({ eventDate: -1 })
-      .limit(10);
+    const recentEvents = await CaseTimelineEvent.findAll({
+      where: { caseId },
+      order: [['eventDate', 'DESC']],
+      limit: 10
+    });
 
     // Get upcoming deadlines
     const upcomingDeadlines = await CaseTimelineEvent.findUpcomingDeadlines(caseId, 30);
@@ -190,7 +188,7 @@ router.put('/:id/status', async (req, res) => {
     }
 
     const validatedData = validateRequest(updateStatusSchema, req.body);
-    const caseData = await Case.findById(req.params.id);
+    const caseData = await Case.findByPk(req.params.id);
 
     if (!caseData) {
       return res.status(404).json({
@@ -238,7 +236,7 @@ router.put('/:id/assign', async (req, res) => {
     const caseId = req.params.id;
     const validatedData = validateRequest(assignCaseSchema, req.body);
 
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -257,8 +255,8 @@ router.put('/:id/assign', async (req, res) => {
     await caseData.save();
 
     // Create timeline event
-    const timelineEvent = new CaseTimelineEvent({
-      caseId: caseData._id,
+    await CaseTimelineEvent.create({
+      caseId: caseData.id,
       caseNumber: caseData.caseNumber,
       title: 'Case Assigned',
       description: `Case assigned to ${validatedData.assignedTo}`,
@@ -267,8 +265,6 @@ router.put('/:id/assign', async (req, res) => {
       createdBy: validatedData.assignedBy,
       notes: validatedData.reason
     });
-
-    await timelineEvent.save();
 
     res.json({
       success: true,
@@ -309,7 +305,7 @@ router.get('/:id/timeline', async (req, res) => {
     }
 
     const caseId = req.params.id;
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -375,7 +371,7 @@ router.post('/:id/timeline', async (req, res) => {
     }
 
     const validatedData = validateRequest(createTimelineEventSchema, req.body);
-    const caseData = await Case.findById(req.params.id);
+    const caseData = await Case.findByPk(req.params.id);
 
     if (!caseData) {
       return res.status(404).json({
@@ -384,13 +380,11 @@ router.post('/:id/timeline', async (req, res) => {
       });
     }
 
-    const timelineEvent = new CaseTimelineEvent({
+    await CaseTimelineEvent.create({
       caseId: req.params.id,
       caseNumber: caseData.caseNumber,
       ...validatedData
     });
-
-    await timelineEvent.save();
 
     res.status(201).json({
       success: true,
@@ -429,7 +423,7 @@ router.put('/:id/categorize', async (req, res) => {
     const caseId = req.params.id;
     const validatedData = validateRequest(categorizeCaseSchema, req.body);
 
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -491,7 +485,7 @@ router.post('/:id/notes', async (req, res) => {
     const caseId = req.params.id;
     const validatedData = validateRequest(createNoteSchema, req.body);
 
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -501,17 +495,15 @@ router.post('/:id/notes', async (req, res) => {
     }
 
     // Create new note
-    const newNote = new CaseNote({
+    await CaseNote.create({
       ...validatedData,
-      caseId: caseData._id,
+      caseId: caseData.id,
       caseNumber: caseData.caseNumber
     });
 
-    await newNote.save();
-
     // Create timeline event for the note
     const timelineEvent = new CaseTimelineEvent({
-      caseId: caseData._id,
+      caseId: caseData.id,
       caseNumber: caseData.caseNumber,
       title: 'Note Added',
       description: validatedData.title || 'New note added',
@@ -595,7 +587,7 @@ router.post('/:id/close', async (req, res) => {
     const caseId = req.params.id;
     const validatedData = validateRequest(closeCaseSchema, req.body);
 
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -627,7 +619,7 @@ router.post('/:id/close', async (req, res) => {
 
     // Create timeline event
     const timelineEvent = new CaseTimelineEvent({
-      caseId: caseData._id,
+      caseId: caseData.id,
       caseNumber: caseData.caseNumber,
       title: 'Case Closed',
       description: `Case closed with outcome: ${validatedData.outcome}`,
@@ -674,7 +666,7 @@ router.post('/:id/reopen', async (req, res) => {
     const caseId = req.params.id;
     const { reopenedBy, reason } = req.body;
 
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({
@@ -706,7 +698,7 @@ router.post('/:id/reopen', async (req, res) => {
 
     // Create timeline event
     const timelineEvent = new CaseTimelineEvent({
-      caseId: caseData._id,
+      caseId: caseData.id,
       caseNumber: caseData.caseNumber,
       title: 'Case Reopened',
       description: `Case reopened by ${reopenedBy}`,
@@ -931,7 +923,7 @@ router.get('/:id', async (req, res) => {
     }
 
     const caseId = req.params.id;
-    const caseData = await Case.findById(caseId);
+    const caseData = await Case.findByPk(caseId);
 
     if (!caseData) {
       return res.status(404).json({

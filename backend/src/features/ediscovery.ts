@@ -8,12 +8,12 @@
 
 import express from 'express';
 const router = express.Router();
-import mongoose from 'mongoose';
-import Evidence from '../models/Evidence';
-import DocumentReview from '../models/DocumentReview';
-import PrivilegeLog from '../models/PrivilegeLog';
-import Production from '../models/Production';
-import LegalHold from '../models/LegalHold';
+// mongoose import removed - using Sequelize with PostgreSQL/UUIDs
+import { Evidence } from '../models/sequelize/Evidence';
+import { DocumentReview } from '../models/sequelize/DocumentReview';
+import { PrivilegeLog } from '../models/sequelize/PrivilegeLog';
+import { Production } from '../models/sequelize/Production';
+import { LegalHold } from '../models/sequelize/LegalHold';
 import { isConnected } from '../config/database';
 import {
   collectEvidenceSchema,
@@ -118,7 +118,7 @@ router.post('/collect', async (req, res) => {
       data: {
         evidence: newEvidence,
         evidenceNumber: newEvidence.evidenceNumber,
-        evidenceId: newEvidence._id,
+        evidenceId: newEvidence.id,
         chainOfCustody: newEvidence.chainOfCustody
       }
     });
@@ -235,7 +235,7 @@ router.put('/review/:id/complete', async (req, res) => {
     }
 
     const validatedData = validateRequest(completeReviewSchema, req.body);
-    const review = await DocumentReview.findById(req.params.id);
+    const review = await DocumentReview.findByPk(req.params.id);
 
     if (!review) {
       return res.status(404).json({
@@ -289,7 +289,7 @@ router.post('/process', async (req, res) => {
 
     for (const evidenceId of evidenceIds) {
       try {
-        const evidence = await Evidence.findById(evidenceId);
+        const evidence = await Evidence.findByPk(evidenceId);
         
         if (!evidence) {
           errors.push({ evidenceId, error: 'Evidence not found' });
@@ -317,7 +317,7 @@ router.post('/process', async (req, res) => {
 
         await evidence.save();
         processedItems.push({
-          evidenceId: evidence._id,
+          evidenceId: evidence.id,
           evidenceNumber: evidence.evidenceNumber,
           status: 'Processed'
         });
@@ -385,7 +385,7 @@ router.post('/privilege', async (req, res) => {
       data: {
         privilegeLog,
         logNumber: privilegeLog.logNumber,
-        logId: privilegeLog._id
+        logId: privilegeLog.id
       }
     });
   } catch (error) {
@@ -463,7 +463,7 @@ router.post('/productions', async (req, res) => {
       data: {
         production: newProduction,
         productionNumber: newProduction.productionNumber,
-        productionId: newProduction._id
+        productionId: newProduction.id
       }
     });
   } catch (error) {
@@ -511,7 +511,7 @@ router.post('/productions/:id/documents', async (req, res) => {
       });
     }
 
-    const production = await Production.findById(req.params.id);
+    const production = await Production.findByPk(req.params.id);
     
     if (!production) {
       return res.status(404).json({
@@ -562,7 +562,7 @@ router.post('/tagging', async (req, res) => {
 
     // Tag evidence or review
     if (validatedData.evidenceId) {
-      const evidence = await Evidence.findById(validatedData.evidenceId);
+      const evidence = await Evidence.findByPk(validatedData.evidenceId);
       
       if (!evidence) {
         return res.status(404).json({
@@ -585,7 +585,7 @@ router.post('/tagging', async (req, res) => {
       await evidence.save();
       result = evidence;
     } else if (validatedData.documentReviewId) {
-      const review = await DocumentReview.findById(validatedData.documentReviewId);
+      const review = await DocumentReview.findByPk(validatedData.documentReviewId);
       
       if (!review) {
         return res.status(404).json({
@@ -633,7 +633,7 @@ router.get('/tagging/analytics/:caseId', async (req, res) => {
 
     // Get evidence tags
     const evidenceTags = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $unwind: '$tags' },
       { $group: { _id: '$tags', count: { $sum: 1 } } },
       { $sort: { count: -1 } }
@@ -641,7 +641,7 @@ router.get('/tagging/analytics/:caseId', async (req, res) => {
 
     // Get relevance distribution
     const relevanceStats = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $group: { _id: '$relevance', count: { $sum: 1 } } }
     ]);
 
@@ -701,7 +701,7 @@ router.post('/legal-holds', async (req, res) => {
       data: {
         legalHold: newHold,
         holdNumber: newHold.holdNumber,
-        holdId: newHold._id,
+        holdId: newHold.id,
         custodians: newHold.custodians.length,
         complianceRate: newHold.complianceRate
       }
@@ -752,7 +752,7 @@ router.post('/legal-holds/:id/acknowledge', async (req, res) => {
     }
 
     const validatedData = validateRequest(acknowledgeLegalHoldSchema, req.body);
-    const hold = await LegalHold.findById(req.params.id);
+    const hold = await LegalHold.findByPk(req.params.id);
 
     if (!hold) {
       return res.status(404).json({
@@ -794,7 +794,7 @@ router.post('/legal-holds/:id/release', async (req, res) => {
     }
 
     const { releasedBy, reason } = req.body;
-    const hold = await LegalHold.findById(req.params.id);
+    const hold = await LegalHold.findByPk(req.params.id);
 
     if (!hold) {
       return res.status(404).json({
@@ -849,7 +849,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get evidence statistics
     const evidenceStats = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$evidenceType',
@@ -861,7 +861,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get review progress
     const reviewStats = await DocumentReview.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$reviewStatus',
@@ -873,7 +873,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get privilege statistics
     const privilegeStats = await PrivilegeLog.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$privilegeType',
@@ -884,7 +884,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get production statistics
     const productionStats = await Production.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$status',
@@ -897,7 +897,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get legal hold compliance
     const legalHoldStats = await LegalHold.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: null,
@@ -914,7 +914,7 @@ router.get('/analytics', async (req, res) => {
     const totalReviews = await DocumentReview.countDocuments({ caseId });
     const completedReviews = await DocumentReview.countDocuments({ caseId, reviewStatus: 'Completed' });
     const totalReviewTime = await DocumentReview.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $group: { _id: null, totalMinutes: { $sum: '$timeSpentMinutes' } } }
     ]);
 
