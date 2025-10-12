@@ -906,6 +906,48 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Update document by ID (Generic UPDATE)
+router.put('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Document Update',
+        description: 'Update document metadata and properties',
+        endpoint: '/api/documents/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const document = await Document.findByPk(req.params.id);
+    if (!document) {
+      return res.status(404).json({
+        success: false,
+        message: 'Document not found'
+      });
+    }
+
+    // Update document with new data
+    await document.update({
+      ...req.body,
+      lastModifiedBy: req.body.updatedBy || req.body.lastModifiedBy
+    });
+
+    res.json({
+      success: true,
+      message: 'Document updated successfully',
+      data: {
+        document
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating document',
+      error: error.message
+    });
+  }
+});
+
 // List all documents with pagination
 router.get('/', async (req, res) => {
   try {

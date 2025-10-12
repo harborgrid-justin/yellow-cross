@@ -947,4 +947,94 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Update a case by ID (Generic UPDATE)
+router.put('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Case Update',
+        description: 'Update case information',
+        endpoint: '/api/cases/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const caseId = req.params.id;
+    const caseData = await Case.findByPk(caseId);
+
+    if (!caseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Case not found'
+      });
+    }
+
+    // Update case with new data
+    await caseData.update({
+      ...req.body,
+      lastModifiedBy: req.body.updatedBy || req.body.lastModifiedBy
+    });
+
+    res.json({
+      success: true,
+      message: 'Case updated successfully',
+      data: {
+        case: caseData
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating case',
+      error: error.message
+    });
+  }
+});
+
+// Delete a case by ID (Generic DELETE)
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Case Deletion',
+        description: 'Delete a case',
+        endpoint: '/api/cases/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const caseId = req.params.id;
+    const caseData = await Case.findByPk(caseId);
+
+    if (!caseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Case not found'
+      });
+    }
+
+    // Soft delete by archiving instead of hard delete
+    await caseData.update({
+      archived: true,
+      archivedDate: new Date(),
+      archivedBy: req.body.deletedBy || 'System'
+    });
+
+    res.json({
+      success: true,
+      message: 'Case archived successfully',
+      data: {
+        caseId: caseData.id,
+        caseNumber: caseData.caseNumber
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error deleting case',
+      error: error.message
+    });
+  }
+});
+
 export default router;

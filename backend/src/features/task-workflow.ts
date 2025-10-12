@@ -955,4 +955,117 @@ router.put('/:id/status', async (req, res) => {
   }
 });
 
+// Get a single task by ID
+router.get('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        message: 'Database not connected'
+      });
+    }
+
+    const task = await Task.findByPk(req.params.id);
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: 'Task not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: { task }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Update task by ID (Generic UPDATE)
+router.put('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Task Update',
+        description: 'Update task information',
+        endpoint: '/api/tasks/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const task = await Task.findByPk(req.params.id);
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: 'Task not found'
+      });
+    }
+
+    // Update task with new data
+    await task.update({
+      ...req.body,
+      lastModifiedBy: req.body.updatedBy || req.body.lastModifiedBy,
+      lastActivityDate: new Date()
+    });
+
+    res.json({
+      success: true,
+      message: 'Task updated successfully',
+      data: { task }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete task by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Task Deletion',
+        description: 'Delete a task',
+        endpoint: '/api/tasks/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const task = await Task.findByPk(req.params.id);
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: 'Task not found'
+      });
+    }
+
+    // Soft delete by updating status
+    await task.update({
+      status: 'Cancelled',
+      lastModifiedBy: req.body.deletedBy || 'System',
+      lastActivityDate: new Date()
+    });
+
+    res.json({
+      success: true,
+      message: 'Task cancelled successfully',
+      data: {
+        taskId: task.id,
+        taskNumber: task.taskNumber,
+        status: 'Cancelled'
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;
