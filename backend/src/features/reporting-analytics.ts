@@ -381,13 +381,13 @@ router.get('/attorney-performance/metrics', async (req, res) => {
 
     const timeEntries = await TimeEntry.findAll({ where: {
       ...attorneyFilter,
-      ...(Object.keys(dateFilter).length && { date: dateFilter } })
-    });
+      ...(Object.keys(dateFilter).length && { date: dateFilter })
+    }});
 
     const cases = await Case.findAll({ where: {
       ...attorneyFilter,
-      ...(Object.keys(dateFilter).length && { createdAt: dateFilter } })
-    });
+      ...(Object.keys(dateFilter).length && { createdAt: dateFilter })
+    }});
 
     // Group by attorney
     const attorneyStats = {};
