@@ -18,6 +18,24 @@ import { Evidence } from './Evidence';
 import { PrivilegeLog } from './PrivilegeLog';
 import { Production } from './Production';
 import { LegalHold } from './LegalHold';
+import { Client } from './Client';
+import { ClientCommunication } from './ClientCommunication';
+import { ClientFeedback } from './ClientFeedback';
+import { Contract } from './Contract';
+import { CalendarEvent } from './CalendarEvent';
+import { Deadline } from './Deadline';
+import { TimeEntry } from './TimeEntry';
+import { Expense } from './Expense';
+import { Invoice } from './Invoice';
+import { Message } from './Message';
+import { CommunicationTemplate } from './CommunicationTemplate';
+import { ResearchItem } from './ResearchItem';
+import { CourtDocket } from './CourtDocket';
+import { ComplianceItem } from './ComplianceItem';
+import { Report } from './Report';
+import { SecurityAuditLog } from './SecurityAuditLog';
+import { Integration } from './Integration';
+import { DocumentTemplate } from './DocumentTemplate';
 
 // Named exports
 export {
@@ -35,7 +53,25 @@ export {
   Evidence,
   PrivilegeLog,
   Production,
-  LegalHold
+  LegalHold,
+  Client,
+  ClientCommunication,
+  ClientFeedback,
+  Contract,
+  CalendarEvent,
+  Deadline,
+  TimeEntry,
+  Expense,
+  Invoice,
+  Message,
+  CommunicationTemplate,
+  ResearchItem,
+  CourtDocket,
+  ComplianceItem,
+  Report,
+  SecurityAuditLog,
+  Integration,
+  DocumentTemplate
 };
 
 // Export all models as a default object
@@ -54,5 +90,23 @@ export default {
   Evidence,
   PrivilegeLog,
   Production,
-  LegalHold
+  LegalHold,
+  Client,
+  ClientCommunication,
+  ClientFeedback,
+  Contract,
+  CalendarEvent,
+  Deadline,
+  TimeEntry,
+  Expense,
+  Invoice,
+  Message,
+  CommunicationTemplate,
+  ResearchItem,
+  CourtDocket,
+  ComplianceItem,
+  Report,
+  SecurityAuditLog,
+  Integration,
+  DocumentTemplate
 };
