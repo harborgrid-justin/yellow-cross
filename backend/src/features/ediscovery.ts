@@ -8,7 +8,7 @@
 
 import express from 'express';
 const router = express.Router();
-import mongoose from 'mongoose';
+// mongoose import removed - using Sequelize with PostgreSQL/UUIDs
 import { Evidence } from '../models/sequelize/Evidence';
 import { DocumentReview } from '../models/sequelize/DocumentReview';
 import { PrivilegeLog } from '../models/sequelize/PrivilegeLog';
@@ -633,7 +633,7 @@ router.get('/tagging/analytics/:caseId', async (req, res) => {
 
     // Get evidence tags
     const evidenceTags = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $unwind: '$tags' },
       { $group: { _id: '$tags', count: { $sum: 1 } } },
       { $sort: { count: -1 } }
@@ -641,7 +641,7 @@ router.get('/tagging/analytics/:caseId', async (req, res) => {
 
     // Get relevance distribution
     const relevanceStats = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $group: { _id: '$relevance', count: { $sum: 1 } } }
     ]);
 
@@ -849,7 +849,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get evidence statistics
     const evidenceStats = await Evidence.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$evidenceType',
@@ -861,7 +861,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get review progress
     const reviewStats = await DocumentReview.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$reviewStatus',
@@ -873,7 +873,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get privilege statistics
     const privilegeStats = await PrivilegeLog.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$privilegeType',
@@ -884,7 +884,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get production statistics
     const productionStats = await Production.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: '$status',
@@ -897,7 +897,7 @@ router.get('/analytics', async (req, res) => {
 
     // Get legal hold compliance
     const legalHoldStats = await LegalHold.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       {
         $group: {
           _id: null,
@@ -914,7 +914,7 @@ router.get('/analytics', async (req, res) => {
     const totalReviews = await DocumentReview.countDocuments({ caseId });
     const completedReviews = await DocumentReview.countDocuments({ caseId, reviewStatus: 'Completed' });
     const totalReviewTime = await DocumentReview.aggregate([
-      { $match: { caseId: new mongoose.Types.ObjectId(caseId) } },
+      { $match: { caseId: caseId } },
       { $group: { _id: null, totalMinutes: { $sum: '$timeSpentMinutes' } } }
     ]);
 

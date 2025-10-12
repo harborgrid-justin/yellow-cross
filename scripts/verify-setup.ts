@@ -72,17 +72,14 @@ if (fs.existsSync(path.join(rootDir, '.env'))) {
 
 console.log();
 
-// 3. Check Prisma setup
-console.log('🗄️  Prisma Configuration\n');
+// 3. Check Sequelize setup
+console.log('🗄️  Sequelize Configuration\n');
 
-checkFile(path.join(rootDir, 'backend/prisma/schema.prisma'), 'Prisma schema');
-checkDirectory(path.join(rootDir, 'backend/src/generated/prisma'), 'Prisma client generated');
-
-// Check if Prisma client has key files
-if (fs.existsSync(path.join(rootDir, 'backend/src/generated/prisma'))) {
-  checkFile(path.join(rootDir, 'backend/src/generated/prisma/index.js'), 'Prisma client index');
-  checkFile(path.join(rootDir, 'backend/src/generated/prisma/index.d.ts'), 'Prisma client types');
-}
+checkDirectory(path.join(rootDir, 'backend/src/models/sequelize'), 'Sequelize models directory');
+checkFile(path.join(rootDir, 'backend/src/models/sequelize/Case.ts'), 'Case model');
+checkFile(path.join(rootDir, 'backend/src/models/sequelize/Document.ts'), 'Document model');
+checkFile(path.join(rootDir, 'backend/src/models/sequelize/Task.ts'), 'Task model');
+checkFile(path.join(rootDir, 'backend/src/models/sequelize/User.ts'), 'User model');
 
 console.log();
 
@@ -90,7 +87,8 @@ console.log();
 console.log('📦 Dependencies\n');
 
 checkDirectory(path.join(rootDir, 'node_modules'), 'node_modules directory');
-checkDirectory(path.join(rootDir, 'node_modules/@prisma/client'), '@prisma/client installed');
+checkDirectory(path.join(rootDir, 'node_modules/sequelize'), 'Sequelize installed');
+checkDirectory(path.join(rootDir, 'node_modules/sequelize-typescript'), 'Sequelize-TypeScript installed');
 checkDirectory(path.join(rootDir, 'node_modules/express'), 'Express installed');
 checkDirectory(path.join(rootDir, 'node_modules/pg'), 'PostgreSQL driver installed');
 
@@ -146,7 +144,7 @@ if (allChecksPassed) {
   console.log('  1. Start the server: npm start');
   console.log('  2. Or use Docker: npm run docker:setup');
   console.log('  3. Run tests: npm test');
-  console.log('  4. Open Prisma Studio: npm run prisma:studio');
+  console.log('  4. Seed the database: npm run db:seed');
   console.log('\n📖 See README.md for more information.\n');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 } else {
@@ -155,7 +153,7 @@ if (allChecksPassed) {
   console.log('Some checks failed. Please review the errors above.\n');
   console.log('💡 Common fixes:');
   console.log('  - Missing .env: Run "npm run setup:env"');
-  console.log('  - Missing Prisma client: Run "npm run prisma:generate"');
+  console.log('  - Missing database connection: Check DATABASE_URL in .env');
   console.log('  - Missing dependencies: Run "npm install"');
   console.log('\n📖 See SETUP_VERIFICATION.md for detailed troubleshooting.\n');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
