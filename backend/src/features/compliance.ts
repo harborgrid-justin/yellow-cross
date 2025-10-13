@@ -792,4 +792,74 @@ router.get('/', (req, res) => {
   });
 });
 
+// Update compliance item by ID (Generic UPDATE)
+router.put('/:id', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Update Compliance Item', message: 'Database not connected' });
+    }
+
+    const item = await ComplianceItem.findByPk(req.params.id);
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        error: 'Compliance item not found'
+      });
+    }
+
+    await item.update({
+      ...req.body,
+      lastModifiedBy: req.body.updatedBy || req.body.lastModifiedBy
+    });
+
+    res.json({
+      success: true,
+      message: 'Compliance item updated successfully',
+      data: item
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete compliance item by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!await isConnected()) {
+      return res.json({ feature: 'Delete Compliance Item', message: 'Database not connected' });
+    }
+
+    const item = await ComplianceItem.findByPk(req.params.id);
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        error: 'Compliance item not found'
+      });
+    }
+
+    // Only allow deletion if status is Pending or Draft
+    if (!['Pending', 'Draft'].includes(item.status)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Can only delete compliance items in Pending or Draft status'
+      });
+    }
+
+    await item.destroy();
+
+    res.json({
+      success: true,
+      message: 'Compliance item deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;

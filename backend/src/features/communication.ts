@@ -973,4 +973,62 @@ router.get('/', (req, res) => {
   });
 });
 
+// Delete message by ID
+router.delete('/messages/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Message', message: 'Database not connected' });
+    }
+
+    const message = await Message.findByPk(req.params.id);
+    if (!message) {
+      return res.status(404).json({
+        success: false,
+        message: 'Message not found'
+      });
+    }
+
+    await message.destroy();
+
+    res.json({
+      success: true,
+      message: 'Message deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete template by ID
+router.delete('/templates/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Template', message: 'Database not connected' });
+    }
+
+    const template = await CommunicationTemplate.findByPk(req.params.id);
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        message: 'Template not found'
+      });
+    }
+
+    await template.destroy();
+
+    res.json({
+      success: true,
+      message: 'Template deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;

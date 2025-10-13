@@ -1169,4 +1169,115 @@ router.get('/rates/:userId', async (req, res) => {
   }
 });
 
+// Delete time entry by ID
+router.delete('/time-entry/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Time Entry', message: 'Database not connected' });
+    }
+
+    const timeEntry = await TimeEntry.findByPk(req.params.id);
+    if (!timeEntry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Time entry not found'
+      });
+    }
+
+    // Only allow deletion if not invoiced
+    if (timeEntry.invoiceId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete time entry that has been invoiced'
+      });
+    }
+
+    await timeEntry.destroy();
+
+    res.json({
+      success: true,
+      message: 'Time entry deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete expense by ID
+router.delete('/expense/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Expense', message: 'Database not connected' });
+    }
+
+    const expense = await Expense.findByPk(req.params.id);
+    if (!expense) {
+      return res.status(404).json({
+        success: false,
+        message: 'Expense not found'
+      });
+    }
+
+    // Only allow deletion if not invoiced
+    if (expense.invoiceId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete expense that has been invoiced'
+      });
+    }
+
+    await expense.destroy();
+
+    res.json({
+      success: true,
+      message: 'Expense deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete invoice by ID
+router.delete('/invoices/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Invoice', message: 'Database not connected' });
+    }
+
+    const invoice = await Invoice.findByPk(req.params.id);
+    if (!invoice) {
+      return res.status(404).json({
+        success: false,
+        message: 'Invoice not found'
+      });
+    }
+
+    // Only allow deletion if in Draft status
+    if (invoice.status !== 'Draft') {
+      return res.status(400).json({
+        success: false,
+        message: 'Can only delete invoices in Draft status'
+      });
+    }
+
+    await invoice.destroy();
+
+    res.json({
+      success: true,
+      message: 'Invoice deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;

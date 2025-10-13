@@ -1074,4 +1074,50 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Delete a client by ID (Generic DELETE)
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Client Deletion',
+        description: 'Delete or deactivate a client',
+        endpoint: '/api/clients/:id',
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const clientId = req.params.id;
+    const client = await Client.findByPk(clientId);
+
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: 'Client not found'
+      });
+    }
+
+    // Soft delete by changing status to Inactive instead of hard delete
+    await client.update({
+      status: 'Inactive',
+      lastModifiedBy: req.body.deletedBy || 'System'
+    });
+
+    res.json({
+      success: true,
+      message: 'Client deactivated successfully',
+      data: {
+        clientId: client.id,
+        clientNumber: client.clientNumber,
+        status: 'Inactive'
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error deleting client',
+      error: error.message
+    });
+  }
+});
+
 export default router;

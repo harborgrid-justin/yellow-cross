@@ -1042,6 +1042,62 @@ router.put('/events/:id', async (req, res) => {
   }
 });
 
+// Get event by ID
+router.get('/events/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Get Event', message: 'Database not connected' });
+    }
+
+    const event = await CalendarEvent.findByPk(req.params.id);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: { event }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Delete event by ID
+router.delete('/events/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Event', message: 'Database not connected' });
+    }
+
+    const event = await CalendarEvent.findByPk(req.params.id);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    await event.destroy();
+
+    res.json({
+      success: true,
+      message: 'Event deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Calendar overview
 router.get('/', (req, res) => {
   res.json({

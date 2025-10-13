@@ -961,4 +961,41 @@ router.post('/dashboard/config', async (req, res) => {
   }
 });
 
+// Delete report by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.json({ feature: 'Delete Report', message: 'Database not connected' });
+    }
+
+    const report = await Report.findByPk(req.params.id);
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: 'Report not found'
+      });
+    }
+
+    // Don't delete templates, only draft reports
+    if (report.isTemplate) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete report templates. Archive them instead.'
+      });
+    }
+
+    await report.destroy();
+
+    res.json({
+      success: true,
+      message: 'Report deleted successfully'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 export default router;
