@@ -74,7 +74,7 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Import all feature modules
+// Import all feature modules - Original 15 features
 import caseManagement from './features/case-management';
 import clientCRM from './features/client-crm';
 import documentManagement from './features/document-management';
@@ -92,7 +92,54 @@ import security from './features/security';
 import integration from './features/integration';
 import authRouter from './routes/auth';
 
-// Register all feature routes
+// Import new 45 features
+import litigationManagement from './features/litigation-management';
+import mediationADR from './features/mediation-adr';
+import intellectualProperty from './features/intellectual-property';
+import realEstateTransactions from './features/real-estate-transactions';
+import corporateGovernance from './features/corporate-governance';
+import mergersAcquisitions from './features/mergers-acquisitions';
+import employmentLaw from './features/employment-law';
+import immigrationLaw from './features/immigration-law';
+import familyLaw from './features/family-law';
+import criminalDefense from './features/criminal-defense';
+import bankruptcyManagement from './features/bankruptcy-management';
+import estatePlanning from './features/estate-planning';
+import taxLaw from './features/tax-law';
+import personalInjury from './features/personal-injury';
+import classAction from './features/class-action';
+import appellatePractice from './features/appellate-practice';
+import environmentalLaw from './features/environmental-law';
+import healthcareLaw from './features/healthcare-law';
+import insuranceDefense from './features/insurance-defense';
+import securitiesLaw from './features/securities-law';
+import financialServices from './features/financial-services';
+import energyUtilities from './features/energy-utilities';
+import telecommunications from './features/telecommunications';
+import aviationLaw from './features/aviation-law';
+import maritimeLaw from './features/maritime-law';
+import constructionLaw from './features/construction-law';
+import franchiseLaw from './features/franchise-law';
+import sportsEntertainment from './features/sports-entertainment';
+import technologyTransactions from './features/technology-transactions';
+import dataPrivacy from './features/data-privacy';
+import cybersecurityLegal from './features/cybersecurity-legal';
+import governmentContracts from './features/government-contracts';
+import nonProfitLaw from './features/non-profit-law';
+import educationLaw from './features/education-law';
+import laborRelations from './features/labor-relations';
+import internationalTrade from './features/international-trade';
+import antitrustCompetition from './features/antitrust-competition';
+import whiteCollarCrime from './features/white-collar-crime';
+import civilRights from './features/civil-rights';
+import municipalLaw from './features/municipal-law';
+import veteransAffairs from './features/veterans-affairs';
+import socialSecurity from './features/social-security';
+import consumerProtection from './features/consumer-protection';
+import landlordTenant from './features/landlord-tenant';
+import proBono from './features/pro-bono';
+
+// Register all feature routes - Original 15 features
 app.use('/api/cases', caseManagement);
 app.use('/api/clients', clientCRM);
 app.use('/api/documents', documentManagement);
@@ -109,6 +156,53 @@ app.use('/api/communication', communication);
 app.use('/api/security', security);
 app.use('/api/integrations', integration);
 
+// Register new 45 feature routes
+app.use('/api/litigation', litigationManagement);
+app.use('/api/mediation', mediationADR);
+app.use('/api/ip', intellectualProperty);
+app.use('/api/realestate', realEstateTransactions);
+app.use('/api/governance', corporateGovernance);
+app.use('/api/manda', mergersAcquisitions);
+app.use('/api/employment', employmentLaw);
+app.use('/api/immigration', immigrationLaw);
+app.use('/api/family', familyLaw);
+app.use('/api/criminal', criminalDefense);
+app.use('/api/bankruptcy', bankruptcyManagement);
+app.use('/api/estate', estatePlanning);
+app.use('/api/tax', taxLaw);
+app.use('/api/personalinjury', personalInjury);
+app.use('/api/classaction', classAction);
+app.use('/api/appellate', appellatePractice);
+app.use('/api/environmental', environmentalLaw);
+app.use('/api/healthcare', healthcareLaw);
+app.use('/api/insurancedefense', insuranceDefense);
+app.use('/api/securities', securitiesLaw);
+app.use('/api/financial', financialServices);
+app.use('/api/energy', energyUtilities);
+app.use('/api/telecom', telecommunications);
+app.use('/api/aviation', aviationLaw);
+app.use('/api/maritime', maritimeLaw);
+app.use('/api/construction', constructionLaw);
+app.use('/api/franchise', franchiseLaw);
+app.use('/api/sports', sportsEntertainment);
+app.use('/api/technology', technologyTransactions);
+app.use('/api/privacy', dataPrivacy);
+app.use('/api/cybersecurity', cybersecurityLegal);
+app.use('/api/govcontracts', governmentContracts);
+app.use('/api/nonprofit', nonProfitLaw);
+app.use('/api/education', educationLaw);
+app.use('/api/labor', laborRelations);
+app.use('/api/trade', internationalTrade);
+app.use('/api/antitrust', antitrustCompetition);
+app.use('/api/whitecollar', whiteCollarCrime);
+app.use('/api/civilrights', civilRights);
+app.use('/api/municipal', municipalLaw);
+app.use('/api/veterans', veteransAffairs);
+app.use('/api/socialsecurity', socialSecurity);
+app.use('/api/consumer', consumerProtection);
+app.use('/api/landlordtenant', landlordTenant);
+app.use('/api/probono', proBono);
+
 // Authentication routes (convenience wrapper for security/auth endpoints)
 app.use('/api/auth', authRouter);
 
@@ -116,9 +210,11 @@ app.use('/api/auth', authRouter);
 app.get('/api', (req, res) => {
   res.json({
     name: 'Yellow Cross',
-    version: '1.0.0',
-    description: 'Enterprise Law Firm Practice Management Platform',
+    version: '2.0.0',
+    description: 'Enterprise Law Firm Practice Management Platform - Now with 60 Production Features',
+    totalFeatures: 60,
     features: [
+      // Original 15 features
       'Case Management System',
       'Client Relationship Management (CRM)',
       'Document Management System',
@@ -133,7 +229,53 @@ app.get('/api', (req, res) => {
       'Reporting & Analytics',
       'Communication & Collaboration',
       'Security & Access Control',
-      'Integration & API Management'
+      'Integration & API Management',
+      // New 45 features
+      'Litigation Management',
+      'Mediation & ADR',
+      'Intellectual Property Management',
+      'Real Estate Transactions',
+      'Corporate Governance',
+      'Mergers & Acquisitions',
+      'Employment Law',
+      'Immigration Law',
+      'Family Law',
+      'Criminal Defense',
+      'Bankruptcy Management',
+      'Estate Planning',
+      'Tax Law',
+      'Personal Injury',
+      'Class Action Management',
+      'Appellate Practice',
+      'Environmental Law',
+      'Healthcare Law',
+      'Insurance Defense',
+      'Securities Law',
+      'Financial Services',
+      'Energy & Utilities',
+      'Telecommunications',
+      'Aviation Law',
+      'Maritime Law',
+      'Construction Law',
+      'Franchise Law',
+      'Sports & Entertainment',
+      'Technology Transactions',
+      'Data Privacy & GDPR',
+      'Cybersecurity Legal',
+      'Government Contracts',
+      'Non-Profit Law',
+      'Education Law',
+      'Labor Relations',
+      'International Trade',
+      'Antitrust & Competition',
+      'White Collar Crime',
+      'Civil Rights',
+      'Municipal Law',
+      'Veterans Affairs',
+      'Social Security',
+      'Consumer Protection',
+      'Landlord-Tenant Law',
+      'Pro Bono Management'
     ]
   });
 });
@@ -186,7 +328,7 @@ if (process.env.NODE_ENV !== 'test') {
     logger.info('Yellow Cross Platform started', {
       port: PORT,
       environment: process.env.NODE_ENV || 'development',
-      features: 15,
+      features: 60,
       nodeVersion: process.version,
     });
   });
