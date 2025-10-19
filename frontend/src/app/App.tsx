@@ -8,7 +8,7 @@ import LoginPage from '../features/auth/LoginPage';
 import RegisterPage from '../features/auth/RegisterPage';
 import ProfilePage from '../features/auth/ProfilePage';
 
-// Feature pages
+// Core Feature pages (1-15)
 import CaseManagementPage from '../features/case-management/CaseManagementPage';
 import ClientCrmPage from '../features/client-crm/ClientCrmPage';
 import DocumentManagementPage from '../features/document-management/DocumentManagementPage';
@@ -24,6 +24,53 @@ import ReportingAnalyticsPage from '../features/reporting-analytics/ReportingAna
 import CommunicationPage from '../features/communication/CommunicationPage';
 import SecurityPage from '../features/security/SecurityPage';
 import IntegrationPage from '../features/integration/IntegrationPage';
+
+// NEW Feature pages (16-60)
+import LitigationManagementPage from '../features/litigation-management/LitigationManagementPage';
+import MediationAdrPage from '../features/mediation-adr/MediationAdrPage';
+import IntellectualPropertyPage from '../features/intellectual-property/IntellectualPropertyPage';
+import RealEstateTransactionsPage from '../features/real-estate-transactions/RealEstateTransactionsPage';
+import CorporateGovernancePage from '../features/corporate-governance/CorporateGovernancePage';
+import MergersAcquisitionsPage from '../features/mergers-acquisitions/MergersAcquisitionsPage';
+import EmploymentLawPage from '../features/employment-law/EmploymentLawPage';
+import ImmigrationLawPage from '../features/immigration-law/ImmigrationLawPage';
+import FamilyLawPage from '../features/family-law/FamilyLawPage';
+import CriminalDefensePage from '../features/criminal-defense/CriminalDefensePage';
+import BankruptcyManagementPage from '../features/bankruptcy-management/BankruptcyManagementPage';
+import EstatePlanningPage from '../features/estate-planning/EstatePlanningPage';
+import TaxLawPage from '../features/tax-law/TaxLawPage';
+import PersonalInjuryPage from '../features/personal-injury/PersonalInjuryPage';
+import ClassActionPage from '../features/class-action/ClassActionPage';
+import SecuritiesLawPage from '../features/securities-law/SecuritiesLawPage';
+import HealthcareLawPage from '../features/healthcare-law/HealthcareLawPage';
+import EnvironmentalLawPage from '../features/environmental-law/EnvironmentalLawPage';
+import InsuranceDefensePage from '../features/insurance-defense/InsuranceDefensePage';
+import AppellatePracticePage from '../features/appellate-practice/AppellatePracticePage';
+import FinancialServicesPage from '../features/financial-services/FinancialServicesPage';
+import EnergyUtilitiesPage from '../features/energy-utilities/EnergyUtilitiesPage';
+import TelecommunicationsPage from '../features/telecommunications/TelecommunicationsPage';
+import AviationLawPage from '../features/aviation-law/AviationLawPage';
+import MaritimeLawPage from '../features/maritime-law/MaritimeLawPage';
+import ConstructionLawPage from '../features/construction-law/ConstructionLawPage';
+import FranchiseLawPage from '../features/franchise-law/FranchiseLawPage';
+import SportsEntertainmentPage from '../features/sports-entertainment/SportsEntertainmentPage';
+import TechnologyTransactionsPage from '../features/technology-transactions/TechnologyTransactionsPage';
+import DataPrivacyPage from '../features/data-privacy/DataPrivacyPage';
+import CybersecurityLegalPage from '../features/cybersecurity-legal/CybersecurityLegalPage';
+import GovernmentContractsPage from '../features/government-contracts/GovernmentContractsPage';
+import NonProfitLawPage from '../features/non-profit-law/NonProfitLawPage';
+import EducationLawPage from '../features/education-law/EducationLawPage';
+import LaborRelationsPage from '../features/labor-relations/LaborRelationsPage';
+import InternationalTradePage from '../features/international-trade/InternationalTradePage';
+import AntitrustCompetitionPage from '../features/antitrust-competition/AntitrustCompetitionPage';
+import WhiteCollarCrimePage from '../features/white-collar-crime/WhiteCollarCrimePage';
+import CivilRightsPage from '../features/civil-rights/CivilRightsPage';
+import MunicipalLawPage from '../features/municipal-law/MunicipalLawPage';
+import VeteransAffairsPage from '../features/veterans-affairs/VeteransAffairsPage';
+import SocialSecurityPage from '../features/social-security/SocialSecurityPage';
+import ConsumerProtectionPage from '../features/consumer-protection/ConsumerProtectionPage';
+import LandlordTenantPage from '../features/landlord-tenant/LandlordTenantPage';
+import ProBonoManagementPage from '../features/pro-bono/ProBonoManagementPage';
 
 // Sub-feature pages (dynamic imports for code splitting)
 import SubFeaturePage from '../shared/components/SubFeaturePage';
