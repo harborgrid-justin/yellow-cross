@@ -2,7 +2,17 @@
  * Feature 21: Mergers & Acquisitions Management
  */
 import express from 'express';
+
+// Authentication middleware
+import { authenticate, requireActiveAccount } from '../middleware/auth';
+
 const router = express.Router();
+
+// ============================================================================
+// APPLY AUTHENTICATION TO ALL ROUTES
+// ============================================================================
+router.use(authenticate);
+router.use(requireActiveAccount);
 import { isConnected } from '../config/database';
 import Joi from 'joi';
 import { MergerAcquisition } from '../models/sequelize/MergerAcquisition';

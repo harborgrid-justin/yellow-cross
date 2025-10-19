@@ -7,7 +7,17 @@
  */
 
 import express from 'express';
+
+// Authentication middleware
+import { authenticate, requireActiveAccount } from '../middleware/auth';
+
 const router = express.Router();
+
+// ============================================================================
+// APPLY AUTHENTICATION TO ALL ROUTES
+// ============================================================================
+router.use(authenticate);
+router.use(requireActiveAccount);
 import { Case } from '../models/sequelize/Case';
 import { CaseNote } from '../models/sequelize/CaseNote';
 import { CaseTimelineEvent } from '../models/sequelize/CaseTimelineEvent';
