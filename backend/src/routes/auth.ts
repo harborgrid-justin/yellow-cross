@@ -1,15 +1,14 @@
 /**
  * Authentication Routes
- * Convenience wrapper for security authentication endpoints
+ * JWT-based authentication and authorization endpoints
  */
 
 import express from 'express';
-import security from '../features/security';
+import authFeature from '../features/auth';
 
 const router = express.Router();
 
-// Forward all /api/auth/* requests to the security feature's /auth/* routes
-// This creates a convenience alias so /api/auth/login works instead of /api/security/auth/login
-router.use('/', security);
+// Use the new authentication feature
+router.use('/', authFeature);
 
 export default router;
