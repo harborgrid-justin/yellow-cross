@@ -7,7 +7,7 @@ export interface Feature {
     name: string;
     icon: string;
     endpoint: string;
-    category: 'management' | 'legal' | 'compliance' | 'analytics';
+    category: 'management' | 'legal' | 'compliance' | 'analytics' | 'practice-areas' | 'specialized' | 'criminal' | 'public-service';
     description: string;
     subFeatureCount: number;
     slug: string;
