@@ -10,7 +10,11 @@
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+// Token storage keys - must match AuthContext
 const ACCESS_TOKEN_KEY = 'yellow_cross_access_token';
+const REFRESH_TOKEN_KEY = 'yellow_cross_refresh_token';
+const USER_KEY = 'yellow_cross_user';
 
 export interface ApiResponse<T = unknown> {
   data?: T;
@@ -34,6 +38,22 @@ export class ApiError extends Error {
  */
 function getAuthToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+/**
+ * Clear auth data on unauthorized
+ */
+function clearAuthData(): void {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+/**
+ * Trigger auth error event for AuthContext to handle
+ */
+function triggerAuthError(): void {
+  window.dispatchEvent(new CustomEvent('auth:unauthorized'));
 }
 
 /**
@@ -67,17 +87,10 @@ async function request<T>(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       
-      // Handle 401 - redirect to login
+      // Handle 401 - notify AuthContext to handle logout and navigation
       if (response.status === 401) {
-        // Clear tokens on 401
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem('yellow_cross_refresh_token');
-        localStorage.removeItem('yellow_cross_user');
-        
-        // Redirect to login if not already there
-        if (!window.location.pathname.includes('/login')) {
-          window.location.href = '/login';
-        }
+        clearAuthData();
+        triggerAuthError();
       }
       
       throw new ApiError(

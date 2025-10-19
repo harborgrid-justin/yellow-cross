@@ -59,6 +59,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(false);
   }, []);
 
+  // Listen for unauthorized events from API client
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      // Clear state
+      setUser(null);
+      setAccessToken(null);
+      setRefreshToken(null);
+      
+      // Redirect to login if not already there
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/login';
+      }
+    };
+
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, []);
+
   // Auto-refresh token before expiry
   useEffect(() => {
     if (!accessToken) return;
