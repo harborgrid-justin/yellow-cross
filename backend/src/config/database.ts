@@ -43,6 +43,31 @@ import { EnvironmentalLawMatter } from '../models/sequelize/EnvironmentalLawMatt
 import { HealthcareLawMatter } from '../models/sequelize/HealthcareLawMatter';
 import { InsuranceDefenseCase } from '../models/sequelize/InsuranceDefenseCase';
 import { SecuritiesLawMatter } from '../models/sequelize/SecuritiesLawMatter';
+import { FinancialServicesMatter } from '../models/sequelize/FinancialServicesMatter';
+import { EnergyUtilitiesMatter } from '../models/sequelize/EnergyUtilitiesMatter';
+import { TelecommunicationsMatter } from '../models/sequelize/TelecommunicationsMatter';
+import { AviationLawMatter } from '../models/sequelize/AviationLawMatter';
+import { MaritimeLawMatter } from '../models/sequelize/MaritimeLawMatter';
+import { ConstructionLawMatter } from '../models/sequelize/ConstructionLawMatter';
+import { FranchiseLawMatter } from '../models/sequelize/FranchiseLawMatter';
+import { SportsEntertainmentMatter } from '../models/sequelize/SportsEntertainmentMatter';
+import { TechnologyTransactionsMatter } from '../models/sequelize/TechnologyTransactionsMatter';
+import { DataPrivacyMatter } from '../models/sequelize/DataPrivacyMatter';
+import { CybersecurityLegalMatter } from '../models/sequelize/CybersecurityLegalMatter';
+import { GovernmentContractsMatter } from '../models/sequelize/GovernmentContractsMatter';
+import { NonProfitLawMatter } from '../models/sequelize/NonProfitLawMatter';
+import { EducationLawMatter } from '../models/sequelize/EducationLawMatter';
+import { LaborRelationsMatter } from '../models/sequelize/LaborRelationsMatter';
+import { InternationalTradeMatter } from '../models/sequelize/InternationalTradeMatter';
+import { AntitrustCompetitionMatter } from '../models/sequelize/AntitrustCompetitionMatter';
+import { WhiteCollarCrimeMatter } from '../models/sequelize/WhiteCollarCrimeMatter';
+import { CivilRightsMatter } from '../models/sequelize/CivilRightsMatter';
+import { MunicipalLawMatter } from '../models/sequelize/MunicipalLawMatter';
+import { VeteransAffairsMatter } from '../models/sequelize/VeteransAffairsMatter';
+import { SocialSecurityMatter } from '../models/sequelize/SocialSecurityMatter';
+import { ConsumerProtectionMatter } from '../models/sequelize/ConsumerProtectionMatter';
+import { LandlordTenantMatter } from '../models/sequelize/LandlordTenantMatter';
+import { ProBonoMatter } from '../models/sequelize/ProBonoMatter';
 
 // Database connection URL
 const DATABASE_URL = process.env.DATABASE_URL || 
@@ -69,7 +94,16 @@ const sequelize = new Sequelize(DATABASE_URL, {
     CriminalDefenseCase, BankruptcyCase, EstatePlanningMatter,
     TaxLawMatter, PersonalInjuryCase, ClassActionCase,
     AppellateCase, EnvironmentalLawMatter, HealthcareLawMatter,
-    InsuranceDefenseCase, SecuritiesLawMatter
+    InsuranceDefenseCase, SecuritiesLawMatter,
+    FinancialServicesMatter, EnergyUtilitiesMatter, TelecommunicationsMatter,
+    AviationLawMatter, MaritimeLawMatter, ConstructionLawMatter,
+    FranchiseLawMatter, SportsEntertainmentMatter, TechnologyTransactionsMatter,
+    DataPrivacyMatter, CybersecurityLegalMatter, GovernmentContractsMatter,
+    NonProfitLawMatter, EducationLawMatter, LaborRelationsMatter,
+    InternationalTradeMatter, AntitrustCompetitionMatter, WhiteCollarCrimeMatter,
+    CivilRightsMatter, MunicipalLawMatter, VeteransAffairsMatter,
+    SocialSecurityMatter, ConsumerProtectionMatter, LandlordTenantMatter,
+    ProBonoMatter
   ],
   pool: {
     max: 5,

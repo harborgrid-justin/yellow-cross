@@ -56,6 +56,31 @@ import { EnvironmentalLawMatter } from './EnvironmentalLawMatter';
 import { HealthcareLawMatter } from './HealthcareLawMatter';
 import { InsuranceDefenseCase } from './InsuranceDefenseCase';
 import { SecuritiesLawMatter } from './SecuritiesLawMatter';
+import { FinancialServicesMatter } from './FinancialServicesMatter';
+import { EnergyUtilitiesMatter } from './EnergyUtilitiesMatter';
+import { TelecommunicationsMatter } from './TelecommunicationsMatter';
+import { AviationLawMatter } from './AviationLawMatter';
+import { MaritimeLawMatter } from './MaritimeLawMatter';
+import { ConstructionLawMatter } from './ConstructionLawMatter';
+import { FranchiseLawMatter } from './FranchiseLawMatter';
+import { SportsEntertainmentMatter } from './SportsEntertainmentMatter';
+import { TechnologyTransactionsMatter } from './TechnologyTransactionsMatter';
+import { DataPrivacyMatter } from './DataPrivacyMatter';
+import { CybersecurityLegalMatter } from './CybersecurityLegalMatter';
+import { GovernmentContractsMatter } from './GovernmentContractsMatter';
+import { NonProfitLawMatter } from './NonProfitLawMatter';
+import { EducationLawMatter } from './EducationLawMatter';
+import { LaborRelationsMatter } from './LaborRelationsMatter';
+import { InternationalTradeMatter } from './InternationalTradeMatter';
+import { AntitrustCompetitionMatter } from './AntitrustCompetitionMatter';
+import { WhiteCollarCrimeMatter } from './WhiteCollarCrimeMatter';
+import { CivilRightsMatter } from './CivilRightsMatter';
+import { MunicipalLawMatter } from './MunicipalLawMatter';
+import { VeteransAffairsMatter } from './VeteransAffairsMatter';
+import { SocialSecurityMatter } from './SocialSecurityMatter';
+import { ConsumerProtectionMatter } from './ConsumerProtectionMatter';
+import { LandlordTenantMatter } from './LandlordTenantMatter';
+import { ProBonoMatter } from './ProBonoMatter';
 
 // Named exports
 export {
@@ -111,7 +136,32 @@ export {
   EnvironmentalLawMatter,
   HealthcareLawMatter,
   InsuranceDefenseCase,
-  SecuritiesLawMatter
+  SecuritiesLawMatter,
+  FinancialServicesMatter,
+  EnergyUtilitiesMatter,
+  TelecommunicationsMatter,
+  AviationLawMatter,
+  MaritimeLawMatter,
+  ConstructionLawMatter,
+  FranchiseLawMatter,
+  SportsEntertainmentMatter,
+  TechnologyTransactionsMatter,
+  DataPrivacyMatter,
+  CybersecurityLegalMatter,
+  GovernmentContractsMatter,
+  NonProfitLawMatter,
+  EducationLawMatter,
+  LaborRelationsMatter,
+  InternationalTradeMatter,
+  AntitrustCompetitionMatter,
+  WhiteCollarCrimeMatter,
+  CivilRightsMatter,
+  MunicipalLawMatter,
+  VeteransAffairsMatter,
+  SocialSecurityMatter,
+  ConsumerProtectionMatter,
+  LandlordTenantMatter,
+  ProBonoMatter
 };
 
 // Export all models as a default object
@@ -168,5 +218,30 @@ export default {
   EnvironmentalLawMatter,
   HealthcareLawMatter,
   InsuranceDefenseCase,
-  SecuritiesLawMatter
+  SecuritiesLawMatter,
+  FinancialServicesMatter,
+  EnergyUtilitiesMatter,
+  TelecommunicationsMatter,
+  AviationLawMatter,
+  MaritimeLawMatter,
+  ConstructionLawMatter,
+  FranchiseLawMatter,
+  SportsEntertainmentMatter,
+  TechnologyTransactionsMatter,
+  DataPrivacyMatter,
+  CybersecurityLegalMatter,
+  GovernmentContractsMatter,
+  NonProfitLawMatter,
+  EducationLawMatter,
+  LaborRelationsMatter,
+  InternationalTradeMatter,
+  AntitrustCompetitionMatter,
+  WhiteCollarCrimeMatter,
+  CivilRightsMatter,
+  MunicipalLawMatter,
+  VeteransAffairsMatter,
+  SocialSecurityMatter,
+  ConsumerProtectionMatter,
+  LandlordTenantMatter,
+  ProBonoMatter
 };
