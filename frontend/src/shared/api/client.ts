@@ -6,9 +6,15 @@
  * - Consistent error handling
  * - Type-safe requests
  * - Request/response interceptors
+ * - Automatic authentication token injection
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+// Token storage keys - must match AuthContext
+const ACCESS_TOKEN_KEY = 'yellow_cross_access_token';
+const REFRESH_TOKEN_KEY = 'yellow_cross_refresh_token';
+const USER_KEY = 'yellow_cross_user';
 
 export interface ApiResponse<T = unknown> {
   data?: T;
@@ -28,7 +34,30 @@ export class ApiError extends Error {
 }
 
 /**
- * Make an API request
+ * Get the auth token from localStorage
+ */
+function getAuthToken(): string | null {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+/**
+ * Clear auth data on unauthorized
+ */
+function clearAuthData(): void {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+/**
+ * Trigger auth error event for AuthContext to handle
+ */
+function triggerAuthError(): void {
+  window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+}
+
+/**
+ * Make an API request with automatic authentication
  */
 async function request<T>(
   endpoint: string,
@@ -36,12 +65,20 @@ async function request<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   
+  // Get auth token and add to headers if available
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
   const config: RequestInit = {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
   };
 
   try {
@@ -49,6 +86,13 @@ async function request<T>(
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      
+      // Handle 401 - notify AuthContext to handle logout and navigation
+      if (response.status === 401) {
+        clearAuthData();
+        triggerAuthError();
+      }
+      
       throw new ApiError(
         errorData.message || `HTTP ${response.status}`,
         response.status,
