@@ -6,9 +6,11 @@
  * - Consistent error handling
  * - Type-safe requests
  * - Request/response interceptors
+ * - Automatic authentication token injection
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const ACCESS_TOKEN_KEY = 'yellow_cross_access_token';
 
 export interface ApiResponse<T = unknown> {
   data?: T;
@@ -28,7 +30,14 @@ export class ApiError extends Error {
 }
 
 /**
- * Make an API request
+ * Get the auth token from localStorage
+ */
+function getAuthToken(): string | null {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+/**
+ * Make an API request with automatic authentication
  */
 async function request<T>(
   endpoint: string,
@@ -36,12 +45,20 @@ async function request<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   
+  // Get auth token and add to headers if available
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
   const config: RequestInit = {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
   };
 
   try {
@@ -49,6 +66,20 @@ async function request<T>(
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      
+      // Handle 401 - redirect to login
+      if (response.status === 401) {
+        // Clear tokens on 401
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem('yellow_cross_refresh_token');
+        localStorage.removeItem('yellow_cross_user');
+        
+        // Redirect to login if not already there
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = '/login';
+        }
+      }
+      
       throw new ApiError(
         errorData.message || `HTTP ${response.status}`,
         response.status,
