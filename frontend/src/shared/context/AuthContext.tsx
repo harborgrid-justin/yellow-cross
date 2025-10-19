@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface User {
   id: string;
@@ -62,15 +61,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Listen for unauthorized events from API client
   useEffect(() => {
     const handleUnauthorized = () => {
-      // Clear state
+      // Clear state - this will trigger PrivateRoute to redirect to login
       setUser(null);
       setAccessToken(null);
       setRefreshToken(null);
-      
-      // Redirect to login if not already there
-      if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
-      }
     };
 
     window.addEventListener('auth:unauthorized', handleUnauthorized);
