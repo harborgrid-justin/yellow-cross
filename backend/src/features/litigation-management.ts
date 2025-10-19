@@ -7,6 +7,7 @@ import express from 'express';
 const router = express.Router();
 import { isConnected } from '../config/database';
 import Joi from 'joi';
+import { LitigationMatter } from '../models/sequelize/LitigationMatter';
 
 // Validation schemas
 const createLitigationSchema = Joi.object({
@@ -67,13 +68,15 @@ router.post('/create', async (req, res) => {
 
     const validatedData = validateRequest(createLitigationSchema, req.body);
 
-    // Simulated litigation creation (replace with actual DB logic)
-    const litigation = {
-      id: `LIT-${Date.now()}`,
+    // Generate unique litigation number
+    const litigationNumber = `LIT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+
+    // Create litigation matter in database
+    const litigation = await LitigationMatter.create({
+      litigationNumber,
       ...validatedData,
-      status: 'pending',
-      createdAt: new Date()
-    };
+      status: 'pending'
+    });
 
     res.status(201).json({
       success: true,
@@ -110,19 +113,15 @@ router.get('/:id', async (req, res) => {
 
     const { id } = req.params;
 
-    // Simulated data retrieval
-    const litigation = {
-      id,
-      caseId: 'CASE-2025-0001',
-      litigationType: 'civil',
-      court: 'Superior Court of California',
-      judgeAssigned: 'Hon. Jane Smith',
-      status: 'discovery',
-      filingDate: '2025-01-15',
-      trialDate: '2025-08-20',
-      pleadingsCount: 12,
-      discoveriesCount: 8
-    };
+    // Retrieve litigation matter from database
+    const litigation = await LitigationMatter.findByPk(id);
+
+    if (!litigation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Litigation matter not found'
+      });
+    }
 
     res.json({
       success: true,
@@ -159,17 +158,22 @@ router.put('/:id', async (req, res) => {
     const validatedData = validateRequest(updateLitigationSchema, req.body);
     const { id } = req.params;
 
-    // Simulated update
-    const updatedLitigation = {
-      id,
-      ...validatedData,
-      updatedAt: new Date()
-    };
+    // Update litigation matter in database
+    const litigation = await LitigationMatter.findByPk(id);
+
+    if (!litigation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Litigation matter not found'
+      });
+    }
+
+    await litigation.update(validatedData);
 
     res.json({
       success: true,
       message: 'Litigation matter updated successfully',
-      data: updatedLitigation
+      data: litigation
     });
   } catch (error: any) {
     res.status(400).json({
@@ -199,17 +203,10 @@ router.get('/', async (req, res) => {
       });
     }
 
-    // Simulated list with filters
-    const litigations = [
-      {
-        id: 'LIT-001',
-        caseId: 'CASE-2025-0001',
-        litigationType: 'civil',
-        court: 'Superior Court',
-        status: 'discovery',
-        trialDate: '2025-08-20'
-      }
-    ];
+    // Retrieve all litigation matters from database
+    const litigations = await LitigationMatter.findAll({
+      order: [['createdAt', 'DESC']]
+    });
 
     res.json({
       success: true,
@@ -249,12 +246,27 @@ router.post('/:id/pleadings', async (req, res) => {
     const validatedData = validateRequest(createPleadingSchema, req.body);
     const { id } = req.params;
 
+    // Get litigation matter
+    const litigation = await LitigationMatter.findByPk(id);
+
+    if (!litigation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Litigation matter not found'
+      });
+    }
+
     const pleading = {
       id: `PLEAD-${Date.now()}`,
       litigationId: id,
       ...validatedData,
       createdAt: new Date()
     };
+
+    // Update pleadings array in litigation matter
+    const pleadings = (litigation.pleadings as any[]) || [];
+    pleadings.push(pleading);
+    await litigation.update({ pleadings });
 
     res.status(201).json({
       success: true,
@@ -265,6 +277,49 @@ router.post('/:id/pleadings', async (req, res) => {
     res.status(400).json({
       success: false,
       message: 'Error creating pleading',
+      error: error.message
+    });
+  }
+});
+
+// Delete litigation matter
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({
+        feature: 'Litigation Management - Delete',
+        description: 'Delete or archive litigation matter',
+        endpoint: '/api/litigation/:id',
+        capabilities: [
+          'Soft delete',
+          'Archive matter',
+          'Maintain audit trail'
+        ],
+        message: 'Database not connected - showing capabilities only'
+      });
+    }
+
+    const { id } = req.params;
+
+    const litigation = await LitigationMatter.findByPk(id);
+
+    if (!litigation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Litigation matter not found'
+      });
+    }
+
+    await litigation.destroy();
+
+    res.json({
+      success: true,
+      message: 'Litigation matter deleted successfully'
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: 'Error deleting litigation matter',
       error: error.message
     });
   }

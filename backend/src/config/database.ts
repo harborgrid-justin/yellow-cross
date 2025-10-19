@@ -23,6 +23,26 @@ import { Evidence } from '../models/sequelize/Evidence';
 import { PrivilegeLog } from '../models/sequelize/PrivilegeLog';
 import { Production } from '../models/sequelize/Production';
 import { LegalHold } from '../models/sequelize/LegalHold';
+import { LitigationMatter } from '../models/sequelize/LitigationMatter';
+import { Mediation } from '../models/sequelize/Mediation';
+import { IntellectualProperty } from '../models/sequelize/IntellectualProperty';
+import { RealEstateTransaction } from '../models/sequelize/RealEstateTransaction';
+import { CorporateGovernance } from '../models/sequelize/CorporateGovernance';
+import { MergerAcquisition } from '../models/sequelize/MergerAcquisition';
+import { EmploymentLawMatter } from '../models/sequelize/EmploymentLawMatter';
+import { ImmigrationCase } from '../models/sequelize/ImmigrationCase';
+import { FamilyLawCase } from '../models/sequelize/FamilyLawCase';
+import { CriminalDefenseCase } from '../models/sequelize/CriminalDefenseCase';
+import { BankruptcyCase } from '../models/sequelize/BankruptcyCase';
+import { EstatePlanningMatter } from '../models/sequelize/EstatePlanningMatter';
+import { TaxLawMatter } from '../models/sequelize/TaxLawMatter';
+import { PersonalInjuryCase } from '../models/sequelize/PersonalInjuryCase';
+import { ClassActionCase } from '../models/sequelize/ClassActionCase';
+import { AppellateCase } from '../models/sequelize/AppellateCase';
+import { EnvironmentalLawMatter } from '../models/sequelize/EnvironmentalLawMatter';
+import { HealthcareLawMatter } from '../models/sequelize/HealthcareLawMatter';
+import { InsuranceDefenseCase } from '../models/sequelize/InsuranceDefenseCase';
+import { SecuritiesLawMatter } from '../models/sequelize/SecuritiesLawMatter';
 
 // Database connection URL
 const DATABASE_URL = process.env.DATABASE_URL || 
@@ -42,7 +62,14 @@ const sequelize = new Sequelize(DATABASE_URL, {
     User, Case, CaseNote, CaseTimelineEvent,
     Document, DocumentVersion, DocumentReview,
     Task, TaskComment, TaskTemplate, Workflow,
-    Evidence, PrivilegeLog, Production, LegalHold
+    Evidence, PrivilegeLog, Production, LegalHold,
+    LitigationMatter, Mediation, IntellectualProperty,
+    RealEstateTransaction, CorporateGovernance, MergerAcquisition,
+    EmploymentLawMatter, ImmigrationCase, FamilyLawCase,
+    CriminalDefenseCase, BankruptcyCase, EstatePlanningMatter,
+    TaxLawMatter, PersonalInjuryCase, ClassActionCase,
+    AppellateCase, EnvironmentalLawMatter, HealthcareLawMatter,
+    InsuranceDefenseCase, SecuritiesLawMatter
   ],
   pool: {
     max: 5,

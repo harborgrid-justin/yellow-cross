@@ -6,6 +6,7 @@ import express from 'express';
 const router = express.Router();
 import { isConnected } from '../config/database';
 import Joi from 'joi';
+import { TaxLawMatter } from '../models/sequelize/TaxLawMatter';
 
 const createSchema = Joi.object({
   title: Joi.string().required(),
@@ -31,7 +32,8 @@ router.post('/create', async (req, res) => {
       });
     }
     const validatedData = validateRequest(createSchema, req.body);
-    const record = { id: `REC-${Date.now()}`, ...validatedData, createdAt: new Date() };
+    const matterNumber = `TAX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+    const record = await TaxLawMatter.create({ matterNumber, ...validatedData });
     res.status(201).json({ success: true, data: record });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
@@ -43,7 +45,11 @@ router.get('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'Tax Law Management - Details', capabilities: ['View details', 'Document access', 'History tracking'] });
     }
-    res.json({ success: true, data: { id: req.params.id, title: 'Sample', status: 'active' } });
+    const record = await TaxLawMatter.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    res.json({ success: true, data: record });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -54,7 +60,12 @@ router.put('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'Tax Law Management - Update', capabilities: ['Update records', 'Status changes'] });
     }
-    res.json({ success: true, message: 'Updated successfully' });
+    const record = await TaxLawMatter.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    await record.update(req.body);
+    res.json({ success: true, message: 'Updated successfully', data: record });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -65,7 +76,8 @@ router.get('/', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'Tax Law Management - List', capabilities: ['List all', 'Filter', 'Search', 'Sort'] });
     }
-    res.json({ success: true, data: [], total: 0 });
+    const records = await TaxLawMatter.findAll({ order: [['createdAt', 'DESC']] });
+    res.json({ success: true, data: records, total: records.length });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
