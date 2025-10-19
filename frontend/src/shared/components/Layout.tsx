@@ -1,9 +1,18 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { featuresData } from '../utils/featuresData';
 
 const Layout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className="app-layout">
@@ -27,7 +36,21 @@ const Layout: React.FC = () => {
                 ))}
               </ul>
             </li>
-            <li role="none"><Link to="/login" className="btn-login" role="menuitem">Login</Link></li>
+            {isAuthenticated ? (
+              <>
+                <li role="none" className="dropdown">
+                  <a href="#" role="menuitem" aria-haspopup="true">
+                    <i className="fas fa-user"></i> {user?.firstName || user?.username}
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><button onClick={handleLogout} className="btn-logout">Logout</button></li>
+                  </ul>
+                </li>
+              </>
+            ) : (
+              <li role="none"><Link to="/login" className="btn-login" role="menuitem">Login</Link></li>
+            )}
           </ul>
           <button 
             className="hamburger" 
