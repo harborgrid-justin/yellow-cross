@@ -9,6 +9,25 @@ import { isConnected } from '../config/database';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/sequelize/User';
+import crypto from 'crypto';
+import rateLimit from 'express-rate-limit';
+
+// Rate limiting for authentication endpoints
+const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 requests per windowMs for sensitive auth operations
+  message: 'Too many authentication attempts, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 login attempts per 15 minutes
+  message: 'Too many login attempts, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 // JWT Secret (should be in .env)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -95,7 +114,7 @@ const validateRequest = (schema: any, data: any) => {
  * POST /api/auth/register
  * Register a new user
  */
-router.post('/register', async (req, res) => {
+router.post('/register', authRateLimiter, async (req, res) => {
   try {
     if (!isConnected()) {
       return res.status(503).json({
@@ -125,7 +144,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Generate unique userId
-    const userId = `USR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+    const userId = `USR-${Date.now()}-${crypto.randomBytes(5).toString('hex').toUpperCase()}`;
 
     // Create user
     const user = await User.create({
@@ -177,7 +196,7 @@ router.post('/register', async (req, res) => {
  * POST /api/auth/login
  * User login
  */
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimiter, async (req, res) => {
   try {
     if (!isConnected()) {
       return res.status(503).json({
@@ -493,7 +512,7 @@ router.put('/change-password', async (req, res) => {
  * POST /api/auth/forgot-password
  * Request password reset
  */
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', authRateLimiter, async (req, res) => {
   try {
     if (!isConnected()) {
       return res.status(503).json({
@@ -515,7 +534,7 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     // Generate reset token
-    const resetToken = `RST-${Date.now()}-${Math.random().toString(36).substr(2, 16)}`.toUpperCase();
+    const resetToken = `RST-${Date.now()}-${crypto.randomBytes(16).toString('hex').toUpperCase()}`;
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
     await user.save();
@@ -541,7 +560,7 @@ router.post('/forgot-password', async (req, res) => {
  * POST /api/auth/reset-password
  * Reset password with token
  */
-router.post('/reset-password', async (req, res) => {
+router.post('/reset-password', authRateLimiter, async (req, res) => {
   try {
     if (!isConnected()) {
       return res.status(503).json({

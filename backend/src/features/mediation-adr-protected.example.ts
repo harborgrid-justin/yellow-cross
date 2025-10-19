@@ -19,6 +19,14 @@ import {
   requireActiveAccount 
 } from '../middleware/auth';
 
+// SECURITY: Consider adding rate limiting to prevent abuse
+// import rateLimit from 'express-rate-limit';
+// const createLimiter = rateLimit({
+//   windowMs: 60 * 1000, // 1 minute
+//   max: 10, // 10 requests per minute
+//   message: 'Too many requests, please try again later'
+// });
+
 // Validation schemas
 const createMediationSchema = Joi.object({
   caseId: Joi.string().required(),
@@ -71,7 +79,14 @@ router.post('/create',
       const validatedData = validateRequest(createMediationSchema, req.body);
       
       // Automatically track who created this
-      const createdBy = req.user?.userId || 'system';
+      // Since authenticate middleware is applied, req.user should always be defined
+      if (!req.user?.userId) {
+        return res.status(401).json({
+          success: false,
+          message: 'User authentication required'
+        });
+      }
+      const createdBy = req.user.userId;
       
       const mediationNumber = `MED-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
       
@@ -166,7 +181,14 @@ router.put('/:id',
       }
 
       // Automatically track who updated this
-      const updatedBy = req.user?.userId || 'system';
+      // Since authenticate middleware is applied, req.user should always be defined
+      if (!req.user?.userId) {
+        return res.status(401).json({
+          success: false,
+          message: 'User authentication required'
+        });
+      }
+      const updatedBy = req.user.userId;
       
       await mediation.update({
         ...validatedData,
@@ -360,7 +382,11 @@ To apply this pattern to other features:
    - Permission-based: Add requirePermission('resource:action')
 
 4. Remove 'createdBy' and 'updatedBy' from validation schemas - set them automatically:
-   const createdBy = req.user?.userId || 'system';
+   // Always check that req.user is defined first
+   if (!req.user?.userId) {
+     return res.status(401).json({ success: false, message: 'User authentication required' });
+   }
+   const createdBy = req.user.userId;
    
 5. Use req.user to access current user info:
    - req.user.id - User UUID
