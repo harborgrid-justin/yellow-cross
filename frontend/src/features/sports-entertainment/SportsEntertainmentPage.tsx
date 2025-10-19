@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Sports&EntertainmentPage: React.FC = () => {
+const SportsEntertainmentPage: React.FC = () => {
   const subFeatures = subFeaturesData['sports-entertainment'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Sports&EntertainmentPage: React.FC = () => {
   );
 };
 
-export default Sports&EntertainmentPage;
+export default SportsEntertainmentPage;

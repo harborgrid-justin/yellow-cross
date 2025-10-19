@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const DataPrivacy&GDPRPage: React.FC = () => {
+const DataPrivacyPage: React.FC = () => {
   const subFeatures = subFeaturesData['data-privacy'] || [];
 
   return (
@@ -55,4 +55,4 @@ const DataPrivacy&GDPRPage: React.FC = () => {
   );
 };
 
-export default DataPrivacy&GDPRPage;
+export default DataPrivacyPage;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Mergers&AcquisitionsPage: React.FC = () => {
+const MergersAcquisitionsPage: React.FC = () => {
   const subFeatures = subFeaturesData['mergers-acquisitions'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Mergers&AcquisitionsPage: React.FC = () => {
   );
 };
 
-export default Mergers&AcquisitionsPage;
+export default MergersAcquisitionsPage;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Landlord-TenantPage: React.FC = () => {
+const LandlordTenantPage: React.FC = () => {
   const subFeatures = subFeaturesData['landlord-tenant'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Landlord-TenantPage: React.FC = () => {
   );
 };
 
-export default Landlord-TenantPage;
+export default LandlordTenantPage;

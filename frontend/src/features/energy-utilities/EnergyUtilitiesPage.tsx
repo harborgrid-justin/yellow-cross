@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Energy&UtilitiesPage: React.FC = () => {
+const EnergyUtilitiesPage: React.FC = () => {
   const subFeatures = subFeaturesData['energy-utilities'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Energy&UtilitiesPage: React.FC = () => {
   );
 };
 
-export default Energy&UtilitiesPage;
+export default EnergyUtilitiesPage;

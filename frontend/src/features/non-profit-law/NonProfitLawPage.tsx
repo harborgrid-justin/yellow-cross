@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Non-ProfitLawPage: React.FC = () => {
+const NonProfitLawPage: React.FC = () => {
   const subFeatures = subFeaturesData['non-profit-law'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Non-ProfitLawPage: React.FC = () => {
   );
 };
 
-export default Non-ProfitLawPage;
+export default NonProfitLawPage;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Mediation&ADRPage: React.FC = () => {
+const MediationAdrPage: React.FC = () => {
   const subFeatures = subFeaturesData['mediation-adr'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Mediation&ADRPage: React.FC = () => {
   );
 };
 
-export default Mediation&ADRPage;
+export default MediationAdrPage;

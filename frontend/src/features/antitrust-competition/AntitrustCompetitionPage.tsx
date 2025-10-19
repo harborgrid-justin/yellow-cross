@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { subFeaturesData } from '../../shared/utils/featuresData';
 
-const Antitrust&CompetitionPage: React.FC = () => {
+const AntitrustCompetitionPage: React.FC = () => {
   const subFeatures = subFeaturesData['antitrust-competition'] || [];
 
   return (
@@ -55,4 +55,4 @@ const Antitrust&CompetitionPage: React.FC = () => {
   );
 };
 
-export default Antitrust&CompetitionPage;
+export default AntitrustCompetitionPage;
