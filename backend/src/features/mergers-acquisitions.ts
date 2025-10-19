@@ -5,6 +5,7 @@ import express from 'express';
 const router = express.Router();
 import { isConnected } from '../config/database';
 import Joi from 'joi';
+import { MergerAcquisition } from '../models/sequelize/MergerAcquisition';
 
 const createMandASchema = Joi.object({
   dealName: Joi.string().required(),
@@ -51,7 +52,12 @@ router.put('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'M&A - Update' });
     }
-    res.json({ success: true, message: 'Updated successfully' });
+    const record = await MergerAcquisition.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    await record.update(req.body);
+    res.json({ success: true, message: 'Updated successfully', data: record });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -62,7 +68,26 @@ router.get('/', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'M&A - List', capabilities: ['All deals', 'Pipeline view'] });
     }
-    res.json({ success: true, data: [], total: 0 });
+    const records = await MergerAcquisition.findAll({ order: [['createdAt', 'DESC']] });
+    res.json({ success: true, data: records, total: records.length });
+  } catch (error: any) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({ feature: 'MergerAcquisition - Delete' });
+    }
+    const record = await MergerAcquisition.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    await record.destroy();
+    res.json({ success: true, message: 'Deleted successfully' });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }

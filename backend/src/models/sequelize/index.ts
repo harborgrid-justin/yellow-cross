@@ -36,6 +36,26 @@ import { Report } from './Report';
 import { SecurityAuditLog } from './SecurityAuditLog';
 import { Integration } from './Integration';
 import { DocumentTemplate } from './DocumentTemplate';
+import { LitigationMatter } from './LitigationMatter';
+import { Mediation } from './Mediation';
+import { IntellectualProperty } from './IntellectualProperty';
+import { RealEstateTransaction } from './RealEstateTransaction';
+import { CorporateGovernance } from './CorporateGovernance';
+import { MergerAcquisition } from './MergerAcquisition';
+import { EmploymentLawMatter } from './EmploymentLawMatter';
+import { ImmigrationCase } from './ImmigrationCase';
+import { FamilyLawCase } from './FamilyLawCase';
+import { CriminalDefenseCase } from './CriminalDefenseCase';
+import { BankruptcyCase } from './BankruptcyCase';
+import { EstatePlanningMatter } from './EstatePlanningMatter';
+import { TaxLawMatter } from './TaxLawMatter';
+import { PersonalInjuryCase } from './PersonalInjuryCase';
+import { ClassActionCase } from './ClassActionCase';
+import { AppellateCase } from './AppellateCase';
+import { EnvironmentalLawMatter } from './EnvironmentalLawMatter';
+import { HealthcareLawMatter } from './HealthcareLawMatter';
+import { InsuranceDefenseCase } from './InsuranceDefenseCase';
+import { SecuritiesLawMatter } from './SecuritiesLawMatter';
 
 // Named exports
 export {
@@ -71,7 +91,27 @@ export {
   Report,
   SecurityAuditLog,
   Integration,
-  DocumentTemplate
+  DocumentTemplate,
+  LitigationMatter,
+  Mediation,
+  IntellectualProperty,
+  RealEstateTransaction,
+  CorporateGovernance,
+  MergerAcquisition,
+  EmploymentLawMatter,
+  ImmigrationCase,
+  FamilyLawCase,
+  CriminalDefenseCase,
+  BankruptcyCase,
+  EstatePlanningMatter,
+  TaxLawMatter,
+  PersonalInjuryCase,
+  ClassActionCase,
+  AppellateCase,
+  EnvironmentalLawMatter,
+  HealthcareLawMatter,
+  InsuranceDefenseCase,
+  SecuritiesLawMatter
 };
 
 // Export all models as a default object
@@ -108,5 +148,25 @@ export default {
   Report,
   SecurityAuditLog,
   Integration,
-  DocumentTemplate
+  DocumentTemplate,
+  LitigationMatter,
+  Mediation,
+  IntellectualProperty,
+  RealEstateTransaction,
+  CorporateGovernance,
+  MergerAcquisition,
+  EmploymentLawMatter,
+  ImmigrationCase,
+  FamilyLawCase,
+  CriminalDefenseCase,
+  BankruptcyCase,
+  EstatePlanningMatter,
+  TaxLawMatter,
+  PersonalInjuryCase,
+  ClassActionCase,
+  AppellateCase,
+  EnvironmentalLawMatter,
+  HealthcareLawMatter,
+  InsuranceDefenseCase,
+  SecuritiesLawMatter
 };

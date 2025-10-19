@@ -7,6 +7,7 @@ import express from 'express';
 const router = express.Router();
 import { isConnected } from '../config/database';
 import Joi from 'joi';
+import { IntellectualProperty } from '../models/sequelize/IntellectualProperty';
 
 const createIPSchema = Joi.object({
   ipType: Joi.string().valid('patent', 'trademark', 'copyright', 'trade-secret').required(),
@@ -15,6 +16,13 @@ const createIPSchema = Joi.object({
   filingDate: Joi.date().optional(),
   owner: Joi.string().required(),
   createdBy: Joi.string().required()
+});
+
+const updateIPSchema = Joi.object({
+  status: Joi.string().valid('pending', 'granted', 'rejected', 'expired', 'abandoned').optional(),
+  grantDate: Joi.date().optional(),
+  expirationDate: Joi.date().optional(),
+  updatedBy: Joi.string().required()
 });
 
 const validateRequest = (schema: any, data: any) => {
@@ -32,7 +40,8 @@ router.post('/create', async (req, res) => {
       });
     }
     const validatedData = validateRequest(createIPSchema, req.body);
-    const ip = { id: `IP-${Date.now()}`, ...validatedData, status: 'pending', createdAt: new Date() };
+    const ipNumber = `IP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+    const ip = await IntellectualProperty.create({ ipNumber, ...validatedData, status: 'pending' });
     res.status(201).json({ success: true, message: 'IP asset created successfully', data: ip });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
@@ -44,7 +53,10 @@ router.get('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'IP Management - Details', capabilities: ['Full IP details', 'Filing history', 'Renewal tracking'] });
     }
-    const ip = { id: req.params.id, ipType: 'patent', title: 'Innovative Widget', status: 'granted' };
+    const ip = await IntellectualProperty.findByPk(req.params.id);
+    if (!ip) {
+      return res.status(404).json({ success: false, message: 'IP asset not found' });
+    }
     res.json({ success: true, data: ip });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
@@ -56,7 +68,13 @@ router.put('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'IP Management - Update', capabilities: ['Status updates', 'Renewal management'] });
     }
-    res.json({ success: true, message: 'IP asset updated successfully' });
+    const validatedData = validateRequest(updateIPSchema, req.body);
+    const ip = await IntellectualProperty.findByPk(req.params.id);
+    if (!ip) {
+      return res.status(404).json({ success: false, message: 'IP asset not found' });
+    }
+    await ip.update(validatedData);
+    res.json({ success: true, message: 'IP asset updated successfully', data: ip });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -67,7 +85,24 @@ router.get('/', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'IP Management - List', capabilities: ['Portfolio view', 'Renewal alerts', 'Search by type'] });
     }
-    res.json({ success: true, data: [], total: 0 });
+    const ips = await IntellectualProperty.findAll({ order: [['createdAt', 'DESC']] });
+    res.json({ success: true, data: ips, total: ips.length });
+  } catch (error: any) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({ feature: 'IP Management - Delete', capabilities: ['Archive IP asset', 'Maintain history'] });
+    }
+    const ip = await IntellectualProperty.findByPk(req.params.id);
+    if (!ip) {
+      return res.status(404).json({ success: false, message: 'IP asset not found' });
+    }
+    await ip.destroy();
+    res.json({ success: true, message: 'IP asset deleted successfully' });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }

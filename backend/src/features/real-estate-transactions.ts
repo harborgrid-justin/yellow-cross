@@ -7,6 +7,7 @@ import express from 'express';
 const router = express.Router();
 import { isConnected } from '../config/database';
 import Joi from 'joi';
+import { RealEstateTransaction } from '../models/sequelize/RealEstateTransaction';
 
 const createTransactionSchema = Joi.object({
   propertyAddress: Joi.string().required(),
@@ -44,7 +45,11 @@ router.get('/:id', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'Real Estate Transactions - Details', capabilities: ['Transaction details', 'Document checklist', 'Timeline tracking'] });
     }
-    res.json({ success: true, data: { id: req.params.id, status: 'in-progress' } });
+    const record = await RealEstateTransaction.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    res.json({ success: true, data: record });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -66,7 +71,26 @@ router.get('/', async (req, res) => {
     if (!isConnected()) {
       return res.status(200).json({ feature: 'Real Estate Transactions - List', capabilities: ['All transactions', 'Filter by status', 'Upcoming closings'] });
     }
-    res.json({ success: true, data: [], total: 0 });
+    const records = await RealEstateTransaction.findAll({ order: [['createdAt', 'DESC']] });
+    res.json({ success: true, data: records, total: records.length });
+  } catch (error: any) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+    if (!isConnected()) {
+      return res.status(200).json({ feature: 'RealEstateTransaction - Delete' });
+    }
+    const record = await RealEstateTransaction.findByPk(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Record not found' });
+    }
+    await record.destroy();
+    res.json({ success: true, message: 'Deleted successfully' });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
   }
