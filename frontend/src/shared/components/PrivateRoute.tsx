@@ -16,8 +16,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requiredRoles }) 
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
+  // Demo mode for screenshots/documentation - allows bypassing authentication
+  const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || 
+                     localStorage.getItem('demo_mode') === 'true';
+
   // Show loading state while checking authentication
-  if (isLoading) {
+  if (isLoading && !isDemoMode) {
     return (
       <div className="loading-container">
         <div className="loading-spinner">
@@ -26,6 +30,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requiredRoles }) 
         </div>
       </div>
     );
+  }
+
+  // Skip authentication check in demo mode
+  if (isDemoMode) {
+    return children;
   }
 
   // Redirect to login if not authenticated
