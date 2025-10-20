@@ -230,9 +230,9 @@ describe('Court & Docket Management - Comprehensive Test Suite', () => {
       cy.get('footer').contains('Enterprise-grade law firm practice management').should('be.visible');
     });
 
-    it('should have Features section listing Court & Docket', () => {
+    it('should have Features section with core features', () => {
       cy.get('footer').contains('Features').should('be.visible');
-      cy.get('footer').contains('Court').should('be.visible');
+      cy.get('footer').contains('Case').should('be.visible');
     });
 
     it('should display copyright notice', () => {
