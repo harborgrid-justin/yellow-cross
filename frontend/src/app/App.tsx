@@ -92,184 +92,244 @@ const App: React.FC = () => {
             <Route path="features">
               <Route path="case-management" element={<PrivateRoute><CaseManagementPage /></PrivateRoute>} />
               <Route path="case-management/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="case-management/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="client-crm" element={<PrivateRoute><ClientCrmPage /></PrivateRoute>} />
               <Route path="client-crm/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="client-crm/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="document-management" element={<PrivateRoute><DocumentManagementPage /></PrivateRoute>} />
               <Route path="document-management/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="document-management/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="time-billing" element={<PrivateRoute><TimeBillingPage /></PrivateRoute>} />
               <Route path="time-billing/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="time-billing/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="calendar-scheduling" element={<PrivateRoute><CalendarSchedulingPage /></PrivateRoute>} />
               <Route path="calendar-scheduling/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="calendar-scheduling/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="task-workflow" element={<PrivateRoute><TaskWorkflowPage /></PrivateRoute>} />
               <Route path="task-workflow/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="task-workflow/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="legal-research" element={<PrivateRoute><LegalResearchPage /></PrivateRoute>} />
               <Route path="legal-research/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="legal-research/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="court-docket" element={<PrivateRoute><CourtDocketPage /></PrivateRoute>} />
               <Route path="court-docket/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="court-docket/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="contract-management" element={<PrivateRoute><ContractManagementPage /></PrivateRoute>} />
               <Route path="contract-management/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="contract-management/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="ediscovery" element={<PrivateRoute><EdiscoveryPage /></PrivateRoute>} />
               <Route path="ediscovery/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="ediscovery/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="compliance" element={<PrivateRoute><CompliancePage /></PrivateRoute>} />
               <Route path="compliance/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="compliance/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="reporting-analytics" element={<PrivateRoute><ReportingAnalyticsPage /></PrivateRoute>} />
               <Route path="reporting-analytics/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="reporting-analytics/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="communication" element={<PrivateRoute><CommunicationPage /></PrivateRoute>} />
               <Route path="communication/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="communication/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="security" element={<PrivateRoute><SecurityPage /></PrivateRoute>} />
               <Route path="security/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="security/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="integration" element={<PrivateRoute><IntegrationPage /></PrivateRoute>} />
               <Route path="integration/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="integration/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               {/* NEW Feature Routes (16-60) */}
               <Route path="litigation-management" element={<PrivateRoute><LitigationManagementPage /></PrivateRoute>} />
               <Route path="litigation-management/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="litigation-management/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="mediation-adr" element={<PrivateRoute><MediationAdrPage /></PrivateRoute>} />
               <Route path="mediation-adr/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="mediation-adr/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="intellectual-property" element={<PrivateRoute><IntellectualPropertyPage /></PrivateRoute>} />
               <Route path="intellectual-property/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="intellectual-property/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="real-estate-transactions" element={<PrivateRoute><RealEstateTransactionsPage /></PrivateRoute>} />
               <Route path="real-estate-transactions/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="real-estate-transactions/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="corporate-governance" element={<PrivateRoute><CorporateGovernancePage /></PrivateRoute>} />
               <Route path="corporate-governance/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="corporate-governance/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="mergers-acquisitions" element={<PrivateRoute><MergersAcquisitionsPage /></PrivateRoute>} />
               <Route path="mergers-acquisitions/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="mergers-acquisitions/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="employment-law" element={<PrivateRoute><EmploymentLawPage /></PrivateRoute>} />
               <Route path="employment-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="employment-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="immigration-law" element={<PrivateRoute><ImmigrationLawPage /></PrivateRoute>} />
               <Route path="immigration-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="immigration-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="family-law" element={<PrivateRoute><FamilyLawPage /></PrivateRoute>} />
               <Route path="family-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="family-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="criminal-defense" element={<PrivateRoute><CriminalDefensePage /></PrivateRoute>} />
               <Route path="criminal-defense/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="criminal-defense/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="bankruptcy-management" element={<PrivateRoute><BankruptcyManagementPage /></PrivateRoute>} />
               <Route path="bankruptcy-management/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="bankruptcy-management/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="estate-planning" element={<PrivateRoute><EstatePlanningPage /></PrivateRoute>} />
               <Route path="estate-planning/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="estate-planning/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="tax-law" element={<PrivateRoute><TaxLawPage /></PrivateRoute>} />
               <Route path="tax-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="tax-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="personal-injury" element={<PrivateRoute><PersonalInjuryPage /></PrivateRoute>} />
               <Route path="personal-injury/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="personal-injury/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="class-action" element={<PrivateRoute><ClassActionPage /></PrivateRoute>} />
               <Route path="class-action/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="class-action/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="securities-law" element={<PrivateRoute><SecuritiesLawPage /></PrivateRoute>} />
               <Route path="securities-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="securities-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="healthcare-law" element={<PrivateRoute><HealthcareLawPage /></PrivateRoute>} />
               <Route path="healthcare-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="healthcare-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="environmental-law" element={<PrivateRoute><EnvironmentalLawPage /></PrivateRoute>} />
               <Route path="environmental-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="environmental-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="insurance-defense" element={<PrivateRoute><InsuranceDefensePage /></PrivateRoute>} />
               <Route path="insurance-defense/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="insurance-defense/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="appellate-practice" element={<PrivateRoute><AppellatePracticePage /></PrivateRoute>} />
               <Route path="appellate-practice/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="appellate-practice/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="financial-services" element={<PrivateRoute><FinancialServicesPage /></PrivateRoute>} />
               <Route path="financial-services/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="financial-services/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="energy-utilities" element={<PrivateRoute><EnergyUtilitiesPage /></PrivateRoute>} />
               <Route path="energy-utilities/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="energy-utilities/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="telecommunications" element={<PrivateRoute><TelecommunicationsPage /></PrivateRoute>} />
               <Route path="telecommunications/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="telecommunications/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="aviation-law" element={<PrivateRoute><AviationLawPage /></PrivateRoute>} />
               <Route path="aviation-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="aviation-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="maritime-law" element={<PrivateRoute><MaritimeLawPage /></PrivateRoute>} />
               <Route path="maritime-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="maritime-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="construction-law" element={<PrivateRoute><ConstructionLawPage /></PrivateRoute>} />
               <Route path="construction-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="construction-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="franchise-law" element={<PrivateRoute><FranchiseLawPage /></PrivateRoute>} />
               <Route path="franchise-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="franchise-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="sports-entertainment" element={<PrivateRoute><SportsEntertainmentPage /></PrivateRoute>} />
               <Route path="sports-entertainment/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="sports-entertainment/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="technology-transactions" element={<PrivateRoute><TechnologyTransactionsPage /></PrivateRoute>} />
               <Route path="technology-transactions/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="technology-transactions/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="data-privacy" element={<PrivateRoute><DataPrivacyPage /></PrivateRoute>} />
               <Route path="data-privacy/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="data-privacy/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="cybersecurity-legal" element={<PrivateRoute><CybersecurityLegalPage /></PrivateRoute>} />
               <Route path="cybersecurity-legal/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="cybersecurity-legal/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="government-contracts" element={<PrivateRoute><GovernmentContractsPage /></PrivateRoute>} />
               <Route path="government-contracts/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="government-contracts/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="non-profit-law" element={<PrivateRoute><NonProfitLawPage /></PrivateRoute>} />
               <Route path="non-profit-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="non-profit-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="education-law" element={<PrivateRoute><EducationLawPage /></PrivateRoute>} />
               <Route path="education-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="education-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="labor-relations" element={<PrivateRoute><LaborRelationsPage /></PrivateRoute>} />
               <Route path="labor-relations/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="labor-relations/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="international-trade" element={<PrivateRoute><InternationalTradePage /></PrivateRoute>} />
               <Route path="international-trade/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="international-trade/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="antitrust-competition" element={<PrivateRoute><AntitrustCompetitionPage /></PrivateRoute>} />
               <Route path="antitrust-competition/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="antitrust-competition/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="white-collar-crime" element={<PrivateRoute><WhiteCollarCrimePage /></PrivateRoute>} />
               <Route path="white-collar-crime/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="white-collar-crime/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="civil-rights" element={<PrivateRoute><CivilRightsPage /></PrivateRoute>} />
               <Route path="civil-rights/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="civil-rights/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="municipal-law" element={<PrivateRoute><MunicipalLawPage /></PrivateRoute>} />
               <Route path="municipal-law/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="municipal-law/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="veterans-affairs" element={<PrivateRoute><VeteransAffairsPage /></PrivateRoute>} />
               <Route path="veterans-affairs/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="veterans-affairs/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="social-security" element={<PrivateRoute><SocialSecurityPage /></PrivateRoute>} />
               <Route path="social-security/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="social-security/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="consumer-protection" element={<PrivateRoute><ConsumerProtectionPage /></PrivateRoute>} />
               <Route path="consumer-protection/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="consumer-protection/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="landlord-tenant" element={<PrivateRoute><LandlordTenantPage /></PrivateRoute>} />
               <Route path="landlord-tenant/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="landlord-tenant/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               
               <Route path="pro-bono" element={<PrivateRoute><ProBonoManagementPage /></PrivateRoute>} />
               <Route path="pro-bono/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
+              <Route path="pro-bono/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
             </Route>
           </Route>
         </Routes>

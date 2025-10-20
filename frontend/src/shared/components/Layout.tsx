@@ -79,7 +79,7 @@ const Layout: React.FC = () => {
             <div className="footer-section">
               <h4>Features</h4>
               <ul>
-                {featuresData.slice(0, 5).map((feature) => (
+                {featuresData.slice(0, 9).map((feature) => (
                   <li key={feature.slug}>
                     <Link to={`/features/${feature.slug}`}>{feature.name}</Link>
                   </li>
