@@ -391,7 +391,7 @@ describe('Client Relationship Management - Comprehensive Test Suite', () => {
     });
 
     it('should maintain proper URL structure', () => {
-      cy.url().should('match', /http:\/\/localhost:3001\//);
+      cy.url().should('include', Cypress.config().baseUrl);
     });
 
     it('should handle navigation from home to client CRM', () => {
