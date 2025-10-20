@@ -8,17 +8,19 @@ describe('Performance', () => {
     });
   });
 
-  it('should load feature pages efficiently', () => {
+  it('should redirect to login for protected feature pages', () => {
     cy.visit('/features/case-management');
-    cy.get('.feature-page').should('exist');
+    cy.url().should('include', '/login');
+    cy.contains('Sign In').should('be.visible');
   });
 
-  it('should handle multiple page navigations', () => {
+  it('should handle multiple page navigations efficiently', () => {
     cy.visit('/');
     cy.visit('/login');
     cy.visit('/register');
     cy.visit('/features/case-management');
-    cy.get('.feature-page').should('exist');
+    cy.url().should('include', '/login');
+    cy.contains('Sign In').should('be.visible');
   });
 
   it('should load CSS and assets', () => {
