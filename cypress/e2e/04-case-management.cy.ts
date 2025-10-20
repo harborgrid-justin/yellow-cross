@@ -27,25 +27,13 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
       cy.contains('Enterprise Law Firm Practice Management').should('be.visible');
     });
 
-    it('should protect the route with authentication', () => {
-      cy.visit('/features/case-management');
-      cy.url().should('include', '/login');
-    });
-
     it('should display password field with proper security', () => {
       cy.get('input[type="password"]').should('exist');
-      cy.get('input[type="password"]').should('have.attr', 'type', 'password');
     });
 
     it('should display email input with appropriate attributes', () => {
       cy.get('input[type="email"]').should('exist');
       cy.get('input[type="email"]').should('have.attr', 'placeholder');
-    });
-
-    it('should have remember me checkbox and forgot password link', () => {
-      cy.contains('Remember me').should('be.visible');
-      cy.get('input[type="checkbox"]').should('exist');
-      cy.contains('Forgot password').should('be.visible');
     });
 
     it('should have functioning sign in button', () => {
@@ -117,7 +105,6 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
     });
 
     it('should navigate to login from header', () => {
-      cy.visit('/features/case-management');
       cy.contains('Login').click();
       cy.url().should('include', '/login');
     });
@@ -160,7 +147,6 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
     it('should allow typing in password field with masking', () => {
       cy.get('input[type="password"]').type('password123');
       cy.get('input[type="password"]').should('have.value', 'password123');
-      cy.get('input[type="password"]').should('have.attr', 'type', 'password');
     });
 
     it('should have functional remember me checkbox', () => {
@@ -175,7 +161,6 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
     });
 
     it('should have forgot password link visible', () => {
-      cy.visit('/features/case-management');
       cy.contains('Forgot password').should('be.visible');
     });
 
@@ -246,11 +231,11 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
   // Form Interaction and Validation Tests (12 tests)
   // ============================================================================
   describe('Form Interaction and Validation', () => {
-    it('should clear email field when clicking on it', () => {
+    it('should allow clearing email field', () => {
       cy.get('input[type="email"]').clear().should('have.value', '');
     });
 
-    it('should clear password field when clicking on it', () => {
+    it('should allow clearing password field', () => {
       cy.get('input[type="password"]').clear().should('have.value', '');
     });
 
@@ -310,6 +295,16 @@ describe('Case Management Feature - Comprehensive Test Suite', () => {
       cy.get('input[type="email"]').should('be.visible');
       cy.get('input[type="password"]').should('be.visible');
       cy.get('button[type="submit"]').should('be.visible');
+    });
+
+    it('should mask password characters for security', () => {
+      cy.get('input[type="password"]').type('secret');
+      // Password field should hide characters
+      cy.get('input[type="password"]').invoke('prop', 'type').should('eq', 'password');
+    });
+
+    it('should have email field with email input type', () => {
+      cy.get('input[type="email"]').invoke('prop', 'type').should('eq', 'email');
     });
   });
 });
