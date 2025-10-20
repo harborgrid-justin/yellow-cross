@@ -230,7 +230,7 @@ describe('Task & Workflow Management - Comprehensive Test Suite', () => {
       cy.get('footer').contains('Enterprise-grade law firm practice management').should('be.visible');
     });
 
-    it('should have Features section listing Case Management', () => {
+    it('should have Features section in footer with feature links', () => {
       cy.get('footer').contains('Features').should('be.visible');
       cy.get('footer').contains('Case Management System').should('be.visible');
     });
