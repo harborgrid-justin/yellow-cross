@@ -344,13 +344,8 @@ describe('eDiscovery & Evidence Management - Comprehensive Test Suite', () => {
   // URL and Route Handling Tests (6 tests)
   // ============================================================================
   describe('URL and Route Handling', () => {
-    it('should handle ediscovery URL correctly', () => {
-      cy.visit('/features/ediscovery');
-      cy.url().should('include', '/login');
-    });
-
     it('should maintain proper URL structure', () => {
-      cy.url().should('match', /http:\/\/localhost:3001\//);
+      cy.url().should('include', Cypress.config().baseUrl);
     });
 
     it('should handle navigation from home to ediscovery', () => {
@@ -373,6 +368,12 @@ describe('eDiscovery & Evidence Management - Comprehensive Test Suite', () => {
       cy.visit('/features/ediscovery/');
       cy.url().should('include', '/login');
     });
+
+    it('should maintain URL integrity during navigation', () => {
+      cy.visit('/features/ediscovery');
+      cy.contains('Home').click();
+      cy.url().should('eq', `${Cypress.config().baseUrl}/`);
+    });
   });
 
   // ============================================================================
@@ -384,7 +385,12 @@ describe('eDiscovery & Evidence Management - Comprehensive Test Suite', () => {
         '/features/ediscovery',
         '/features/ediscovery/data-collection',
         '/features/ediscovery/review-platform',
-        '/features/ediscovery/legal-hold'
+        '/features/ediscovery/legal-hold',
+        '/features/ediscovery/production-management',
+        '/features/ediscovery/privilege-review',
+        '/features/ediscovery/evidence-organization',
+        '/features/ediscovery/analytics-tar',
+        '/features/ediscovery/ediscovery-reporting'
       ];
       
       routes.forEach(route => {
