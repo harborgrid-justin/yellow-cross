@@ -230,9 +230,9 @@ describe('Task & Workflow Management - Comprehensive Test Suite', () => {
       cy.get('footer').contains('Enterprise-grade law firm practice management').should('be.visible');
     });
 
-    it('should have Features section listing Task & Workflow Management', () => {
+    it('should have Features section listing Case Management', () => {
       cy.get('footer').contains('Features').should('be.visible');
-      cy.get('footer').contains('Task & Workflow Management').should('be.visible');
+      cy.get('footer').contains('Case Management System').should('be.visible');
     });
 
     it('should display copyright notice', () => {
@@ -251,8 +251,8 @@ describe('Task & Workflow Management - Comprehensive Test Suite', () => {
       cy.get('footer').contains('About').should('be.visible');
     });
 
-    it('should display Resources section in footer', () => {
-      cy.get('footer').contains('Resources').should('be.visible');
+    it('should display Contact link in footer', () => {
+      cy.get('footer').contains('Contact').should('be.visible');
     });
 
     it('should have consistent footer layout across pages', () => {
