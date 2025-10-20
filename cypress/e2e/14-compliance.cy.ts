@@ -378,7 +378,7 @@ describe('Compliance System - Comprehensive Test Suite', () => {
   // ============================================================================
   describe('URL and Route Handling', () => {
     it('should handle route URL correctly', () => {
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.url().should('include', '/login');
     });
 
@@ -388,34 +388,34 @@ describe('Compliance System - Comprehensive Test Suite', () => {
 
     it('should handle navigation from home', () => {
       cy.visit('/');
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.url().should('include', '/login');
     });
 
     it('should preserve attempted URL for post-login redirect', () => {
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.url().should('include', '/login');
     });
 
     it('should handle sub-feature navigation attempts', () => {
-      cy.visit('/features/{module['route']}/{module['sub_features'][0]}');
+      cy.visit('/features/compliance/regulatory-tracking');
       cy.url().should('include', '/login');
     });
 
     it('should handle case-insensitive URL variations', () => {
-      cy.visit('/features/{module['route'].title()}', {{ failOnStatusCode: false }});
+      cy.visit('/features/Compliance', { failOnStatusCode: false });
       cy.url().should('exist');
     });
 
     it('should handle trailing slashes in URLs', () => {
-      cy.visit('/features/{module['route']}/');
+      cy.visit('/features/compliance/');
       cy.url().should('include', '/login');
     });
 
     it('should maintain URL integrity during navigation', () => {
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.contains('Home').click();
-      cy.url().should('eq', `${{Cypress.config().baseUrl}}/`);
+      cy.url().should('eq', `${Cypress.config().baseUrl}/`);
     });
   });
 
@@ -425,10 +425,10 @@ describe('Compliance System - Comprehensive Test Suite', () => {
   describe('Security and Data Protection', () => {{
     it('should require authentication for all routes', () => {{
       const routes = [
-        '/features/{module['route']}',
-        '/features/{module['route']}/{module['sub_features'][0]}',
-        '/features/{module['route']}/{module['sub_features'][1]}',
-        '/features/{module['route']}/{module['sub_features'][2]}'
+        '/features/compliance',
+        '/features/compliance/regulatory-tracking',
+        '/features/compliance/audit-management',
+        '/features/compliance/policy-compliance'
       ];
       
       routes.forEach(route => {{
@@ -452,35 +452,35 @@ describe('Compliance System - Comprehensive Test Suite', () => {
     }});
 
     it('should protect against unauthorized access', () => {{
-      cy.visit('/features/{module['route']}');
-      cy.url().should('not.include', '/features/{module['route']}');
+      cy.visit('/features/compliance');
+      cy.url().should('not.include', '/features/compliance');
       cy.url().should('include', '/login');
     }});
 
     it('should maintain security across navigation', () => {{
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.contains('Home').click();
-      cy.visit('/features/{module['route']}');
+      cy.visit('/features/compliance');
       cy.url().should('include', '/login');
     }});
 
     it('should protect first sub-feature', () => {{
-      cy.visit('/features/{module['route']}/{module['sub_features'][0]}');
+      cy.visit('/features/compliance/regulatory-tracking');
       cy.url().should('include', '/login');
     }});
 
     it('should protect second sub-feature', () => {{
-      cy.visit('/features/{module['route']}/{module['sub_features'][1]}');
+      cy.visit('/features/compliance/audit-management');
       cy.url().should('include', '/login');
     }});
 
     it('should protect third sub-feature', () => {{
-      cy.visit('/features/{module['route']}/{module['sub_features'][2]}');
+      cy.visit('/features/compliance/policy-compliance');
       cy.url().should('include', '/login');
     }});
 
     it('should protect fourth sub-feature', () => {{
-      cy.visit('/features/{module['route']}/{module['sub_features'][3]}');
+      cy.visit('/features/compliance/risk-assessment');
       cy.url().should('include', '/login');
     }});
   }});
