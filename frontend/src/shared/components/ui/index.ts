@@ -14,6 +14,11 @@ export { Tooltip } from './Tooltip/Tooltip';
 export { Dropdown, type DropdownOption } from './Dropdown/Dropdown';
 export { Pagination, usePagination } from './Pagination/Pagination';
 export { Breadcrumb, type BreadcrumbItem, useBreadcrumb, generateBreadcrumbsFromPath } from './Breadcrumb/Breadcrumb';
+export { Tabs, TabList, Tab, TabPanel, LegalTabs, MinimalTabs, useTabs, type TabItem } from './Tabs/Tabs';
+export { Accordion, AccordionItem, AccordionHeader, AccordionPanel, LegalAccordion, MinimalAccordion, useAccordion, type AccordionItem as AccordionItemType } from './Accordion/Accordion';
+export { Switch, LegalSwitch, MinimalSwitch, IOSSwitch, ToggleSwitch, OnOffSwitch, YesNoSwitch, useSwitch } from './Switch/Switch';
+export { Textarea, LegalTextarea, MinimalTextarea, CommentTextarea, NotesTextarea, FeedbackTextarea, useTextarea } from './Textarea/Textarea';
+export { Spinner, LoadingSpinner, SaveSpinner, ProcessingSpinner, LegalSpinner, MinimalSpinner, OverlaySpinner, InlineSpinner, ButtonSpinner, PageSpinner, useSpinner } from './Spinner/Spinner';
 
 // Component Types
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button/Button';
@@ -31,3 +36,8 @@ export type { TooltipProps } from './Tooltip/Tooltip';
 export type { DropdownProps } from './Dropdown/Dropdown';
 export type { PaginationProps } from './Pagination/Pagination';
 export type { BreadcrumbProps } from './Breadcrumb/Breadcrumb';
+export type { TabsProps, TabListProps, TabProps, TabPanelProps } from './Tabs/Tabs';
+export type { AccordionProps, AccordionItemProps, AccordionHeaderProps, AccordionPanelProps } from './Accordion/Accordion';
+export type { SwitchProps } from './Switch/Switch';
+export type { TextareaProps } from './Textarea/Textarea';
+export type { SpinnerProps } from './Spinner/Spinner';
