@@ -1,0 +1,363 @@
+/* Card Base Styles */
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  background-color: var(--white, #ffffff);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Variants */
+.card--default {
+  border: 1px solid var(--gray-200, #e5e7eb);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.card--outlined {
+  border: 1px solid var(--gray-300, #d1d5db);
+  box-shadow: none;
+}
+
+.card--elevated {
+  border: 1px solid var(--gray-100, #f3f4f6);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.card--filled {
+  border: none;
+  background-color: var(--gray-50, #f9fafb);
+  box-shadow: none;
+}
+
+/* Card Sizes */
+.card--sm {
+  border-radius: 0.375rem;
+}
+
+.card--md {
+  border-radius: 0.5rem;
+}
+
+.card--lg {
+  border-radius: 0.75rem;
+}
+
+/* Card Padding */
+.card--padding-none {
+  padding: 0;
+}
+
+.card--padding-sm {
+  padding: 1rem;
+}
+
+.card--padding-md {
+  padding: 1.5rem;
+}
+
+.card--padding-lg {
+  padding: 2rem;
+}
+
+/* Card States */
+.card--hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card--interactive {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card--interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card--interactive:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.card--interactive:focus-visible {
+  outline: 2px solid var(--primary-500, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Card Header */
+.card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.card--padding-none .card__header {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+}
+
+.card--padding-sm .card__header {
+  padding-bottom: 0.75rem;
+}
+
+.card--padding-lg .card__header {
+  padding-bottom: 1.25rem;
+}
+
+/* Card Title */
+.card__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--gray-900, #111827);
+}
+
+.card--sm .card__title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.card--lg .card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Card Description */
+.card__description {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--gray-600, #4b5563);
+}
+
+.card--sm .card__description {
+  font-size: 0.8125rem;
+}
+
+.card--lg .card__description {
+  font-size: 1rem;
+}
+
+/* Card Content */
+.card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card--padding-none .card__content {
+  padding: 0 1.5rem;
+}
+
+.card__header + .card__content {
+  padding-top: 1rem;
+}
+
+.card--padding-sm .card__header + .card__content {
+  padding-top: 0.75rem;
+}
+
+.card--padding-lg .card__header + .card__content {
+  padding-top: 1.25rem;
+}
+
+/* Card Footer */
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.card--padding-none .card__footer {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+}
+
+.card--padding-sm .card__footer {
+  padding-top: 0.75rem;
+}
+
+.card--padding-lg .card__footer {
+  padding-top: 1.25rem;
+}
+
+/* Card Footer Variants */
+.card__footer--start {
+  justify-content: flex-start;
+}
+
+.card__footer--center {
+  justify-content: center;
+}
+
+.card__footer--between {
+  justify-content: space-between;
+}
+
+.card__footer--around {
+  justify-content: space-around;
+}
+
+/* No Border Variants */
+.card__header--no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.card__footer--no-border {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Responsive Card */
+@media (max-width: 640px) {
+  .card--padding-lg {
+    padding: 1.25rem;
+  }
+  
+  .card--padding-md {
+    padding: 1rem;
+  }
+  
+  .card__header {
+    gap: 0.375rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .card__title {
+    font-size: 1rem;
+  }
+  
+  .card__description {
+    font-size: 0.8125rem;
+  }
+  
+  .card__footer {
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+}
+
+/* Card Loading State */
+.card--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.card--loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+}
+
+.card--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--gray-300, #d1d5db);
+  border-top-color: var(--primary-500, #3b82f6);
+  border-radius: 50%;
+  animation: card-spin 1s linear infinite;
+  z-index: 11;
+}
+
+@keyframes card-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: var(--gray-800, #1f2937);
+  }
+  
+  .card--default,
+  .card--elevated {
+    border-color: var(--gray-700, #374151);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card--outlined {
+    border-color: var(--gray-600, #4b5563);
+  }
+  
+  .card--filled {
+    background-color: var(--gray-900, #111827);
+  }
+  
+  .card--elevated {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card__header {
+    border-bottom-color: var(--gray-700, #374151);
+  }
+  
+  .card__footer {
+    border-top-color: var(--gray-700, #374151);
+  }
+  
+  .card__title {
+    color: var(--gray-100, #f3f4f6);
+  }
+  
+  .card__description {
+    color: var(--gray-300, #d1d5db);
+  }
+  
+  .card--hover:hover,
+  .card--interactive:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .card--outlined {
+    border-color: var(--gray-900, #111827);
+  }
+  
+  .card__header,
+  .card__footer {
+    border-width: 2px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .card {
+    box-shadow: none !important;
+    border: 1px solid var(--gray-400, #9ca3af) !important;
+  }
+  
+  .card--interactive,
+  .card--hover {
+    transform: none !important;
+  }
+}

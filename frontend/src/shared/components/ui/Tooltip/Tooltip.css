@@ -1,0 +1,381 @@
+/* Tooltip Component Styles */
+
+/* CSS Variables */
+:root {
+  --tooltip-bg: var(--color-gray-900);
+  --tooltip-text: var(--color-white);
+  --tooltip-border-radius: 6px;
+  --tooltip-padding: 8px 12px;
+  --tooltip-font-size: 12px;
+  --tooltip-line-height: 1.4;
+  --tooltip-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --tooltip-arrow-size: 6px;
+  --tooltip-z-index: 9999;
+  
+  /* Variant colors */
+  --tooltip-dark-bg: var(--color-gray-900);
+  --tooltip-dark-text: var(--color-white);
+  
+  --tooltip-light-bg: var(--color-white);
+  --tooltip-light-text: var(--color-gray-900);
+  --tooltip-light-border: var(--color-gray-200);
+  
+  --tooltip-legal-bg: var(--color-blue-600);
+  --tooltip-legal-text: var(--color-white);
+  
+  --tooltip-warning-bg: var(--color-yellow-500);
+  --tooltip-warning-text: var(--color-gray-900);
+  
+  --tooltip-error-bg: var(--color-red-600);
+  --tooltip-error-text: var(--color-white);
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --tooltip-bg: var(--color-gray-700);
+  --tooltip-light-bg: var(--color-gray-800);
+  --tooltip-light-text: var(--color-gray-100);
+  --tooltip-light-border: var(--color-gray-600);
+}
+
+/* Tooltip Portal */
+.tooltip-portal {
+  position: relative;
+  z-index: var(--tooltip-z-index);
+}
+
+/* Base Tooltip Styles */
+.tooltip {
+  position: absolute;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  padding: var(--tooltip-padding);
+  border-radius: var(--tooltip-border-radius);
+  font-size: var(--tooltip-font-size);
+  line-height: var(--tooltip-line-height);
+  font-weight: 400;
+  box-shadow: var(--tooltip-shadow);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  word-wrap: break-word;
+  hyphens: auto;
+  z-index: var(--tooltip-z-index);
+}
+
+.tooltip__content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Arrow Styles */
+.tooltip--arrow .tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: var(--tooltip-arrow-size) solid transparent;
+}
+
+/* Arrow positioning for different placements */
+.tooltip--top.tooltip--arrow .tooltip__arrow {
+  bottom: calc(-1 * var(--tooltip-arrow-size));
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--tooltip-bg);
+  border-bottom: none;
+}
+
+.tooltip--top-start.tooltip--arrow .tooltip__arrow {
+  bottom: calc(-1 * var(--tooltip-arrow-size));
+  left: var(--tooltip-arrow-size);
+  border-top-color: var(--tooltip-bg);
+  border-bottom: none;
+}
+
+.tooltip--top-end.tooltip--arrow .tooltip__arrow {
+  bottom: calc(-1 * var(--tooltip-arrow-size));
+  right: var(--tooltip-arrow-size);
+  border-top-color: var(--tooltip-bg);
+  border-bottom: none;
+}
+
+.tooltip--bottom.tooltip--arrow .tooltip__arrow {
+  top: calc(-1 * var(--tooltip-arrow-size));
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--tooltip-bg);
+  border-top: none;
+}
+
+.tooltip--bottom-start.tooltip--arrow .tooltip__arrow {
+  top: calc(-1 * var(--tooltip-arrow-size));
+  left: var(--tooltip-arrow-size);
+  border-bottom-color: var(--tooltip-bg);
+  border-top: none;
+}
+
+.tooltip--bottom-end.tooltip--arrow .tooltip__arrow {
+  top: calc(-1 * var(--tooltip-arrow-size));
+  right: var(--tooltip-arrow-size);
+  border-bottom-color: var(--tooltip-bg);
+  border-top: none;
+}
+
+.tooltip--left.tooltip--arrow .tooltip__arrow {
+  right: calc(-1 * var(--tooltip-arrow-size));
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--tooltip-bg);
+  border-right: none;
+}
+
+.tooltip--left-start.tooltip--arrow .tooltip__arrow {
+  right: calc(-1 * var(--tooltip-arrow-size));
+  top: var(--tooltip-arrow-size);
+  border-left-color: var(--tooltip-bg);
+  border-right: none;
+}
+
+.tooltip--left-end.tooltip--arrow .tooltip__arrow {
+  right: calc(-1 * var(--tooltip-arrow-size));
+  bottom: var(--tooltip-arrow-size);
+  border-left-color: var(--tooltip-bg);
+  border-right: none;
+}
+
+.tooltip--right.tooltip--arrow .tooltip__arrow {
+  left: calc(-1 * var(--tooltip-arrow-size));
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--tooltip-bg);
+  border-left: none;
+}
+
+.tooltip--right-start.tooltip--arrow .tooltip__arrow {
+  left: calc(-1 * var(--tooltip-arrow-size));
+  top: var(--tooltip-arrow-size);
+  border-right-color: var(--tooltip-bg);
+  border-left: none;
+}
+
+.tooltip--right-end.tooltip--arrow .tooltip__arrow {
+  left: calc(-1 * var(--tooltip-arrow-size));
+  bottom: var(--tooltip-arrow-size);
+  border-right-color: var(--tooltip-bg);
+  border-left: none;
+}
+
+/* Variant Styles */
+.tooltip--default {
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-text);
+}
+
+.tooltip--default.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-bg);
+  border-bottom-color: var(--tooltip-bg);
+  border-left-color: var(--tooltip-bg);
+  border-right-color: var(--tooltip-bg);
+}
+
+.tooltip--dark {
+  background-color: var(--tooltip-dark-bg);
+  color: var(--tooltip-dark-text);
+}
+
+.tooltip--dark.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-dark-bg);
+  border-bottom-color: var(--tooltip-dark-bg);
+  border-left-color: var(--tooltip-dark-bg);
+  border-right-color: var(--tooltip-dark-bg);
+}
+
+.tooltip--light {
+  background-color: var(--tooltip-light-bg);
+  color: var(--tooltip-light-text);
+  border: 1px solid var(--tooltip-light-border);
+  box-shadow: var(--tooltip-shadow);
+}
+
+.tooltip--light.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-light-bg);
+  border-bottom-color: var(--tooltip-light-bg);
+  border-left-color: var(--tooltip-light-bg);
+  border-right-color: var(--tooltip-light-bg);
+}
+
+.tooltip--light.tooltip--arrow .tooltip__arrow::after {
+  content: '';
+  position: absolute;
+  border: calc(var(--tooltip-arrow-size) - 1px) solid transparent;
+}
+
+.tooltip--light.tooltip--top.tooltip--arrow .tooltip__arrow::after {
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--tooltip-light-border);
+}
+
+.tooltip--legal {
+  background-color: var(--tooltip-legal-bg);
+  color: var(--tooltip-legal-text);
+}
+
+.tooltip--legal.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-legal-bg);
+  border-bottom-color: var(--tooltip-legal-bg);
+  border-left-color: var(--tooltip-legal-bg);
+  border-right-color: var(--tooltip-legal-bg);
+}
+
+.tooltip--warning {
+  background-color: var(--tooltip-warning-bg);
+  color: var(--tooltip-warning-text);
+  font-weight: 500;
+}
+
+.tooltip--warning.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-warning-bg);
+  border-bottom-color: var(--tooltip-warning-bg);
+  border-left-color: var(--tooltip-warning-bg);
+  border-right-color: var(--tooltip-warning-bg);
+}
+
+.tooltip--error {
+  background-color: var(--tooltip-error-bg);
+  color: var(--tooltip-error-text);
+  font-weight: 500;
+}
+
+.tooltip--error.tooltip--arrow .tooltip__arrow {
+  border-top-color: var(--tooltip-error-bg);
+  border-bottom-color: var(--tooltip-error-bg);
+  border-left-color: var(--tooltip-error-bg);
+  border-right-color: var(--tooltip-error-bg);
+}
+
+/* Content Styling */
+.tooltip .tooltip__content p {
+  margin: 0 0 4px 0;
+}
+
+.tooltip .tooltip__content p:last-child {
+  margin-bottom: 0;
+}
+
+.tooltip .tooltip__content ul,
+.tooltip .tooltip__content ol {
+  margin: 4px 0;
+  padding-left: 16px;
+}
+
+.tooltip .tooltip__content li {
+  margin: 2px 0;
+}
+
+.tooltip .tooltip__content code {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.tooltip--light .tooltip__content code {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-800);
+}
+
+/* Animation Classes */
+.tooltip--enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.tooltip--enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.tooltip--exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tooltip--exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.15s ease-in, transform 0.15s ease-in;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tooltip {
+    font-size: 11px;
+    padding: 6px 10px;
+    max-width: calc(100vw - 32px) !important;
+  }
+  
+  .tooltip--arrow .tooltip__arrow {
+    border-width: 5px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .tooltip {
+    border: 2px solid currentColor;
+    box-shadow: none;
+  }
+  
+  .tooltip--light {
+    border-color: var(--color-gray-400);
+  }
+  
+  .tooltip--arrow .tooltip__arrow {
+    border-width: calc(var(--tooltip-arrow-size) + 1px);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
+  
+  .tooltip--enter-active,
+  .tooltip--exit-active {
+    transition: none;
+  }
+}
+
+/* Focus Visible */
+.tooltip:focus-visible {
+  outline: 2px solid var(--color-primary-400);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .tooltip {
+    position: static !important;
+    display: inline-block;
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+    border: 1px solid #000;
+    padding: 2px 4px;
+    font-size: 10px;
+  }
+  
+  .tooltip__arrow {
+    display: none;
+  }
+  
+  .tooltip::before {
+    content: '[';
+  }
+  
+  .tooltip::after {
+    content: ']';
+  }
+}
