@@ -87,10 +87,10 @@ const mockAdminApi = {
       ]
     };
   },
-  getItem: async (_id: string): Promise<AdminItem> => {
+  getItem: async (id: string): Promise<AdminItem> => {
     await new Promise(resolve => setTimeout(resolve, 300));
     return {
-      id: _id,
+      id,
       name: `Admin User ${id}`,
       description: 'Sample admin user',
       status: 'active',
@@ -120,8 +120,9 @@ const mockAdminApi = {
       updatedAt: new Date().toISOString()
     };
   },
-  deleteItem: async (id: string): Promise<void> => {
+  deleteItem: async (_id: string): Promise<void> => {
     await new Promise(resolve => setTimeout(resolve, 300));
+    // In real implementation, would use _id to delete item
   }
 };
 

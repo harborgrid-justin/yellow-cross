@@ -43,7 +43,7 @@ const AdminMain: React.FC = () => {
 
   // Load data on component mount
   useEffect(() => {
-    void dispatch(fetchAdminItems());
+    void dispatch(fetchAdminItems(undefined));
   }, [dispatch]);
 
   // Filter and search logic
@@ -159,7 +159,7 @@ const AdminMain: React.FC = () => {
           <div className="text-center py-12">
             <p className="text-red-600 mb-4">{error}</p>
             <button 
-              onClick={() => void dispatch(fetchAdminItems())} 
+              onClick={() => void dispatch(fetchAdminItems(undefined))} 
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
             >
               Try Again
