@@ -75,6 +75,9 @@ import ProBonoManagementPage from '../features/pro-bono/ProBonoManagementPage';
 // Sub-feature pages (dynamic imports for code splitting)
 import SubFeaturePage from '../shared/components/SubFeaturePage';
 
+// Page Routes
+import { AdminRoutes } from '../pages/admin';
+
 import '../assets/styles/app.css';
 
 const App: React.FC = () => {
@@ -331,6 +334,9 @@ const App: React.FC = () => {
               <Route path="pro-bono/:subFeature" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
               <Route path="pro-bono/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
             </Route>
+
+            {/* Pages Routes */}
+            <Route path="pages/admin/*" element={<AdminRoutes />} />
           </Route>
         </Routes>
       </Router>
