@@ -316,12 +316,12 @@ export const {
 } = caseManagementSlice.actions;
 
 // Selectors
-export const selectCaseManagementItems = (state: RootState) => state.caseManagement?.items || [];
-export const selectCaseManagementItem = (state: RootState) => state.caseManagement?.selectedItem;
-export const selectCaseManagementLoading = (state: RootState) => state.caseManagement?.loading;
-export const selectCaseManagementError = (state: RootState) => state.caseManagement?.error;
-export const selectCaseManagementFilters = (state: RootState) => state.caseManagement?.filters || {};
-export const selectCaseManagementNotifications = (state: RootState) => state.caseManagement?.notifications || [];
-export const selectCaseManagementPagination = (state: RootState) => state.caseManagement?.pagination;
+export const selectCaseManagementItems = (state: RootState) => state.caseManagementPage?.items || [];
+export const selectCaseManagementItem = (state: RootState) => state.caseManagementPage?.selectedItem;
+export const selectCaseManagementLoading = (state: RootState) => state.caseManagementPage?.loading;
+export const selectCaseManagementError = (state: RootState) => state.caseManagementPage?.error;
+export const selectCaseManagementFilters = (state: RootState) => state.caseManagementPage?.filters || {};
+export const selectCaseManagementNotifications = (state: RootState) => state.caseManagementPage?.notifications || [];
+export const selectCaseManagementPagination = (state: RootState) => state.caseManagementPage?.pagination;
 
 export default caseManagementSlice.reducer;
