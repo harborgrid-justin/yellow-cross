@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { IP, CreateIPInput, UpdateIPInput } from './types';
 
 export function useCreateIP(options?: { onSuccess?: (data: IP) => void; onError?: (error: string) => void }) {
-  return useMutation<IP, CreateIPInput>('/intellectual-property/create', 'post', options);
+  return useMutation<IP, CreateIPInput>('/ip/create', 'post', options);
 }
 
 export function useUpdateIP(id: string, options?: { onSuccess?: (data: IP) => void; onError?: (error: string) => void }) {

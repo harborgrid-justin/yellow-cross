@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { LandlordTenant, CreateLandlordTenantInput, UpdateLandlordTenantInput } from './types';
 
 export function useCreateLandlordTenant(options?: { onSuccess?: (data: LandlordTenant) => void; onError?: (error: string) => void }) {
-  return useMutation<LandlordTenant, CreateLandlordTenantInput>('/landlord-tenant/create', 'post', options);
+  return useMutation<LandlordTenant, CreateLandlordTenantInput>('/landlordtenant/create', 'post', options);
 }
 
 export function useUpdateLandlordTenant(id: string, options?: { onSuccess?: (data: LandlordTenant) => void; onError?: (error: string) => void }) {

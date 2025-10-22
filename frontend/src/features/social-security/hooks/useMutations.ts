@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { SocialSecurity, CreateSocialSecurityInput, UpdateSocialSecurityInput } from './types';
 
 export function useCreateSocialSecurity(options?: { onSuccess?: (data: SocialSecurity) => void; onError?: (error: string) => void }) {
-  return useMutation<SocialSecurity, CreateSocialSecurityInput>('/social-security/create', 'post', options);
+  return useMutation<SocialSecurity, CreateSocialSecurityInput>('/socialsecurity/create', 'post', options);
 }
 
 export function useUpdateSocialSecurity(id: string, options?: { onSuccess?: (data: SocialSecurity) => void; onError?: (error: string) => void }) {

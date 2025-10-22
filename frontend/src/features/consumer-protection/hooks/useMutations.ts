@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Consumer, CreateConsumerInput, UpdateConsumerInput } from './types';
 
 export function useCreateConsumer(options?: { onSuccess?: (data: Consumer) => void; onError?: (error: string) => void }) {
-  return useMutation<Consumer, CreateConsumerInput>('/consumer-protection/create', 'post', options);
+  return useMutation<Consumer, CreateConsumerInput>('/consumer/create', 'post', options);
 }
 
 export function useUpdateConsumer(id: string, options?: { onSuccess?: (data: Consumer) => void; onError?: (error: string) => void }) {

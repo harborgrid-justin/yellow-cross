@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Estate, CreateEstateInput, UpdateEstateInput } from './types';
 
 export function useCreateEstate(options?: { onSuccess?: (data: Estate) => void; onError?: (error: string) => void }) {
-  return useMutation<Estate, CreateEstateInput>('/estate-planning/create', 'post', options);
+  return useMutation<Estate, CreateEstateInput>('/estate/create', 'post', options);
 }
 
 export function useUpdateEstate(id: string, options?: { onSuccess?: (data: Estate) => void; onError?: (error: string) => void }) {

@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Construction, CreateConstructionInput, UpdateConstructionInput } from './types';
 
 export function useCreateConstruction(options?: { onSuccess?: (data: Construction) => void; onError?: (error: string) => void }) {
-  return useMutation<Construction, CreateConstructionInput>('/construction-law/create', 'post', options);
+  return useMutation<Construction, CreateConstructionInput>('/construction/create', 'post', options);
 }
 
 export function useUpdateConstruction(id: string, options?: { onSuccess?: (data: Construction) => void; onError?: (error: string) => void }) {

@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { PersonalInjury, CreatePersonalInjuryInput, UpdatePersonalInjuryInput } from './types';
 
 export function useCreatePersonalInjury(options?: { onSuccess?: (data: PersonalInjury) => void; onError?: (error: string) => void }) {
-  return useMutation<PersonalInjury, CreatePersonalInjuryInput>('/personal-injury/create', 'post', options);
+  return useMutation<PersonalInjury, CreatePersonalInjuryInput>('/personalinjury/create', 'post', options);
 }
 
 export function useUpdatePersonalInjury(id: string, options?: { onSuccess?: (data: PersonalInjury) => void; onError?: (error: string) => void }) {

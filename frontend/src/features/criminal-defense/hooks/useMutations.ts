@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Criminal, CreateCriminalInput, UpdateCriminalInput } from './types';
 
 export function useCreateCriminal(options?: { onSuccess?: (data: Criminal) => void; onError?: (error: string) => void }) {
-  return useMutation<Criminal, CreateCriminalInput>('/criminal-defense/create', 'post', options);
+  return useMutation<Criminal, CreateCriminalInput>('/criminal/create', 'post', options);
 }
 
 export function useUpdateCriminal(id: string, options?: { onSuccess?: (data: Criminal) => void; onError?: (error: string) => void }) {

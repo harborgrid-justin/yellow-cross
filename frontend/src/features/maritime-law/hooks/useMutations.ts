@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Maritime, CreateMaritimeInput, UpdateMaritimeInput } from './types';
 
 export function useCreateMaritime(options?: { onSuccess?: (data: Maritime) => void; onError?: (error: string) => void }) {
-  return useMutation<Maritime, CreateMaritimeInput>('/maritime-law/create', 'post', options);
+  return useMutation<Maritime, CreateMaritimeInput>('/maritime/create', 'post', options);
 }
 
 export function useUpdateMaritime(id: string, options?: { onSuccess?: (data: Maritime) => void; onError?: (error: string) => void }) {
