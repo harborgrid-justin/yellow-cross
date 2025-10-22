@@ -10,9 +10,9 @@ export function useCreateEducation(options?: { onSuccess?: (data: Education) => 
 }
 
 export function useUpdateEducation(id: string, options?: { onSuccess?: (data: Education) => void; onError?: (error: string) => void }) {
-  return useMutation<Education, UpdateEducationInput>(`/education-law/${id}`, 'put', options);
+  return useMutation<Education, UpdateEducationInput>(`/education/${id}`, 'put', options);
 }
 
 export function useDeleteEducation(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/education-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/education/${id}`, 'delete', options);
 }

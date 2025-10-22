@@ -10,9 +10,9 @@ export function useCreateAntitrust(options?: { onSuccess?: (data: Antitrust) => 
 }
 
 export function useUpdateAntitrust(id: string, options?: { onSuccess?: (data: Antitrust) => void; onError?: (error: string) => void }) {
-  return useMutation<Antitrust, UpdateAntitrustInput>(`/antitrust-competition/${id}`, 'put', options);
+  return useMutation<Antitrust, UpdateAntitrustInput>(`/antitrust/${id}`, 'put', options);
 }
 
 export function useDeleteAntitrust(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/antitrust-competition/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/antitrust/${id}`, 'delete', options);
 }

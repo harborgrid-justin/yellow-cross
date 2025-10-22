@@ -11,9 +11,9 @@ export function useContracts(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Contract>>(`/contract-management${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Contract>>(`/contracts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useContract(id: string, options?: { skip?: boolean }) {
-  return useQuery<Contract>(`/contract-management/${id}`, options);
+  return useQuery<Contract>(`/contracts/${id}`, options);
 }

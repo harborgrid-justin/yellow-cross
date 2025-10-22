@@ -10,9 +10,9 @@ export function useCreateReport(options?: { onSuccess?: (data: Report) => void; 
 }
 
 export function useUpdateReport(id: string, options?: { onSuccess?: (data: Report) => void; onError?: (error: string) => void }) {
-  return useMutation<Report, UpdateReportInput>(`/reporting-analytics/${id}`, 'put', options);
+  return useMutation<Report, UpdateReportInput>(`/reports/${id}`, 'put', options);
 }
 
 export function useDeleteReport(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/reporting-analytics/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/reports/${id}`, 'delete', options);
 }

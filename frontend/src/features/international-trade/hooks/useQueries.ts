@@ -11,9 +11,9 @@ export function useInternationalTrades(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<InternationalTrade>>(`/international-trade${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<InternationalTrade>>(`/trade${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useInternationalTrade(id: string, options?: { skip?: boolean }) {
-  return useQuery<InternationalTrade>(`/international-trade/${id}`, options);
+  return useQuery<InternationalTrade>(`/trade/${id}`, options);
 }

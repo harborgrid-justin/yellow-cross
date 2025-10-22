@@ -10,9 +10,9 @@ export function useCreateCriminal(options?: { onSuccess?: (data: Criminal) => vo
 }
 
 export function useUpdateCriminal(id: string, options?: { onSuccess?: (data: Criminal) => void; onError?: (error: string) => void }) {
-  return useMutation<Criminal, UpdateCriminalInput>(`/criminal-defense/${id}`, 'put', options);
+  return useMutation<Criminal, UpdateCriminalInput>(`/criminal/${id}`, 'put', options);
 }
 
 export function useDeleteCriminal(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/criminal-defense/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/criminal/${id}`, 'delete', options);
 }

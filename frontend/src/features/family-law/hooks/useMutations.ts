@@ -10,9 +10,9 @@ export function useCreateFamily(options?: { onSuccess?: (data: Family) => void; 
 }
 
 export function useUpdateFamily(id: string, options?: { onSuccess?: (data: Family) => void; onError?: (error: string) => void }) {
-  return useMutation<Family, UpdateFamilyInput>(`/family-law/${id}`, 'put', options);
+  return useMutation<Family, UpdateFamilyInput>(`/family/${id}`, 'put', options);
 }
 
 export function useDeleteFamily(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/family-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/family/${id}`, 'delete', options);
 }

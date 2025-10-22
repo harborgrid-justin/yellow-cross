@@ -11,9 +11,9 @@ export function useFranchises(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Franchise>>(`/franchise-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Franchise>>(`/franchise${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useFranchise(id: string, options?: { skip?: boolean }) {
-  return useQuery<Franchise>(`/franchise-law/${id}`, options);
+  return useQuery<Franchise>(`/franchise/${id}`, options);
 }

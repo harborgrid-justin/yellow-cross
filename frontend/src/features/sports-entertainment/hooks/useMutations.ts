@@ -10,9 +10,9 @@ export function useCreateSports(options?: { onSuccess?: (data: Sports) => void; 
 }
 
 export function useUpdateSports(id: string, options?: { onSuccess?: (data: Sports) => void; onError?: (error: string) => void }) {
-  return useMutation<Sports, UpdateSportsInput>(`/sports-entertainment/${id}`, 'put', options);
+  return useMutation<Sports, UpdateSportsInput>(`/sports/${id}`, 'put', options);
 }
 
 export function useDeleteSports(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/sports-entertainment/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/sports/${id}`, 'delete', options);
 }

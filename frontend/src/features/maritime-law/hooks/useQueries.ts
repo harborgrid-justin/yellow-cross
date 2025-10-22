@@ -11,9 +11,9 @@ export function useMaritimes(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Maritime>>(`/maritime-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Maritime>>(`/maritime${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useMaritime(id: string, options?: { skip?: boolean }) {
-  return useQuery<Maritime>(`/maritime-law/${id}`, options);
+  return useQuery<Maritime>(`/maritime/${id}`, options);
 }

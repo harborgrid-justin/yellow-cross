@@ -11,9 +11,9 @@ export function useTaxs(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Tax>>(`/tax-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Tax>>(`/tax${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useTax(id: string, options?: { skip?: boolean }) {
-  return useQuery<Tax>(`/tax-law/${id}`, options);
+  return useQuery<Tax>(`/tax/${id}`, options);
 }

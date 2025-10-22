@@ -11,9 +11,9 @@ export function useWhiteCollarCrimes(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<WhiteCollarCrime>>(`/white-collar-crime${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<WhiteCollarCrime>>(`/whitecollar${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useWhiteCollarCrime(id: string, options?: { skip?: boolean }) {
-  return useQuery<WhiteCollarCrime>(`/white-collar-crime/${id}`, options);
+  return useQuery<WhiteCollarCrime>(`/whitecollar/${id}`, options);
 }

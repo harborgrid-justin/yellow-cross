@@ -11,9 +11,9 @@ export function useSecuritiess(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Securities>>(`/securities-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Securities>>(`/securities${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useSecurities(id: string, options?: { skip?: boolean }) {
-  return useQuery<Securities>(`/securities-law/${id}`, options);
+  return useQuery<Securities>(`/securities/${id}`, options);
 }

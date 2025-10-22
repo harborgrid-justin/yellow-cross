@@ -11,9 +11,9 @@ export function useCivilRightss(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<CivilRights>>(`/civil-rights${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<CivilRights>>(`/civilrights${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useCivilRights(id: string, options?: { skip?: boolean }) {
-  return useQuery<CivilRights>(`/civil-rights/${id}`, options);
+  return useQuery<CivilRights>(`/civilrights/${id}`, options);
 }

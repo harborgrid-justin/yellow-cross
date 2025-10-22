@@ -11,9 +11,9 @@ export function useIntegrations(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Integration>>(`/integration${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Integration>>(`/integrations${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useIntegration(id: string, options?: { skip?: boolean }) {
-  return useQuery<Integration>(`/integration/${id}`, options);
+  return useQuery<Integration>(`/integrations/${id}`, options);
 }

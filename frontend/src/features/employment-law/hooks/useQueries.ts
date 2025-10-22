@@ -11,9 +11,9 @@ export function useEmployments(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Employment>>(`/employment-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Employment>>(`/employment${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useEmployment(id: string, options?: { skip?: boolean }) {
-  return useQuery<Employment>(`/employment-law/${id}`, options);
+  return useQuery<Employment>(`/employment/${id}`, options);
 }

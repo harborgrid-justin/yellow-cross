@@ -10,9 +10,9 @@ export function useCreateResearch(options?: { onSuccess?: (data: Research) => vo
 }
 
 export function useUpdateResearch(id: string, options?: { onSuccess?: (data: Research) => void; onError?: (error: string) => void }) {
-  return useMutation<Research, UpdateResearchInput>(`/legal-research/${id}`, 'put', options);
+  return useMutation<Research, UpdateResearchInput>(`/research/${id}`, 'put', options);
 }
 
 export function useDeleteResearch(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/legal-research/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/research/${id}`, 'delete', options);
 }

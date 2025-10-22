@@ -11,9 +11,9 @@ export function useCriminals(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Criminal>>(`/criminal-defense${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Criminal>>(`/criminal${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useCriminal(id: string, options?: { skip?: boolean }) {
-  return useQuery<Criminal>(`/criminal-defense/${id}`, options);
+  return useQuery<Criminal>(`/criminal/${id}`, options);
 }

@@ -11,9 +11,9 @@ export function useDockets(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Docket>>(`/court-docket${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Docket>>(`/court${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useDocket(id: string, options?: { skip?: boolean }) {
-  return useQuery<Docket>(`/court-docket/${id}`, options);
+  return useQuery<Docket>(`/court/${id}`, options);
 }

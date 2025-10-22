@@ -11,9 +11,9 @@ export function useEnergys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Energy>>(`/energy-utilities${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Energy>>(`/energy${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useEnergy(id: string, options?: { skip?: boolean }) {
-  return useQuery<Energy>(`/energy-utilities/${id}`, options);
+  return useQuery<Energy>(`/energy/${id}`, options);
 }

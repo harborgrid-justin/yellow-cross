@@ -10,9 +10,9 @@ export function useCreateEnvironmental(options?: { onSuccess?: (data: Environmen
 }
 
 export function useUpdateEnvironmental(id: string, options?: { onSuccess?: (data: Environmental) => void; onError?: (error: string) => void }) {
-  return useMutation<Environmental, UpdateEnvironmentalInput>(`/environmental-law/${id}`, 'put', options);
+  return useMutation<Environmental, UpdateEnvironmentalInput>(`/environmental/${id}`, 'put', options);
 }
 
 export function useDeleteEnvironmental(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/environmental-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/environmental/${id}`, 'delete', options);
 }

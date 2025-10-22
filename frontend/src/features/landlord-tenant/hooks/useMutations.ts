@@ -10,9 +10,9 @@ export function useCreateLandlordTenant(options?: { onSuccess?: (data: LandlordT
 }
 
 export function useUpdateLandlordTenant(id: string, options?: { onSuccess?: (data: LandlordTenant) => void; onError?: (error: string) => void }) {
-  return useMutation<LandlordTenant, UpdateLandlordTenantInput>(`/landlord-tenant/${id}`, 'put', options);
+  return useMutation<LandlordTenant, UpdateLandlordTenantInput>(`/landlordtenant/${id}`, 'put', options);
 }
 
 export function useDeleteLandlordTenant(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/landlord-tenant/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/landlordtenant/${id}`, 'delete', options);
 }

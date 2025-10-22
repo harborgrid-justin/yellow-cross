@@ -11,9 +11,9 @@ export function useHealthcares(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Healthcare>>(`/healthcare-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Healthcare>>(`/healthcare${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useHealthcare(id: string, options?: { skip?: boolean }) {
-  return useQuery<Healthcare>(`/healthcare-law/${id}`, options);
+  return useQuery<Healthcare>(`/healthcare/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateMaritime(options?: { onSuccess?: (data: Maritime) => vo
 }
 
 export function useUpdateMaritime(id: string, options?: { onSuccess?: (data: Maritime) => void; onError?: (error: string) => void }) {
-  return useMutation<Maritime, UpdateMaritimeInput>(`/maritime-law/${id}`, 'put', options);
+  return useMutation<Maritime, UpdateMaritimeInput>(`/maritime/${id}`, 'put', options);
 }
 
 export function useDeleteMaritime(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/maritime-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/maritime/${id}`, 'delete', options);
 }

@@ -11,9 +11,9 @@ export function useCybersecuritys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Cybersecurity>>(`/cybersecurity-legal${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Cybersecurity>>(`/cybersecurity${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useCybersecurity(id: string, options?: { skip?: boolean }) {
-  return useQuery<Cybersecurity>(`/cybersecurity-legal/${id}`, options);
+  return useQuery<Cybersecurity>(`/cybersecurity/${id}`, options);
 }

@@ -11,9 +11,9 @@ export function useBankruptcys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Bankruptcy>>(`/bankruptcy-management${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Bankruptcy>>(`/bankruptcy${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useBankruptcy(id: string, options?: { skip?: boolean }) {
-  return useQuery<Bankruptcy>(`/bankruptcy-management/${id}`, options);
+  return useQuery<Bankruptcy>(`/bankruptcy/${id}`, options);
 }

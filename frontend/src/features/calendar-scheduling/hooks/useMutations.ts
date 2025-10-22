@@ -10,9 +10,9 @@ export function useCreateCalendar(options?: { onSuccess?: (data: Calendar) => vo
 }
 
 export function useUpdateCalendar(id: string, options?: { onSuccess?: (data: Calendar) => void; onError?: (error: string) => void }) {
-  return useMutation<Calendar, UpdateCalendarInput>(`/calendar-scheduling/${id}`, 'put', options);
+  return useMutation<Calendar, UpdateCalendarInput>(`/calendar/${id}`, 'put', options);
 }
 
 export function useDeleteCalendar(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/calendar-scheduling/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/calendar/${id}`, 'delete', options);
 }

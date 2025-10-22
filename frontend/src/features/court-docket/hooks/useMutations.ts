@@ -10,9 +10,9 @@ export function useCreateDocket(options?: { onSuccess?: (data: Docket) => void; 
 }
 
 export function useUpdateDocket(id: string, options?: { onSuccess?: (data: Docket) => void; onError?: (error: string) => void }) {
-  return useMutation<Docket, UpdateDocketInput>(`/court-docket/${id}`, 'put', options);
+  return useMutation<Docket, UpdateDocketInput>(`/court/${id}`, 'put', options);
 }
 
 export function useDeleteDocket(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/court-docket/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/court/${id}`, 'delete', options);
 }

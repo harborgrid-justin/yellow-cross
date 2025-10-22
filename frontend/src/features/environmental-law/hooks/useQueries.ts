@@ -11,9 +11,9 @@ export function useEnvironmentals(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Environmental>>(`/environmental-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Environmental>>(`/environmental${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useEnvironmental(id: string, options?: { skip?: boolean }) {
-  return useQuery<Environmental>(`/environmental-law/${id}`, options);
+  return useQuery<Environmental>(`/environmental/${id}`, options);
 }

@@ -11,9 +11,9 @@ export function useSocialSecuritys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<SocialSecurity>>(`/social-security${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<SocialSecurity>>(`/socialsecurity${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useSocialSecurity(id: string, options?: { skip?: boolean }) {
-  return useQuery<SocialSecurity>(`/social-security/${id}`, options);
+  return useQuery<SocialSecurity>(`/socialsecurity/${id}`, options);
 }

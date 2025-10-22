@@ -11,9 +11,9 @@ export function useTechnologys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Technology>>(`/technology-transactions${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Technology>>(`/technology${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useTechnology(id: string, options?: { skip?: boolean }) {
-  return useQuery<Technology>(`/technology-transactions/${id}`, options);
+  return useQuery<Technology>(`/technology/${id}`, options);
 }

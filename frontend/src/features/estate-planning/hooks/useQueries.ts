@@ -11,9 +11,9 @@ export function useEstates(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Estate>>(`/estate-planning${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Estate>>(`/estate${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useEstate(id: string, options?: { skip?: boolean }) {
-  return useQuery<Estate>(`/estate-planning/${id}`, options);
+  return useQuery<Estate>(`/estate/${id}`, options);
 }

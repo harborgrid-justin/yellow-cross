@@ -10,9 +10,9 @@ export function useCreateRealEstate(options?: { onSuccess?: (data: RealEstate) =
 }
 
 export function useUpdateRealEstate(id: string, options?: { onSuccess?: (data: RealEstate) => void; onError?: (error: string) => void }) {
-  return useMutation<RealEstate, UpdateRealEstateInput>(`/real-estate-transactions/${id}`, 'put', options);
+  return useMutation<RealEstate, UpdateRealEstateInput>(`/realestate/${id}`, 'put', options);
 }
 
 export function useDeleteRealEstate(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/real-estate-transactions/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/realestate/${id}`, 'delete', options);
 }

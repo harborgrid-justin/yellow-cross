@@ -11,9 +11,9 @@ export function useLabors(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Labor>>(`/labor-relations${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Labor>>(`/labor${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useLabor(id: string, options?: { skip?: boolean }) {
-  return useQuery<Labor>(`/labor-relations/${id}`, options);
+  return useQuery<Labor>(`/labor/${id}`, options);
 }

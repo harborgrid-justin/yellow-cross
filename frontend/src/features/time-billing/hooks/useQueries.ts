@@ -11,9 +11,9 @@ export function useBillings(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Billing>>(`/time-billing${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Billing>>(`/billing${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useBilling(id: string, options?: { skip?: boolean }) {
-  return useQuery<Billing>(`/time-billing/${id}`, options);
+  return useQuery<Billing>(`/billing/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateMunicipal(options?: { onSuccess?: (data: Municipal) => 
 }
 
 export function useUpdateMunicipal(id: string, options?: { onSuccess?: (data: Municipal) => void; onError?: (error: string) => void }) {
-  return useMutation<Municipal, UpdateMunicipalInput>(`/municipal-law/${id}`, 'put', options);
+  return useMutation<Municipal, UpdateMunicipalInput>(`/municipal/${id}`, 'put', options);
 }
 
 export function useDeleteMunicipal(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/municipal-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/municipal/${id}`, 'delete', options);
 }

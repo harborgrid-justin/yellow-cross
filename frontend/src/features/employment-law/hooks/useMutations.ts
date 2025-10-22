@@ -10,9 +10,9 @@ export function useCreateEmployment(options?: { onSuccess?: (data: Employment) =
 }
 
 export function useUpdateEmployment(id: string, options?: { onSuccess?: (data: Employment) => void; onError?: (error: string) => void }) {
-  return useMutation<Employment, UpdateEmploymentInput>(`/employment-law/${id}`, 'put', options);
+  return useMutation<Employment, UpdateEmploymentInput>(`/employment/${id}`, 'put', options);
 }
 
 export function useDeleteEmployment(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/employment-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/employment/${id}`, 'delete', options);
 }

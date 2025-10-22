@@ -11,9 +11,9 @@ export function useConsumers(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Consumer>>(`/consumer-protection${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Consumer>>(`/consumer${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useConsumer(id: string, options?: { skip?: boolean }) {
-  return useQuery<Consumer>(`/consumer-protection/${id}`, options);
+  return useQuery<Consumer>(`/consumer/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateTechnology(options?: { onSuccess?: (data: Technology) =
 }
 
 export function useUpdateTechnology(id: string, options?: { onSuccess?: (data: Technology) => void; onError?: (error: string) => void }) {
-  return useMutation<Technology, UpdateTechnologyInput>(`/technology-transactions/${id}`, 'put', options);
+  return useMutation<Technology, UpdateTechnologyInput>(`/technology/${id}`, 'put', options);
 }
 
 export function useDeleteTechnology(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/technology-transactions/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/technology/${id}`, 'delete', options);
 }
