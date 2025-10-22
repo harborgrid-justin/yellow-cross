@@ -11,9 +11,9 @@ export function useImmigrations(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Immigration>>(`/immigration-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Immigration>>(`/immigration${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useImmigration(id: string, options?: { skip?: boolean }) {
-  return useQuery<Immigration>(`/immigration-law/${id}`, options);
+  return useQuery<Immigration>(`/immigration/${id}`, options);
 }

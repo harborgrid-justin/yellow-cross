@@ -11,9 +11,9 @@ export function useFamilys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Family>>(`/family-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Family>>(`/family${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useFamily(id: string, options?: { skip?: boolean }) {
-  return useQuery<Family>(`/family-law/${id}`, options);
+  return useQuery<Family>(`/family/${id}`, options);
 }

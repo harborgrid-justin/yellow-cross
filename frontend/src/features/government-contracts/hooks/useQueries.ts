@@ -11,9 +11,9 @@ export function useGovernments(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Government>>(`/government-contracts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Government>>(`/govcontracts${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useGovernment(id: string, options?: { skip?: boolean }) {
-  return useQuery<Government>(`/government-contracts/${id}`, options);
+  return useQuery<Government>(`/govcontracts/${id}`, options);
 }

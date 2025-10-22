@@ -10,9 +10,9 @@ export function useCreateImmigration(options?: { onSuccess?: (data: Immigration)
 }
 
 export function useUpdateImmigration(id: string, options?: { onSuccess?: (data: Immigration) => void; onError?: (error: string) => void }) {
-  return useMutation<Immigration, UpdateImmigrationInput>(`/immigration-law/${id}`, 'put', options);
+  return useMutation<Immigration, UpdateImmigrationInput>(`/immigration/${id}`, 'put', options);
 }
 
 export function useDeleteImmigration(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/immigration-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/immigration/${id}`, 'delete', options);
 }

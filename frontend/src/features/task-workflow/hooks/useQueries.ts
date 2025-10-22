@@ -11,9 +11,9 @@ export function useTasks(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Task>>(`/task-workflow${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Task>>(`/tasks${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useTask(id: string, options?: { skip?: boolean }) {
-  return useQuery<Task>(`/task-workflow/${id}`, options);
+  return useQuery<Task>(`/tasks/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateFinancial(options?: { onSuccess?: (data: Financial) => 
 }
 
 export function useUpdateFinancial(id: string, options?: { onSuccess?: (data: Financial) => void; onError?: (error: string) => void }) {
-  return useMutation<Financial, UpdateFinancialInput>(`/financial-services/${id}`, 'put', options);
+  return useMutation<Financial, UpdateFinancialInput>(`/financial/${id}`, 'put', options);
 }
 
 export function useDeleteFinancial(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/financial-services/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/financial/${id}`, 'delete', options);
 }

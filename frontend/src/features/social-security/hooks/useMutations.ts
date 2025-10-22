@@ -10,9 +10,9 @@ export function useCreateSocialSecurity(options?: { onSuccess?: (data: SocialSec
 }
 
 export function useUpdateSocialSecurity(id: string, options?: { onSuccess?: (data: SocialSecurity) => void; onError?: (error: string) => void }) {
-  return useMutation<SocialSecurity, UpdateSocialSecurityInput>(`/social-security/${id}`, 'put', options);
+  return useMutation<SocialSecurity, UpdateSocialSecurityInput>(`/socialsecurity/${id}`, 'put', options);
 }
 
 export function useDeleteSocialSecurity(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/social-security/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/socialsecurity/${id}`, 'delete', options);
 }

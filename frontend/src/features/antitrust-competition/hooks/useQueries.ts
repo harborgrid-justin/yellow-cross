@@ -11,9 +11,9 @@ export function useAntitrusts(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Antitrust>>(`/antitrust-competition${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Antitrust>>(`/antitrust${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useAntitrust(id: string, options?: { skip?: boolean }) {
-  return useQuery<Antitrust>(`/antitrust-competition/${id}`, options);
+  return useQuery<Antitrust>(`/antitrust/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateMergersAcquisitions(options?: { onSuccess?: (data: Merg
 }
 
 export function useUpdateMergersAcquisitions(id: string, options?: { onSuccess?: (data: MergersAcquisitions) => void; onError?: (error: string) => void }) {
-  return useMutation<MergersAcquisitions, UpdateMergersAcquisitionsInput>(`/mergers-acquisitions/${id}`, 'put', options);
+  return useMutation<MergersAcquisitions, UpdateMergersAcquisitionsInput>(`/manda/${id}`, 'put', options);
 }
 
 export function useDeleteMergersAcquisitions(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/mergers-acquisitions/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/manda/${id}`, 'delete', options);
 }

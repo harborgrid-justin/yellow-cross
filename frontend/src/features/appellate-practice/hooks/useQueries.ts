@@ -11,9 +11,9 @@ export function useAppellates(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Appellate>>(`/appellate-practice${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Appellate>>(`/appellate${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useAppellate(id: string, options?: { skip?: boolean }) {
-  return useQuery<Appellate>(`/appellate-practice/${id}`, options);
+  return useQuery<Appellate>(`/appellate/${id}`, options);
 }

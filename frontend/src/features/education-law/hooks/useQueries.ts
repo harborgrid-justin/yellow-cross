@@ -11,9 +11,9 @@ export function useEducations(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Education>>(`/education-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Education>>(`/education${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useEducation(id: string, options?: { skip?: boolean }) {
-  return useQuery<Education>(`/education-law/${id}`, options);
+  return useQuery<Education>(`/education/${id}`, options);
 }

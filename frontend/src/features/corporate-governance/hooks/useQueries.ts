@@ -11,9 +11,9 @@ export function useCorporates(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Corporate>>(`/corporate-governance${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Corporate>>(`/governance${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useCorporate(id: string, options?: { skip?: boolean }) {
-  return useQuery<Corporate>(`/corporate-governance/${id}`, options);
+  return useQuery<Corporate>(`/governance/${id}`, options);
 }

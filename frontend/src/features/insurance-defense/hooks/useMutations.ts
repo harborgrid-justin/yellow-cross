@@ -10,9 +10,9 @@ export function useCreateInsurance(options?: { onSuccess?: (data: Insurance) => 
 }
 
 export function useUpdateInsurance(id: string, options?: { onSuccess?: (data: Insurance) => void; onError?: (error: string) => void }) {
-  return useMutation<Insurance, UpdateInsuranceInput>(`/insurance-defense/${id}`, 'put', options);
+  return useMutation<Insurance, UpdateInsuranceInput>(`/insurancedefense/${id}`, 'put', options);
 }
 
 export function useDeleteInsurance(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/insurance-defense/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/insurancedefense/${id}`, 'delete', options);
 }

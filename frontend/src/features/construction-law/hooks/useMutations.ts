@@ -10,9 +10,9 @@ export function useCreateConstruction(options?: { onSuccess?: (data: Constructio
 }
 
 export function useUpdateConstruction(id: string, options?: { onSuccess?: (data: Construction) => void; onError?: (error: string) => void }) {
-  return useMutation<Construction, UpdateConstructionInput>(`/construction-law/${id}`, 'put', options);
+  return useMutation<Construction, UpdateConstructionInput>(`/construction/${id}`, 'put', options);
 }
 
 export function useDeleteConstruction(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/construction-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/construction/${id}`, 'delete', options);
 }

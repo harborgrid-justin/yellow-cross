@@ -10,9 +10,9 @@ export function useCreateTax(options?: { onSuccess?: (data: Tax) => void; onErro
 }
 
 export function useUpdateTax(id: string, options?: { onSuccess?: (data: Tax) => void; onError?: (error: string) => void }) {
-  return useMutation<Tax, UpdateTaxInput>(`/tax-law/${id}`, 'put', options);
+  return useMutation<Tax, UpdateTaxInput>(`/tax/${id}`, 'put', options);
 }
 
 export function useDeleteTax(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/tax-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/tax/${id}`, 'delete', options);
 }

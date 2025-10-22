@@ -10,9 +10,9 @@ export function useCreateAppellate(options?: { onSuccess?: (data: Appellate) => 
 }
 
 export function useUpdateAppellate(id: string, options?: { onSuccess?: (data: Appellate) => void; onError?: (error: string) => void }) {
-  return useMutation<Appellate, UpdateAppellateInput>(`/appellate-practice/${id}`, 'put', options);
+  return useMutation<Appellate, UpdateAppellateInput>(`/appellate/${id}`, 'put', options);
 }
 
 export function useDeleteAppellate(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/appellate-practice/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/appellate/${id}`, 'delete', options);
 }

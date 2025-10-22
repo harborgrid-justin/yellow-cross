@@ -11,9 +11,9 @@ export function useCalendars(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Calendar>>(`/calendar-scheduling${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Calendar>>(`/calendar${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useCalendar(id: string, options?: { skip?: boolean }) {
-  return useQuery<Calendar>(`/calendar-scheduling/${id}`, options);
+  return useQuery<Calendar>(`/calendar/${id}`, options);
 }

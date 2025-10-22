@@ -10,9 +10,9 @@ export function useCreateConsumer(options?: { onSuccess?: (data: Consumer) => vo
 }
 
 export function useUpdateConsumer(id: string, options?: { onSuccess?: (data: Consumer) => void; onError?: (error: string) => void }) {
-  return useMutation<Consumer, UpdateConsumerInput>(`/consumer-protection/${id}`, 'put', options);
+  return useMutation<Consumer, UpdateConsumerInput>(`/consumer/${id}`, 'put', options);
 }
 
 export function useDeleteConsumer(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/consumer-protection/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/consumer/${id}`, 'delete', options);
 }

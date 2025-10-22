@@ -10,9 +10,9 @@ export function useCreateVeterans(options?: { onSuccess?: (data: Veterans) => vo
 }
 
 export function useUpdateVeterans(id: string, options?: { onSuccess?: (data: Veterans) => void; onError?: (error: string) => void }) {
-  return useMutation<Veterans, UpdateVeteransInput>(`/veterans-affairs/${id}`, 'put', options);
+  return useMutation<Veterans, UpdateVeteransInput>(`/veterans/${id}`, 'put', options);
 }
 
 export function useDeleteVeterans(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/veterans-affairs/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/veterans/${id}`, 'delete', options);
 }

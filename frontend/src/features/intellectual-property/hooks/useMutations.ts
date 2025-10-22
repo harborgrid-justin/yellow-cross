@@ -10,9 +10,9 @@ export function useCreateIP(options?: { onSuccess?: (data: IP) => void; onError?
 }
 
 export function useUpdateIP(id: string, options?: { onSuccess?: (data: IP) => void; onError?: (error: string) => void }) {
-  return useMutation<IP, UpdateIPInput>(`/intellectual-property/${id}`, 'put', options);
+  return useMutation<IP, UpdateIPInput>(`/ip/${id}`, 'put', options);
 }
 
 export function useDeleteIP(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/intellectual-property/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/ip/${id}`, 'delete', options);
 }

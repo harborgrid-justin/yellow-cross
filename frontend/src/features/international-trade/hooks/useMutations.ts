@@ -10,9 +10,9 @@ export function useCreateInternationalTrade(options?: { onSuccess?: (data: Inter
 }
 
 export function useUpdateInternationalTrade(id: string, options?: { onSuccess?: (data: InternationalTrade) => void; onError?: (error: string) => void }) {
-  return useMutation<InternationalTrade, UpdateInternationalTradeInput>(`/international-trade/${id}`, 'put', options);
+  return useMutation<InternationalTrade, UpdateInternationalTradeInput>(`/trade/${id}`, 'put', options);
 }
 
 export function useDeleteInternationalTrade(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/international-trade/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/trade/${id}`, 'delete', options);
 }

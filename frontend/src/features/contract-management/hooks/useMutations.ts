@@ -10,9 +10,9 @@ export function useCreateContract(options?: { onSuccess?: (data: Contract) => vo
 }
 
 export function useUpdateContract(id: string, options?: { onSuccess?: (data: Contract) => void; onError?: (error: string) => void }) {
-  return useMutation<Contract, UpdateContractInput>(`/contract-management/${id}`, 'put', options);
+  return useMutation<Contract, UpdateContractInput>(`/contracts/${id}`, 'put', options);
 }
 
 export function useDeleteContract(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/contract-management/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/contracts/${id}`, 'delete', options);
 }

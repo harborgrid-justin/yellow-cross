@@ -10,9 +10,9 @@ export function useCreateAviation(options?: { onSuccess?: (data: Aviation) => vo
 }
 
 export function useUpdateAviation(id: string, options?: { onSuccess?: (data: Aviation) => void; onError?: (error: string) => void }) {
-  return useMutation<Aviation, UpdateAviationInput>(`/aviation-law/${id}`, 'put', options);
+  return useMutation<Aviation, UpdateAviationInput>(`/aviation/${id}`, 'put', options);
 }
 
 export function useDeleteAviation(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/aviation-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/aviation/${id}`, 'delete', options);
 }

@@ -10,9 +10,9 @@ export function useCreateBankruptcy(options?: { onSuccess?: (data: Bankruptcy) =
 }
 
 export function useUpdateBankruptcy(id: string, options?: { onSuccess?: (data: Bankruptcy) => void; onError?: (error: string) => void }) {
-  return useMutation<Bankruptcy, UpdateBankruptcyInput>(`/bankruptcy-management/${id}`, 'put', options);
+  return useMutation<Bankruptcy, UpdateBankruptcyInput>(`/bankruptcy/${id}`, 'put', options);
 }
 
 export function useDeleteBankruptcy(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/bankruptcy-management/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/bankruptcy/${id}`, 'delete', options);
 }

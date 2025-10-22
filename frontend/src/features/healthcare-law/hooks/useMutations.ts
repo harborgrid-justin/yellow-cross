@@ -10,9 +10,9 @@ export function useCreateHealthcare(options?: { onSuccess?: (data: Healthcare) =
 }
 
 export function useUpdateHealthcare(id: string, options?: { onSuccess?: (data: Healthcare) => void; onError?: (error: string) => void }) {
-  return useMutation<Healthcare, UpdateHealthcareInput>(`/healthcare-law/${id}`, 'put', options);
+  return useMutation<Healthcare, UpdateHealthcareInput>(`/healthcare/${id}`, 'put', options);
 }
 
 export function useDeleteHealthcare(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/healthcare-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/healthcare/${id}`, 'delete', options);
 }

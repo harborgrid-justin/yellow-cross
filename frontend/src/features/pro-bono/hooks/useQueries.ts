@@ -11,9 +11,9 @@ export function useProBonos(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<ProBono>>(`/pro-bono${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<ProBono>>(`/probono${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useProBono(id: string, options?: { skip?: boolean }) {
-  return useQuery<ProBono>(`/pro-bono/${id}`, options);
+  return useQuery<ProBono>(`/probono/${id}`, options);
 }

@@ -11,9 +11,9 @@ export function useLandlordTenants(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<LandlordTenant>>(`/landlord-tenant${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<LandlordTenant>>(`/landlordtenant${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useLandlordTenant(id: string, options?: { skip?: boolean }) {
-  return useQuery<LandlordTenant>(`/landlord-tenant/${id}`, options);
+  return useQuery<LandlordTenant>(`/landlordtenant/${id}`, options);
 }

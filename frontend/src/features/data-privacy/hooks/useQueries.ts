@@ -11,9 +11,9 @@ export function useDataPrivacys(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<DataPrivacy>>(`/data-privacy${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<DataPrivacy>>(`/privacy${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useDataPrivacy(id: string, options?: { skip?: boolean }) {
-  return useQuery<DataPrivacy>(`/data-privacy/${id}`, options);
+  return useQuery<DataPrivacy>(`/privacy/${id}`, options);
 }

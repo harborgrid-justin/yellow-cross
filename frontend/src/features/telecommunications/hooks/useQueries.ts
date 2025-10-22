@@ -11,9 +11,9 @@ export function useTelecommunicationss(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Telecommunications>>(`/telecommunications${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Telecommunications>>(`/telecom${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useTelecommunications(id: string, options?: { skip?: boolean }) {
-  return useQuery<Telecommunications>(`/telecommunications/${id}`, options);
+  return useQuery<Telecommunications>(`/telecom/${id}`, options);
 }

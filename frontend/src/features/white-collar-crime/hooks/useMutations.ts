@@ -10,9 +10,9 @@ export function useCreateWhiteCollarCrime(options?: { onSuccess?: (data: WhiteCo
 }
 
 export function useUpdateWhiteCollarCrime(id: string, options?: { onSuccess?: (data: WhiteCollarCrime) => void; onError?: (error: string) => void }) {
-  return useMutation<WhiteCollarCrime, UpdateWhiteCollarCrimeInput>(`/white-collar-crime/${id}`, 'put', options);
+  return useMutation<WhiteCollarCrime, UpdateWhiteCollarCrimeInput>(`/whitecollar/${id}`, 'put', options);
 }
 
 export function useDeleteWhiteCollarCrime(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/white-collar-crime/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/whitecollar/${id}`, 'delete', options);
 }

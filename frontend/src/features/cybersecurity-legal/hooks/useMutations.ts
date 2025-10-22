@@ -10,9 +10,9 @@ export function useCreateCybersecurity(options?: { onSuccess?: (data: Cybersecur
 }
 
 export function useUpdateCybersecurity(id: string, options?: { onSuccess?: (data: Cybersecurity) => void; onError?: (error: string) => void }) {
-  return useMutation<Cybersecurity, UpdateCybersecurityInput>(`/cybersecurity-legal/${id}`, 'put', options);
+  return useMutation<Cybersecurity, UpdateCybersecurityInput>(`/cybersecurity/${id}`, 'put', options);
 }
 
 export function useDeleteCybersecurity(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/cybersecurity-legal/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/cybersecurity/${id}`, 'delete', options);
 }

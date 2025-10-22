@@ -11,9 +11,9 @@ export function useInsurances(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Insurance>>(`/insurance-defense${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Insurance>>(`/insurancedefense${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useInsurance(id: string, options?: { skip?: boolean }) {
-  return useQuery<Insurance>(`/insurance-defense/${id}`, options);
+  return useQuery<Insurance>(`/insurancedefense/${id}`, options);
 }

@@ -10,9 +10,9 @@ export function useCreateTask(options?: { onSuccess?: (data: Task) => void; onEr
 }
 
 export function useUpdateTask(id: string, options?: { onSuccess?: (data: Task) => void; onError?: (error: string) => void }) {
-  return useMutation<Task, UpdateTaskInput>(`/task-workflow/${id}`, 'put', options);
+  return useMutation<Task, UpdateTaskInput>(`/tasks/${id}`, 'put', options);
 }
 
 export function useDeleteTask(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/task-workflow/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/tasks/${id}`, 'delete', options);
 }

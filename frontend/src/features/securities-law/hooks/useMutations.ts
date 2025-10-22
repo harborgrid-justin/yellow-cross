@@ -10,9 +10,9 @@ export function useCreateSecurities(options?: { onSuccess?: (data: Securities) =
 }
 
 export function useUpdateSecurities(id: string, options?: { onSuccess?: (data: Securities) => void; onError?: (error: string) => void }) {
-  return useMutation<Securities, UpdateSecuritiesInput>(`/securities-law/${id}`, 'put', options);
+  return useMutation<Securities, UpdateSecuritiesInput>(`/securities/${id}`, 'put', options);
 }
 
 export function useDeleteSecurities(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/securities-law/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/securities/${id}`, 'delete', options);
 }

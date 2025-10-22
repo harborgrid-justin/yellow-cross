@@ -10,9 +10,9 @@ export function useCreateTelecommunications(options?: { onSuccess?: (data: Telec
 }
 
 export function useUpdateTelecommunications(id: string, options?: { onSuccess?: (data: Telecommunications) => void; onError?: (error: string) => void }) {
-  return useMutation<Telecommunications, UpdateTelecommunicationsInput>(`/telecommunications/${id}`, 'put', options);
+  return useMutation<Telecommunications, UpdateTelecommunicationsInput>(`/telecom/${id}`, 'put', options);
 }
 
 export function useDeleteTelecommunications(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/telecommunications/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/telecom/${id}`, 'delete', options);
 }

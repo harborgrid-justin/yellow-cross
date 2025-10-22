@@ -10,9 +10,9 @@ export function useCreateLabor(options?: { onSuccess?: (data: Labor) => void; on
 }
 
 export function useUpdateLabor(id: string, options?: { onSuccess?: (data: Labor) => void; onError?: (error: string) => void }) {
-  return useMutation<Labor, UpdateLaborInput>(`/labor-relations/${id}`, 'put', options);
+  return useMutation<Labor, UpdateLaborInput>(`/labor/${id}`, 'put', options);
 }
 
 export function useDeleteLabor(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/labor-relations/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/labor/${id}`, 'delete', options);
 }

@@ -10,9 +10,9 @@ export function useCreateBilling(options?: { onSuccess?: (data: Billing) => void
 }
 
 export function useUpdateBilling(id: string, options?: { onSuccess?: (data: Billing) => void; onError?: (error: string) => void }) {
-  return useMutation<Billing, UpdateBillingInput>(`/time-billing/${id}`, 'put', options);
+  return useMutation<Billing, UpdateBillingInput>(`/billing/${id}`, 'put', options);
 }
 
 export function useDeleteBilling(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/time-billing/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/billing/${id}`, 'delete', options);
 }

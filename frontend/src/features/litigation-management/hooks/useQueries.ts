@@ -11,9 +11,9 @@ export function useLitigations(params?: PaginationParams) {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
-  return useQuery<PaginatedResponse<Litigation>>(`/litigation-management${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
+  return useQuery<PaginatedResponse<Litigation>>(`/litigation${queryParams.toString() ? `?${queryParams.toString()}` : ''}`);
 }
 
 export function useLitigation(id: string, options?: { skip?: boolean }) {
-  return useQuery<Litigation>(`/litigation-management/${id}`, options);
+  return useQuery<Litigation>(`/litigation/${id}`, options);
 }

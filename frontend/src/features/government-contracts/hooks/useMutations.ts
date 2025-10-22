@@ -10,9 +10,9 @@ export function useCreateGovernment(options?: { onSuccess?: (data: Government) =
 }
 
 export function useUpdateGovernment(id: string, options?: { onSuccess?: (data: Government) => void; onError?: (error: string) => void }) {
-  return useMutation<Government, UpdateGovernmentInput>(`/government-contracts/${id}`, 'put', options);
+  return useMutation<Government, UpdateGovernmentInput>(`/govcontracts/${id}`, 'put', options);
 }
 
 export function useDeleteGovernment(id: string, options?: { onSuccess?: (data: { success: boolean }) => void; onError?: (error: string) => void }) {
-  return useMutation<{ success: boolean }, void>(`/government-contracts/${id}`, 'delete', options);
+  return useMutation<{ success: boolean }, void>(`/govcontracts/${id}`, 'delete', options);
 }
