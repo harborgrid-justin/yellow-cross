@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Telecommunications, CreateTelecommunicationsInput, UpdateTelecommunicationsInput } from './types';
 
 export function useCreateTelecommunications(options?: { onSuccess?: (data: Telecommunications) => void; onError?: (error: string) => void }) {
-  return useMutation<Telecommunications, CreateTelecommunicationsInput>('/telecommunications/create', 'post', options);
+  return useMutation<Telecommunications, CreateTelecommunicationsInput>('/telecom/create', 'post', options);
 }
 
 export function useUpdateTelecommunications(id: string, options?: { onSuccess?: (data: Telecommunications) => void; onError?: (error: string) => void }) {

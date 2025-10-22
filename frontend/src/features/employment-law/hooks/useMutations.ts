@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Employment, CreateEmploymentInput, UpdateEmploymentInput } from './types';
 
 export function useCreateEmployment(options?: { onSuccess?: (data: Employment) => void; onError?: (error: string) => void }) {
-  return useMutation<Employment, CreateEmploymentInput>('/employment-law/create', 'post', options);
+  return useMutation<Employment, CreateEmploymentInput>('/employment/create', 'post', options);
 }
 
 export function useUpdateEmployment(id: string, options?: { onSuccess?: (data: Employment) => void; onError?: (error: string) => void }) {

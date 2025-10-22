@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Financial, CreateFinancialInput, UpdateFinancialInput } from './types';
 
 export function useCreateFinancial(options?: { onSuccess?: (data: Financial) => void; onError?: (error: string) => void }) {
-  return useMutation<Financial, CreateFinancialInput>('/financial-services/create', 'post', options);
+  return useMutation<Financial, CreateFinancialInput>('/financial/create', 'post', options);
 }
 
 export function useUpdateFinancial(id: string, options?: { onSuccess?: (data: Financial) => void; onError?: (error: string) => void }) {

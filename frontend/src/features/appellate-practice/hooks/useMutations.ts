@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Appellate, CreateAppellateInput, UpdateAppellateInput } from './types';
 
 export function useCreateAppellate(options?: { onSuccess?: (data: Appellate) => void; onError?: (error: string) => void }) {
-  return useMutation<Appellate, CreateAppellateInput>('/appellate-practice/create', 'post', options);
+  return useMutation<Appellate, CreateAppellateInput>('/appellate/create', 'post', options);
 }
 
 export function useUpdateAppellate(id: string, options?: { onSuccess?: (data: Appellate) => void; onError?: (error: string) => void }) {

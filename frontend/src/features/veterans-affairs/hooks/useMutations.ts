@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Veterans, CreateVeteransInput, UpdateVeteransInput } from './types';
 
 export function useCreateVeterans(options?: { onSuccess?: (data: Veterans) => void; onError?: (error: string) => void }) {
-  return useMutation<Veterans, CreateVeteransInput>('/veterans-affairs/create', 'post', options);
+  return useMutation<Veterans, CreateVeteransInput>('/veterans/create', 'post', options);
 }
 
 export function useUpdateVeterans(id: string, options?: { onSuccess?: (data: Veterans) => void; onError?: (error: string) => void }) {

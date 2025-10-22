@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Integration, CreateIntegrationInput, UpdateIntegrationInput } from './types';
 
 export function useCreateIntegration(options?: { onSuccess?: (data: Integration) => void; onError?: (error: string) => void }) {
-  return useMutation<Integration, CreateIntegrationInput>('/integration/create', 'post', options);
+  return useMutation<Integration, CreateIntegrationInput>('/integrations/create', 'post', options);
 }
 
 export function useUpdateIntegration(id: string, options?: { onSuccess?: (data: Integration) => void; onError?: (error: string) => void }) {

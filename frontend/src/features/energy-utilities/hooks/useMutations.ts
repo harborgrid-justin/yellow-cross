@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Energy, CreateEnergyInput, UpdateEnergyInput } from './types';
 
 export function useCreateEnergy(options?: { onSuccess?: (data: Energy) => void; onError?: (error: string) => void }) {
-  return useMutation<Energy, CreateEnergyInput>('/energy-utilities/create', 'post', options);
+  return useMutation<Energy, CreateEnergyInput>('/energy/create', 'post', options);
 }
 
 export function useUpdateEnergy(id: string, options?: { onSuccess?: (data: Energy) => void; onError?: (error: string) => void }) {

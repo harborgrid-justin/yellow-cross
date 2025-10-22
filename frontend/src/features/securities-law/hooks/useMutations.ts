@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Securities, CreateSecuritiesInput, UpdateSecuritiesInput } from './types';
 
 export function useCreateSecurities(options?: { onSuccess?: (data: Securities) => void; onError?: (error: string) => void }) {
-  return useMutation<Securities, CreateSecuritiesInput>('/securities-law/create', 'post', options);
+  return useMutation<Securities, CreateSecuritiesInput>('/securities/create', 'post', options);
 }
 
 export function useUpdateSecurities(id: string, options?: { onSuccess?: (data: Securities) => void; onError?: (error: string) => void }) {

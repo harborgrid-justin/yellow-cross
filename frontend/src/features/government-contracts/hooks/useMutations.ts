@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Government, CreateGovernmentInput, UpdateGovernmentInput } from './types';
 
 export function useCreateGovernment(options?: { onSuccess?: (data: Government) => void; onError?: (error: string) => void }) {
-  return useMutation<Government, CreateGovernmentInput>('/government-contracts/create', 'post', options);
+  return useMutation<Government, CreateGovernmentInput>('/govcontracts/create', 'post', options);
 }
 
 export function useUpdateGovernment(id: string, options?: { onSuccess?: (data: Government) => void; onError?: (error: string) => void }) {

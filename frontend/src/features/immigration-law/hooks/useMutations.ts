@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Immigration, CreateImmigrationInput, UpdateImmigrationInput } from './types';
 
 export function useCreateImmigration(options?: { onSuccess?: (data: Immigration) => void; onError?: (error: string) => void }) {
-  return useMutation<Immigration, CreateImmigrationInput>('/immigration-law/create', 'post', options);
+  return useMutation<Immigration, CreateImmigrationInput>('/immigration/create', 'post', options);
 }
 
 export function useUpdateImmigration(id: string, options?: { onSuccess?: (data: Immigration) => void; onError?: (error: string) => void }) {

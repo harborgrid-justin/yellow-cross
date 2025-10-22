@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Environmental, CreateEnvironmentalInput, UpdateEnvironmentalInput } from './types';
 
 export function useCreateEnvironmental(options?: { onSuccess?: (data: Environmental) => void; onError?: (error: string) => void }) {
-  return useMutation<Environmental, CreateEnvironmentalInput>('/environmental-law/create', 'post', options);
+  return useMutation<Environmental, CreateEnvironmentalInput>('/environmental/create', 'post', options);
 }
 
 export function useUpdateEnvironmental(id: string, options?: { onSuccess?: (data: Environmental) => void; onError?: (error: string) => void }) {

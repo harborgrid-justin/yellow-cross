@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { NonProfit, CreateNonProfitInput, UpdateNonProfitInput } from './types';
 
 export function useCreateNonProfit(options?: { onSuccess?: (data: NonProfit) => void; onError?: (error: string) => void }) {
-  return useMutation<NonProfit, CreateNonProfitInput>('/non-profit-law/create', 'post', options);
+  return useMutation<NonProfit, CreateNonProfitInput>('/nonprofit/create', 'post', options);
 }
 
 export function useUpdateNonProfit(id: string, options?: { onSuccess?: (data: NonProfit) => void; onError?: (error: string) => void }) {

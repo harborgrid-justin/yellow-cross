@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Mediation, CreateMediationInput, UpdateMediationInput } from './types';
 
 export function useCreateMediation(options?: { onSuccess?: (data: Mediation) => void; onError?: (error: string) => void }) {
-  return useMutation<Mediation, CreateMediationInput>('/mediation-adr/create', 'post', options);
+  return useMutation<Mediation, CreateMediationInput>('/mediation/create', 'post', options);
 }
 
 export function useUpdateMediation(id: string, options?: { onSuccess?: (data: Mediation) => void; onError?: (error: string) => void }) {

@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Report, CreateReportInput, UpdateReportInput } from './types';
 
 export function useCreateReport(options?: { onSuccess?: (data: Report) => void; onError?: (error: string) => void }) {
-  return useMutation<Report, CreateReportInput>('/reporting-analytics/create', 'post', options);
+  return useMutation<Report, CreateReportInput>('/reports/create', 'post', options);
 }
 
 export function useUpdateReport(id: string, options?: { onSuccess?: (data: Report) => void; onError?: (error: string) => void }) {

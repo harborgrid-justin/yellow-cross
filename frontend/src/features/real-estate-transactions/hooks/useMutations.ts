@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { RealEstate, CreateRealEstateInput, UpdateRealEstateInput } from './types';
 
 export function useCreateRealEstate(options?: { onSuccess?: (data: RealEstate) => void; onError?: (error: string) => void }) {
-  return useMutation<RealEstate, CreateRealEstateInput>('/real-estate-transactions/create', 'post', options);
+  return useMutation<RealEstate, CreateRealEstateInput>('/realestate/create', 'post', options);
 }
 
 export function useUpdateRealEstate(id: string, options?: { onSuccess?: (data: RealEstate) => void; onError?: (error: string) => void }) {

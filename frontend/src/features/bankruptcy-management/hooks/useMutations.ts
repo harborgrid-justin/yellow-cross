@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Bankruptcy, CreateBankruptcyInput, UpdateBankruptcyInput } from './types';
 
 export function useCreateBankruptcy(options?: { onSuccess?: (data: Bankruptcy) => void; onError?: (error: string) => void }) {
-  return useMutation<Bankruptcy, CreateBankruptcyInput>('/bankruptcy-management/create', 'post', options);
+  return useMutation<Bankruptcy, CreateBankruptcyInput>('/bankruptcy/create', 'post', options);
 }
 
 export function useUpdateBankruptcy(id: string, options?: { onSuccess?: (data: Bankruptcy) => void; onError?: (error: string) => void }) {

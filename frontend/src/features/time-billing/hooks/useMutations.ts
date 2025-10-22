@@ -6,7 +6,7 @@ import { useMutation } from '../../../shared/hooks/useMutation';
 import { Billing, CreateBillingInput, UpdateBillingInput } from './types';
 
 export function useCreateBilling(options?: { onSuccess?: (data: Billing) => void; onError?: (error: string) => void }) {
-  return useMutation<Billing, CreateBillingInput>('/time-billing/create', 'post', options);
+  return useMutation<Billing, CreateBillingInput>('/billing/create', 'post', options);
 }
 
 export function useUpdateBilling(id: string, options?: { onSuccess?: (data: Billing) => void; onError?: (error: string) => void }) {
