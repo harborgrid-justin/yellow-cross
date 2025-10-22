@@ -36,6 +36,17 @@ export * from './types';
 // Core service exports
 export * from './core';
 
+// Authentication API
+export { authApi } from './modules/authApi';
+export type {
+  AuthApi,
+  LoginCredentials,
+  RegisterData,
+  ChangePasswordData,
+  AuthResponse,
+  User,
+} from './modules/authApi';
+
 // Domain-specific API exports
 export { caseManagementApi } from './modules/caseManagementApi';
 export type {
@@ -45,6 +56,41 @@ export type {
   PaginatedCaseResponse,
   CaseStatistics,
 } from './modules/caseManagementApi';
+
+export { clientCrmApi } from './modules/clientCrmApi';
+export type {
+  ClientCrmApi,
+  Client,
+  CreateClientData,
+  UpdateClientData,
+  ClientCommunication,
+} from './modules/clientCrmApi';
+
+export { documentManagementApi } from './modules/documentManagementApi';
+export type {
+  DocumentManagementApi,
+  Document,
+  CreateDocumentData,
+  UpdateDocumentData,
+  DocumentVersion,
+} from './modules/documentManagementApi';
+
+export { calendarSchedulingApi } from './modules/calendarSchedulingApi';
+export type {
+  CalendarSchedulingApi,
+  CalendarEvent,
+  CreateEventData,
+  UpdateEventData,
+} from './modules/calendarSchedulingApi';
+
+export { timeBillingApi } from './modules/timeBillingApi';
+export type {
+  TimeBillingApi,
+  TimeEntry,
+  CreateTimeEntryData,
+  Invoice,
+  CreateInvoiceData,
+} from './modules/timeBillingApi';
 
 // Security exports
 export { secureTokenManager } from './security/SecureTokenManager';
