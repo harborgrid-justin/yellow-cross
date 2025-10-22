@@ -1,4 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  loginSuccess,
+  logout as logoutAction,
+  refreshTokenSuccess,
+  updateUser as updateUserAction,
+  restoreSession,
+  setError as setAuthError,
+} from '../../store/slices/authSlice';
 
 interface User {
   id: string;
@@ -33,43 +42,25 @@ interface RegisterData {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Token storage keys
-const ACCESS_TOKEN_KEY = 'yellow_cross_access_token';
-const REFRESH_TOKEN_KEY = 'yellow_cross_refresh_token';
-const USER_KEY = 'yellow_cross_user';
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { user, accessToken, refreshToken, isLoading } = useAppSelector((state) => state.auth);
 
-  // Load auth state from localStorage on mount
+  // Restore auth state from localStorage on mount
   useEffect(() => {
-    const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-    const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-    const storedUser = localStorage.getItem(USER_KEY);
-
-    if (storedAccessToken && storedUser) {
-      setAccessToken(storedAccessToken);
-      setRefreshToken(storedRefreshToken);
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
-  }, []);
+    dispatch(restoreSession());
+  }, [dispatch]);
 
   // Listen for unauthorized events from API client
   useEffect(() => {
     const handleUnauthorized = () => {
       // Clear state - this will trigger PrivateRoute to redirect to login
-      setUser(null);
-      setAccessToken(null);
-      setRefreshToken(null);
+      dispatch(logoutAction());
     };
 
     window.addEventListener('auth:unauthorized', handleUnauthorized);
     return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
-  }, []);
+  }, [dispatch]);
 
   // Auto-refresh token before expiry
   useEffect(() => {
@@ -98,20 +89,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       const data = await response.json();
       
-      // Store tokens and user data
+      // Store tokens and user data via Redux
       const { accessToken: newAccessToken, refreshToken: newRefreshToken, user: userData } = data;
       
-      setAccessToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-      setUser(userData);
-      
-      localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
-      if (newRefreshToken) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
-      }
-      localStorage.setItem(USER_KEY, JSON.stringify(userData));
+      dispatch(loginSuccess({
+        user: userData,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      }));
     } catch (error) {
       console.error('Login error:', error);
+      dispatch(setAuthError(error instanceof Error ? error.message : 'Login failed'));
       throw error;
     }
   };
@@ -161,13 +149,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }).catch(err => console.error('Logout API error:', err));
     }
 
-    // Clear state and localStorage
-    setUser(null);
-    setAccessToken(null);
-    setRefreshToken(null);
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    // Clear state via Redux (also clears localStorage)
+    dispatch(logoutAction());
   };
 
   const refreshAccessToken = async () => {
@@ -190,8 +173,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const data = await response.json();
       const { accessToken: newAccessToken } = data;
 
-      setAccessToken(newAccessToken);
-      localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
+      dispatch(refreshTokenSuccess(newAccessToken));
     } catch (error) {
       console.error('Token refresh error:', error);
       logout();
@@ -200,9 +182,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const updateUser = (userData: Partial<User>) => {
     if (user) {
-      const updatedUser = { ...user, ...userData };
-      setUser(updatedUser);
-      localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+      dispatch(updateUserAction(userData));
     }
   };
 
