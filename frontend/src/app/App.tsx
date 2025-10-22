@@ -75,8 +75,68 @@ import ProBonoManagementPage from '../features/pro-bono/ProBonoManagementPage';
 // Sub-feature pages (dynamic imports for code splitting)
 import SubFeaturePage from '../shared/components/SubFeaturePage';
 
-// Page Routes
+// Page Routes - Domain pages with full CRUD structure
 import { AdminRoutes } from '../pages/admin';
+import { AntitrustCompetitionRoutes } from '../pages/antitrust-competition';
+import { AppellatePracticeRoutes } from '../pages/appellate-practice';
+import { AviationLawRoutes } from '../pages/aviation-law';
+import { BankruptcyManagementRoutes } from '../pages/bankruptcy-management';
+import { CalendarSchedulingRoutes } from '../pages/calendar-scheduling';
+import { CaseManagementRoutes } from '../pages/case-management';
+import { CivilRightsRoutes } from '../pages/civil-rights';
+import { ClassActionRoutes } from '../pages/class-action';
+import { ClientCrmRoutes } from '../pages/client-crm';
+import { CommunicationRoutes } from '../pages/communication';
+import { ComplianceRoutes } from '../pages/compliance';
+import { ConstructionLawRoutes } from '../pages/construction-law';
+import { ConsumerProtectionRoutes } from '../pages/consumer-protection';
+import { ContractManagementRoutes } from '../pages/contract-management';
+import { CorporateGovernanceRoutes } from '../pages/corporate-governance';
+import { CourtDocketRoutes } from '../pages/court-docket';
+import { CriminalDefenseRoutes } from '../pages/criminal-defense';
+import { CybersecurityLegalRoutes } from '../pages/cybersecurity-legal';
+import { DataPrivacyRoutes } from '../pages/data-privacy';
+import { DocumentManagementRoutes } from '../pages/document-management';
+import { EdiscoveryRoutes } from '../pages/ediscovery';
+import { EducationLawRoutes } from '../pages/education-law';
+import { EmploymentLawRoutes } from '../pages/employment-law';
+import { EnergyUtilitiesRoutes } from '../pages/energy-utilities';
+import { EnvironmentalLawRoutes } from '../pages/environmental-law';
+import { EstatePlanningRoutes } from '../pages/estate-planning';
+import { FamilyLawRoutes } from '../pages/family-law';
+import { FinancialServicesRoutes } from '../pages/financial-services';
+import { FranchiseLawRoutes } from '../pages/franchise-law';
+import { GovernmentContractsRoutes } from '../pages/government-contracts';
+import { HealthcareLawRoutes } from '../pages/healthcare-law';
+import { ImmigrationLawRoutes } from '../pages/immigration-law';
+import { InsuranceDefenseRoutes } from '../pages/insurance-defense';
+import { IntegrationRoutes } from '../pages/integration';
+import { IntellectualPropertyRoutes } from '../pages/intellectual-property';
+import { InternationalTradeRoutes } from '../pages/international-trade';
+import { LaborRelationsRoutes } from '../pages/labor-relations';
+import { LandlordTenantRoutes } from '../pages/landlord-tenant';
+import { LegalResearchRoutes } from '../pages/legal-research';
+import { LitigationManagementRoutes } from '../pages/litigation-management';
+import { MaritimeLawRoutes } from '../pages/maritime-law';
+import { MediationAdrRoutes } from '../pages/mediation-adr';
+import { MergersAcquisitionsRoutes } from '../pages/mergers-acquisitions';
+import { MunicipalLawRoutes } from '../pages/municipal-law';
+import { NonProfitLawRoutes } from '../pages/non-profit-law';
+import { PersonalInjuryRoutes } from '../pages/personal-injury';
+import { ProBonoRoutes } from '../pages/pro-bono';
+import { RealEstateTransactionsRoutes } from '../pages/real-estate-transactions';
+import { ReportingAnalyticsRoutes } from '../pages/reporting-analytics';
+import { SecuritiesLawRoutes } from '../pages/securities-law';
+import { SecurityRoutes } from '../pages/security';
+import { SocialSecurityRoutes } from '../pages/social-security';
+import { SportsEntertainmentRoutes } from '../pages/sports-entertainment';
+import { TaskWorkflowRoutes } from '../pages/task-workflow';
+import { TaxLawRoutes } from '../pages/tax-law';
+import { TechnologyTransactionsRoutes } from '../pages/technology-transactions';
+import { TelecommunicationsRoutes } from '../pages/telecommunications';
+import { TimeBillingRoutes } from '../pages/time-billing';
+import { VeteransAffairsRoutes } from '../pages/veterans-affairs';
+import { WhiteCollarCrimeRoutes } from '../pages/white-collar-crime';
 
 import '../assets/styles/app.css';
 
@@ -335,8 +395,68 @@ const App: React.FC = () => {
               <Route path="pro-bono/:subFeature/*" element={<PrivateRoute><SubFeaturePage /></PrivateRoute>} />
             </Route>
 
-            {/* Pages Routes */}
+            {/* Pages Routes - Domain pages with full CRUD structure */}
             <Route path="pages/admin/*" element={<AdminRoutes />} />
+            <Route path="pages/antitrust-competition/*" element={<AntitrustCompetitionRoutes />} />
+            <Route path="pages/appellate-practice/*" element={<AppellatePracticeRoutes />} />
+            <Route path="pages/aviation-law/*" element={<AviationLawRoutes />} />
+            <Route path="pages/bankruptcy-management/*" element={<BankruptcyManagementRoutes />} />
+            <Route path="pages/calendar-scheduling/*" element={<CalendarSchedulingRoutes />} />
+            <Route path="pages/case-management/*" element={<CaseManagementRoutes />} />
+            <Route path="pages/civil-rights/*" element={<CivilRightsRoutes />} />
+            <Route path="pages/class-action/*" element={<ClassActionRoutes />} />
+            <Route path="pages/client-crm/*" element={<ClientCrmRoutes />} />
+            <Route path="pages/communication/*" element={<CommunicationRoutes />} />
+            <Route path="pages/compliance/*" element={<ComplianceRoutes />} />
+            <Route path="pages/construction-law/*" element={<ConstructionLawRoutes />} />
+            <Route path="pages/consumer-protection/*" element={<ConsumerProtectionRoutes />} />
+            <Route path="pages/contract-management/*" element={<ContractManagementRoutes />} />
+            <Route path="pages/corporate-governance/*" element={<CorporateGovernanceRoutes />} />
+            <Route path="pages/court-docket/*" element={<CourtDocketRoutes />} />
+            <Route path="pages/criminal-defense/*" element={<CriminalDefenseRoutes />} />
+            <Route path="pages/cybersecurity-legal/*" element={<CybersecurityLegalRoutes />} />
+            <Route path="pages/data-privacy/*" element={<DataPrivacyRoutes />} />
+            <Route path="pages/document-management/*" element={<DocumentManagementRoutes />} />
+            <Route path="pages/ediscovery/*" element={<EdiscoveryRoutes />} />
+            <Route path="pages/education-law/*" element={<EducationLawRoutes />} />
+            <Route path="pages/employment-law/*" element={<EmploymentLawRoutes />} />
+            <Route path="pages/energy-utilities/*" element={<EnergyUtilitiesRoutes />} />
+            <Route path="pages/environmental-law/*" element={<EnvironmentalLawRoutes />} />
+            <Route path="pages/estate-planning/*" element={<EstatePlanningRoutes />} />
+            <Route path="pages/family-law/*" element={<FamilyLawRoutes />} />
+            <Route path="pages/financial-services/*" element={<FinancialServicesRoutes />} />
+            <Route path="pages/franchise-law/*" element={<FranchiseLawRoutes />} />
+            <Route path="pages/government-contracts/*" element={<GovernmentContractsRoutes />} />
+            <Route path="pages/healthcare-law/*" element={<HealthcareLawRoutes />} />
+            <Route path="pages/immigration-law/*" element={<ImmigrationLawRoutes />} />
+            <Route path="pages/insurance-defense/*" element={<InsuranceDefenseRoutes />} />
+            <Route path="pages/integration/*" element={<IntegrationRoutes />} />
+            <Route path="pages/intellectual-property/*" element={<IntellectualPropertyRoutes />} />
+            <Route path="pages/international-trade/*" element={<InternationalTradeRoutes />} />
+            <Route path="pages/labor-relations/*" element={<LaborRelationsRoutes />} />
+            <Route path="pages/landlord-tenant/*" element={<LandlordTenantRoutes />} />
+            <Route path="pages/legal-research/*" element={<LegalResearchRoutes />} />
+            <Route path="pages/litigation-management/*" element={<LitigationManagementRoutes />} />
+            <Route path="pages/maritime-law/*" element={<MaritimeLawRoutes />} />
+            <Route path="pages/mediation-adr/*" element={<MediationAdrRoutes />} />
+            <Route path="pages/mergers-acquisitions/*" element={<MergersAcquisitionsRoutes />} />
+            <Route path="pages/municipal-law/*" element={<MunicipalLawRoutes />} />
+            <Route path="pages/non-profit-law/*" element={<NonProfitLawRoutes />} />
+            <Route path="pages/personal-injury/*" element={<PersonalInjuryRoutes />} />
+            <Route path="pages/pro-bono/*" element={<ProBonoRoutes />} />
+            <Route path="pages/real-estate-transactions/*" element={<RealEstateTransactionsRoutes />} />
+            <Route path="pages/reporting-analytics/*" element={<ReportingAnalyticsRoutes />} />
+            <Route path="pages/securities-law/*" element={<SecuritiesLawRoutes />} />
+            <Route path="pages/security/*" element={<SecurityRoutes />} />
+            <Route path="pages/social-security/*" element={<SocialSecurityRoutes />} />
+            <Route path="pages/sports-entertainment/*" element={<SportsEntertainmentRoutes />} />
+            <Route path="pages/task-workflow/*" element={<TaskWorkflowRoutes />} />
+            <Route path="pages/tax-law/*" element={<TaxLawRoutes />} />
+            <Route path="pages/technology-transactions/*" element={<TechnologyTransactionsRoutes />} />
+            <Route path="pages/telecommunications/*" element={<TelecommunicationsRoutes />} />
+            <Route path="pages/time-billing/*" element={<TimeBillingRoutes />} />
+            <Route path="pages/veterans-affairs/*" element={<VeteransAffairsRoutes />} />
+            <Route path="pages/white-collar-crime/*" element={<WhiteCollarCrimeRoutes />} />
           </Route>
         </Routes>
       </Router>
