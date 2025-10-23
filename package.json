@@ -106,6 +106,7 @@
   "jest": {
     "testEnvironment": "node",
     "preset": "ts-jest",
+    "setupFilesAfterEnv": ["<rootDir>/backend/tests/setup.ts"],
     "testMatch": [
       "**/backend/tests/**/*.test.ts"
     ],
@@ -115,6 +116,14 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/backend/src/generated/"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": {
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true
+        }
+      }
+    }
   }
 }
