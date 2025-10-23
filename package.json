@@ -10,6 +10,8 @@
     "build:react": "vite build",
     "preview:react": "vite preview",
     "test": "jest",
+    "test:parallel": "ts-node backend/tests/parallel-agent-runner.ts",
+    "test:parallel:auth": "ts-node backend/tests/authenticated-parallel-agent-runner.ts",
     "test:e2e": "cypress run",
     "test:e2e:open": "cypress open",
     "cypress:open": "cypress open",
