@@ -1,0 +1,39 @@
+{
+  "source": {
+    "include": [
+      "frontend/src/shared/components",
+      "frontend/src/shared/hooks",
+      "frontend/src/shared/api",
+      "frontend/src/services",
+      "frontend/src/features"
+    ],
+    "includePattern": ".+\\.(js|jsx|ts|tsx)$",
+    "excludePattern": "(node_modules|dist|build|test|spec|__tests__)"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "template": "default",
+    "encoding": "utf8",
+    "destination": "./docs/api",
+    "recurse": true,
+    "verbose": true,
+    "readme": "./docs/JSDOC_GENERATION_GUIDE.md"
+  },
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "default": {
+      "outputSourceFiles": true,
+      "includeDate": true
+    }
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
+  },
+  "typescript": {
+    "moduleRoot": "frontend/src"
+  }
+}
