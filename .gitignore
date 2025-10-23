@@ -175,3 +175,7 @@ cypress/screenshots/
 cypress/videos/
 cypress/downloads/
 test-output.txt
+
+# Cloned repositories for analysis (not part of project)
+twenty/
+baserow/
