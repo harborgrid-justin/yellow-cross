@@ -95,6 +95,7 @@ import searchRouter from './features/search';
 import notificationsRouter from './features/notifications';
 import activityRouter from './features/activity';
 import trashRouter from './features/trash';
+import twoFactorAuthRouter from './features/two-factor-auth';
 
 // Import new 45 features
 import litigationManagement from './features/litigation-management';
@@ -163,6 +164,7 @@ app.use('/api/search', searchRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/activity', activityRouter);
 app.use('/api/trash', trashRouter);
+app.use('/api/2fa', twoFactorAuthRouter);
 
 // Register new 45 feature routes
 app.use('/api/litigation', litigationManagement);
