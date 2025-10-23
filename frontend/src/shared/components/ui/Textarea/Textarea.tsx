@@ -1,6 +1,29 @@
 import React, { forwardRef, useState, useRef, useEffect, useId } from 'react';
 import './Textarea.css';
 
+/**
+ * TextareaProps - Props for the Textarea component
+ * 
+ * @typedef {Object} TextareaProps
+ * @extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>
+ * @property {('default'|'filled'|'outlined'|'legal'|'minimal')} [variant='default'] - Visual style
+ * @property {('sm'|'md'|'lg')} [size='md'] - Size variant
+ * @property {boolean} [error=false] - Error state
+ * @property {string} [errorMessage] - Error message text
+ * @property {boolean} [success=false] - Success state
+ * @property {string} [successMessage] - Success message text
+ * @property {string} [helperText] - Helper text
+ * @property {React.ReactNode} [label] - Label text
+ * @property {boolean} [required=false] - Required field indicator
+ * @property {boolean} [showCount=false] - Show character count
+ * @property {number} [maxLength] - Maximum character count
+ * @property {boolean} [autoResize=false] - Auto-resize based on content
+ * @property {number} [minRows] - Minimum rows
+ * @property {number} [maxRows] - Maximum rows
+ * @property {('none'|'both'|'horizontal'|'vertical')} [resize='vertical'] - Resize behavior
+ * @property {React.ReactNode} [startAdornment] - Start adornment
+ * @property {React.ReactNode} [endAdornment] - End adornment
+ */
 export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
   /** Textarea variant */
   variant?: 'default' | 'filled' | 'outlined' | 'legal' | 'minimal';
@@ -40,6 +63,76 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
   endAdornment?: React.ReactNode;
 }
 
+/**
+ * Textarea - Multi-line text input component
+ * 
+ * An enhanced textarea component with support for labels, validation,
+ * character counting, auto-resizing, and various visual variants.
+ * 
+ * Features:
+ * - Five visual variants (default, filled, outlined, legal, minimal)
+ * - Three size options (sm, md, lg)
+ * - Error and success states with messages
+ * - Character counter with max length
+ * - Auto-resize based on content
+ * - Min/max rows configuration
+ * - Customizable resize behavior
+ * - Start and end adornments
+ * - Helper text support
+ * - Forward ref support
+ * 
+ * @component
+ * @param {TextareaProps} props - Component props
+ * @param {string} [props.variant='default'] - Visual style
+ * @param {string} [props.size='md'] - Size variant
+ * @param {boolean} [props.error=false] - Error state
+ * @param {string} [props.errorMessage] - Error message
+ * @param {boolean} [props.success=false] - Success state
+ * @param {string} [props.successMessage] - Success message
+ * @param {string} [props.helperText] - Helper text
+ * @param {React.ReactNode} [props.label] - Label
+ * @param {boolean} [props.required=false] - Required indicator
+ * @param {boolean} [props.showCount=false] - Show character count
+ * @param {number} [props.maxLength] - Max characters
+ * @param {boolean} [props.autoResize=false] - Auto-resize
+ * @param {number} [props.minRows] - Minimum rows
+ * @param {number} [props.maxRows] - Maximum rows
+ * @param {React.Ref<HTMLTextAreaElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element} Textarea component
+ * 
+ * @example
+ * // Basic textarea
+ * <Textarea 
+ *   label="Comments"
+ *   placeholder="Enter your comments..."
+ * />
+ * 
+ * @example
+ * // Textarea with character limit
+ * <Textarea 
+ *   label="Description"
+ *   maxLength={500}
+ *   showCount
+ * />
+ * 
+ * @example
+ * // Auto-resizing textarea
+ * <Textarea 
+ *   label="Notes"
+ *   autoResize
+ *   minRows={3}
+ *   maxRows={10}
+ * />
+ * 
+ * @example
+ * // Textarea with validation
+ * <Textarea 
+ *   label="Feedback"
+ *   error={hasError}
+ *   errorMessage="This field is required"
+ * />
+ */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({
     variant = 'default',

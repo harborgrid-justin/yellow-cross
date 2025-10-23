@@ -1,6 +1,25 @@
 import React, { forwardRef, useState, useId } from 'react';
 import './Switch.css';
 
+/**
+ * SwitchProps - Props for the Switch component
+ * 
+ * @typedef {Object} SwitchProps
+ * @extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange'>
+ * @property {boolean} [checked] - Controlled checked state
+ * @property {boolean} [defaultChecked] - Default checked state
+ * @property {boolean} [disabled=false] - Disabled state
+ * @property {('default'|'legal'|'minimal'|'ios')} [variant='default'] - Visual style
+ * @property {('sm'|'md'|'lg')} [size='md'] - Size variant
+ * @property {('primary'|'success'|'warning'|'danger'|'info')} [color='primary'] - Color theme
+ * @property {React.ReactNode} [label] - Label text
+ * @property {React.ReactNode} [description] - Description text
+ * @property {('left'|'right')} [labelPosition='right'] - Label position
+ * @property {boolean} [loading=false] - Loading state
+ * @property {Function} onChange - Change handler
+ * @property {React.ReactNode} [checkedIcon] - Custom checked icon
+ * @property {React.ReactNode} [uncheckedIcon] - Custom unchecked icon
+ */
 export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange'> {
   /** Whether switch is checked */
   checked?: boolean;
@@ -31,6 +50,62 @@ export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
   uncheckedIcon?: React.ReactNode;
 }
 
+/**
+ * Switch - Toggle switch component with multiple variants
+ * 
+ * A customizable switch/toggle component for boolean input with support
+ * for labels, descriptions, loading states, and custom icons.
+ * 
+ * Features:
+ * - Four visual variants (default, legal, minimal, ios)
+ * - Three size options (sm, md, lg)
+ * - Five color themes
+ * - Optional label and description
+ * - Loading state support
+ * - Custom icons for checked/unchecked states
+ * - Controlled and uncontrolled modes
+ * - Forward ref support
+ * 
+ * @component
+ * @param {SwitchProps} props - Component props
+ * @param {boolean} [props.checked] - Controlled state
+ * @param {boolean} [props.defaultChecked] - Initial state
+ * @param {string} [props.variant='default'] - Visual style
+ * @param {string} [props.size='md'] - Size variant
+ * @param {string} [props.color='primary'] - Color theme
+ * @param {React.ReactNode} [props.label] - Label content
+ * @param {Function} props.onChange - Change callback
+ * @param {React.Ref<HTMLInputElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element} Switch component
+ * 
+ * @example
+ * // Basic switch
+ * <Switch label="Enable notifications" />
+ * 
+ * @example
+ * // Controlled switch
+ * <Switch 
+ *   checked={enabled}
+ *   onChange={setEnabled}
+ *   label="Dark mode"
+ * />
+ * 
+ * @example
+ * // Switch with description
+ * <Switch 
+ *   label="Email alerts"
+ *   description="Receive email notifications for important updates"
+ * />
+ * 
+ * @example
+ * // Loading switch
+ * <Switch 
+ *   label="Syncing..."
+ *   loading={isSyncing}
+ *   disabled
+ * />
+ */
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   ({
     checked,
