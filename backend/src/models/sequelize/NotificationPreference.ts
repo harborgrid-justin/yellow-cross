@@ -118,7 +118,7 @@ export class NotificationPreference extends Model {
     }
 
     const now = new Date();
-    const dayName = now.toLocaleDateString('en-US', { weekday: 'lowercase' });
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
     
     // Check if today is a quiet day
     if (this.quietHoursDays && this.quietHoursDays.includes(dayName)) {
