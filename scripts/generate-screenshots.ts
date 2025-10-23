@@ -1,14 +1,16 @@
-#!/usr/bin/env ts-node
-
 /**
  * Screenshot Generator for Yellow Cross Platform
  * 
  * This script:
- * 1. Starts the backend and frontend servers
+ * 1. Starts the backend and frontend servers (optional)
  * 2. Logs in with a test user
  * 3. Navigates to all user-accessible pages
  * 4. Captures screenshots of each page
  * 5. Saves them in an organized directory structure
+ * 
+ * Usage:
+ *   npm run screenshots:generate           - Start servers and generate screenshots
+ *   npm run screenshots:generate -- --skip-servers  - Use already running servers
  */
 
 import { chromium, Browser, Page } from 'playwright';
@@ -17,10 +19,11 @@ import * as path from 'path';
 import { spawn, ChildProcess } from 'child_process';
 
 // Configuration
-const BASE_URL = 'http://localhost:3001';
-const BACKEND_URL = 'http://localhost:3000';
+const BASE_URL = process.env['BASE_URL'] || 'http://localhost:3001';
+const BACKEND_URL = process.env['BACKEND_URL'] || 'http://localhost:3000';
 const SCREENSHOT_DIR = path.join(__dirname, '..', 'screenshots');
-const WAIT_TIME = 2000; // Time to wait for page to fully load
+const WAIT_TIME = parseInt(process.env['WAIT_TIME'] || '2000'); // Time to wait for page to fully load
+const SKIP_SERVERS = process.argv.includes('--skip-servers');
 
 // List of all feature routes from App.tsx
 const FEATURE_ROUTES = [
@@ -262,14 +265,20 @@ async function login(page: Page): Promise<boolean> {
     console.log('\nLogging in...');
     await page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle', timeout: 30000 });
     
+    // Wait for form to be visible
+    await page.waitForSelector('input[type="email"]', { timeout: 10000 });
+    
     // Fill in login credentials (using default seed user)
     await page.fill('input[type="email"]', 'admin@yellowcross.com');
     await page.fill('input[type="password"]', 'Admin@123');
     
-    // Click login button
-    await page.click('button[type="submit"]');
+    // Click login button and wait for navigation
+    await Promise.all([
+      page.waitForNavigation({ timeout: 10000 }).catch(() => {}),
+      page.click('button[type="submit"]')
+    ]);
     
-    // Wait for navigation after login
+    // Wait a bit more for any client-side routing
     await page.waitForTimeout(3000);
     
     // Check if we're logged in by looking for typical authenticated UI elements
@@ -278,8 +287,16 @@ async function login(page: Page): Promise<boolean> {
     
     if (isLoggedIn) {
       console.log('✓ Successfully logged in');
+      console.log(`  Current URL: ${currentUrl}`);
     } else {
       console.log('✗ Login may have failed');
+      console.log(`  Current URL: ${currentUrl}`);
+      
+      // Check for error messages
+      const errorMessage = await page.locator('.error, .alert, [role="alert"]').textContent().catch(() => null);
+      if (errorMessage) {
+        console.log(`  Error message: ${errorMessage}`);
+      }
     }
     
     return isLoggedIn;
@@ -329,9 +346,14 @@ async function main(): Promise<void> {
     // Setup directories
     setupDirectories();
     
-    // Start servers
-    await startBackend();
-    await startFrontend();
+    if (SKIP_SERVERS) {
+      console.log('Skipping server startup (--skip-servers flag detected)');
+      console.log('Assuming servers are already running...\n');
+    } else {
+      // Start servers
+      await startBackend();
+      await startFrontend();
+    }
     
     // Wait for servers to be ready
     console.log('\nWaiting for servers to be ready...');
@@ -398,26 +420,34 @@ async function main(): Promise<void> {
     if (browser) {
       await browser.close();
     }
-    stopServers();
+    if (!SKIP_SERVERS) {
+      stopServers();
+    }
   }
 }
 
 // Handle process termination
 process.on('SIGINT', () => {
   console.log('\nReceived SIGINT, cleaning up...');
-  stopServers();
+  if (!SKIP_SERVERS) {
+    stopServers();
+  }
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
   console.log('\nReceived SIGTERM, cleaning up...');
-  stopServers();
+  if (!SKIP_SERVERS) {
+    stopServers();
+  }
   process.exit(0);
 });
 
 // Run the script
 main().catch((error) => {
   console.error('Fatal error:', error);
-  stopServers();
+  if (!SKIP_SERVERS) {
+    stopServers();
+  }
   process.exit(1);
 });
