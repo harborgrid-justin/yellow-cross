@@ -1,6 +1,24 @@
 import React, { forwardRef } from 'react';
 import './Spinner.css';
 
+/**
+ * SpinnerProps - Props for the Spinner component
+ * 
+ * Configuration options for loading spinner animations with various
+ * visual styles and sizes.
+ * 
+ * @typedef {Object} SpinnerProps
+ * @extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'>
+ * @property {('default'|'dots'|'pulse'|'ring'|'bars'|'legal'|'minimal')} [variant='default'] - Animation style
+ * @property {('xs'|'sm'|'md'|'lg'|'xl')} [size='md'] - Spinner size
+ * @property {('primary'|'secondary'|'success'|'warning'|'danger'|'info'|'current')} [color='primary'] - Color theme
+ * @property {string} [label='Loading...'] - Accessible label text
+ * @property {boolean} [showLabel=false] - Display label visibly
+ * @property {('top'|'bottom'|'left'|'right')} [labelPosition='bottom'] - Label placement
+ * @property {string} [className] - Additional CSS classes
+ * @property {('slow'|'normal'|'fast')} [speed='normal'] - Animation speed
+ * @property {boolean} [visible=true] - Control visibility
+ */
 export interface SpinnerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'> {
   /** Spinner variant */
   variant?: 'default' | 'dots' | 'pulse' | 'ring' | 'bars' | 'legal' | 'minimal';
@@ -22,6 +40,65 @@ export interface SpinnerProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   visible?: boolean;
 }
 
+/**
+ * Spinner - Loading indicator component
+ * 
+ * A versatile loading spinner with multiple animation styles, sizes,
+ * and colors. Used to indicate loading states, processing, or pending
+ * operations throughout the application.
+ * 
+ * Features:
+ * - Seven animation variants
+ * - Five size options (xs to xl)
+ * - Multiple color themes
+ * - Optional visible label
+ * - Configurable animation speed
+ * - Visibility control
+ * - Accessible with ARIA labels
+ * - Forward ref support
+ * 
+ * @component
+ * @param {SpinnerProps} props - Component props
+ * @param {string} [props.variant='default'] - Animation style (default, dots, pulse, ring, bars, legal, minimal)
+ * @param {string} [props.size='md'] - Size (xs, sm, md, lg, xl)
+ * @param {string} [props.color='primary'] - Color theme
+ * @param {string} [props.label='Loading...'] - Screen reader label
+ * @param {boolean} [props.showLabel=false] - Show label text visibly
+ * @param {string} [props.labelPosition='bottom'] - Label position relative to spinner
+ * @param {string} [props.speed='normal'] - Animation speed (slow, normal, fast)
+ * @param {boolean} [props.visible=true] - Control visibility
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element|null} Spinner component or null if not visible
+ * 
+ * @example
+ * // Basic spinner
+ * <Spinner />
+ * 
+ * @example
+ * // Large spinner with label
+ * <Spinner 
+ *   size="lg" 
+ *   showLabel 
+ *   label="Loading cases..."
+ * />
+ * 
+ * @example
+ * // Dots variant with custom color
+ * <Spinner 
+ *   variant="dots"
+ *   color="success"
+ *   speed="fast"
+ * />
+ * 
+ * @example
+ * // Conditional visibility
+ * <Spinner 
+ *   variant="ring"
+ *   visible={isLoading}
+ *   label="Processing request..."
+ * />
+ */
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
   ({
     variant = 'default',

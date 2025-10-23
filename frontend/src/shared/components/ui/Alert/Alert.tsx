@@ -1,8 +1,27 @@
 import React, { forwardRef, useState } from 'react';
 import './Alert.css';
 
+/**
+ * AlertType - Alert severity types
+ * 
+ * @typedef {('info'|'success'|'warning'|'error')} AlertType
+ */
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
+/**
+ * AlertProps - Props for the Alert component
+ * 
+ * @typedef {Object} AlertProps
+ * @extends React.HTMLAttributes<HTMLDivElement>
+ * @property {AlertType} [type='info'] - Alert severity type
+ * @property {string} [title] - Alert title
+ * @property {string} [description] - Alert description text
+ * @property {boolean} [dismissible=false] - Allow user to dismiss
+ * @property {Function} [onDismiss] - Callback when dismissed
+ * @property {React.ReactNode} [icon] - Custom icon element
+ * @property {React.ReactNode} [actions] - Action buttons
+ * @property {React.ReactNode} [children] - Custom content
+ */
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: AlertType;
   title?: string;
@@ -14,6 +33,64 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
+/**
+ * Alert - Notification banner for user feedback
+ * 
+ * A styled notification component for displaying important messages,
+ * status updates, or feedback to users. Supports multiple severity
+ * levels with appropriate colors and icons.
+ * 
+ * Features:
+ * - Four severity types (info, success, warning, error)
+ * - Optional title and description
+ * - Dismissible with close button
+ * - Custom icon support
+ * - Action buttons area
+ * - Automatic visibility management
+ * - Forward ref support
+ * 
+ * @component
+ * @param {AlertProps} props - Component props
+ * @param {AlertType} [props.type='info'] - Severity level
+ * @param {string} [props.title] - Main alert heading
+ * @param {string} [props.description] - Detailed message
+ * @param {boolean} [props.dismissible=false] - Show dismiss button
+ * @param {Function} [props.onDismiss] - Called when alert is dismissed
+ * @param {React.ReactNode} [props.icon] - Custom icon (overrides default)
+ * @param {React.ReactNode} [props.actions] - Action buttons or links
+ * @param {React.ReactNode} [props.children] - Custom content (overrides title/description)
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element|null} Alert component or null if dismissed
+ * 
+ * @example
+ * // Success alert
+ * <Alert type="success" title="Saved successfully" />
+ * 
+ * @example
+ * // Error alert with description
+ * <Alert 
+ *   type="error"
+ *   title="Failed to save"
+ *   description="Please check your internet connection and try again."
+ * />
+ * 
+ * @example
+ * // Dismissible warning with actions
+ * <Alert 
+ *   type="warning"
+ *   title="Action required"
+ *   dismissible
+ *   onDismiss={() => console.log('Dismissed')}
+ *   actions={
+ *     <Button variant="ghost" size="sm">
+ *       Review Now
+ *     </Button>
+ *   }
+ * >
+ *   Your trial expires in 3 days.
+ * </Alert>
+ */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   (
     {

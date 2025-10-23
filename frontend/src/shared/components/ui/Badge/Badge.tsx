@@ -1,6 +1,11 @@
 import React, { forwardRef } from 'react';
 import './Badge.css';
 
+/**
+ * BadgeVariant - Available badge color variants
+ * 
+ * @typedef {('default'|'primary'|'secondary'|'success'|'warning'|'error'|'info'|'outline')} BadgeVariant
+ */
 export type BadgeVariant = 
   | 'default' 
   | 'primary' 
@@ -11,6 +16,19 @@ export type BadgeVariant =
   | 'info'
   | 'outline';
 
+/**
+ * BadgeProps - Props for the Badge component
+ * 
+ * @typedef {Object} BadgeProps
+ * @extends React.HTMLAttributes<HTMLSpanElement>
+ * @property {BadgeVariant} [variant='default'] - Color variant
+ * @property {('sm'|'md'|'lg')} [size='md'] - Badge size
+ * @property {boolean} [dot=false] - Show as dot indicator
+ * @property {boolean} [pulse=false] - Add pulse animation
+ * @property {boolean} [removable=false] - Show remove button
+ * @property {Function} [onRemove] - Callback when badge is removed
+ * @property {React.ReactNode} children - Badge content
+ */
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
   size?: 'sm' | 'md' | 'lg';
@@ -21,6 +39,58 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode;
 }
 
+/**
+ * Badge - Small status indicator or label component
+ * 
+ * A compact component for displaying status, categories, or labels.
+ * Supports multiple color variants, sizes, dot indicator mode, pulse
+ * animation, and removable functionality.
+ * 
+ * Features:
+ * - Eight color variants for different contexts
+ * - Three size options (sm, md, lg)
+ * - Dot indicator mode for status markers
+ * - Pulse animation for active states
+ * - Removable with close button
+ * - Forward ref support
+ * 
+ * @component
+ * @param {BadgeProps} props - Component props
+ * @param {BadgeVariant} [props.variant='default'] - Color variant
+ * @param {('sm'|'md'|'lg')} [props.size='md'] - Size variant
+ * @param {boolean} [props.dot=false] - Show as small dot instead of full badge
+ * @param {boolean} [props.pulse=false] - Add pulsing animation
+ * @param {boolean} [props.removable=false] - Show remove button
+ * @param {Function} [props.onRemove] - Called when remove button is clicked
+ * @param {React.ReactNode} props.children - Badge text or content
+ * @param {React.Ref<HTMLSpanElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element} Rendered badge
+ * 
+ * @example
+ * // Status badge
+ * <Badge variant="success">Active</Badge>
+ * 
+ * @example
+ * // Small badge with pulse
+ * <Badge variant="error" size="sm" pulse>
+ *   New
+ * </Badge>
+ * 
+ * @example
+ * // Dot indicator
+ * <Badge variant="warning" dot pulse />
+ * 
+ * @example
+ * // Removable badge
+ * <Badge 
+ *   variant="info" 
+ *   removable
+ *   onRemove={() => removeTag(id)}
+ * >
+ *   Tag Name
+ * </Badge>
+ */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   (
     {
