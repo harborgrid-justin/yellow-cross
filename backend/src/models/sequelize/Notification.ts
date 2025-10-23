@@ -17,6 +17,7 @@ import {
   CreatedAt,
   UpdatedAt
 } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import { User } from './User';
 
 @Table({
@@ -125,7 +126,7 @@ export class Notification extends Model {
     const deleted = await Notification.destroy({
       where: {
         expiresAt: {
-          [DataType.Op.lt]: now
+          [Op.lt]: now
         }
       }
     });

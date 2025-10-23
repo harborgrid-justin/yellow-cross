@@ -17,6 +17,7 @@ import {
   CreatedAt,
   UpdatedAt
 } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import { User } from './User';
 
 @Table({
@@ -156,8 +157,8 @@ export class Activity extends Model {
 
     if (startDate || endDate) {
       where.createdAt = {};
-      if (startDate) where.createdAt[DataType.Op.gte] = startDate;
-      if (endDate) where.createdAt[DataType.Op.lte] = endDate;
+      if (startDate) where.createdAt[Op.gte] = startDate;
+      if (endDate) where.createdAt[Op.lte] = endDate;
     }
 
     const { rows, count } = await Activity.findAndCountAll({
@@ -224,7 +225,7 @@ export class Activity extends Model {
     const deleted = await Activity.destroy({
       where: {
         createdAt: {
-          [DataType.Op.lt]: cutoffDate
+          [Op.lt]: cutoffDate
         }
       }
     });
