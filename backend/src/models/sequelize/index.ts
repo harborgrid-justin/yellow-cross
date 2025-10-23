@@ -82,6 +82,11 @@ import { SocialSecurityMatter } from './SocialSecurityMatter';
 import { ConsumerProtectionMatter } from './ConsumerProtectionMatter';
 import { LandlordTenantMatter } from './LandlordTenantMatter';
 import { ProBonoMatter } from './ProBonoMatter';
+import { Notification } from './Notification';
+import { NotificationPreference } from './NotificationPreference';
+import { Activity } from './Activity';
+import { CustomField } from './CustomField';
+import { CustomFieldValue } from './CustomFieldValue';
 
 // Named exports
 export {
@@ -163,7 +168,12 @@ export {
   SocialSecurityMatter,
   ConsumerProtectionMatter,
   LandlordTenantMatter,
-  ProBonoMatter
+  ProBonoMatter,
+  Notification,
+  NotificationPreference,
+  Activity,
+  CustomField,
+  CustomFieldValue
 };
 
 // Export all models as a default object
@@ -246,5 +256,10 @@ export default {
   SocialSecurityMatter,
   ConsumerProtectionMatter,
   LandlordTenantMatter,
-  ProBonoMatter
+  ProBonoMatter,
+  Notification,
+  NotificationPreference,
+  Activity,
+  CustomField,
+  CustomFieldValue
 };
