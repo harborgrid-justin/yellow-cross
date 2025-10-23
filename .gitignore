@@ -174,3 +174,4 @@ Thumbs.db
 cypress/screenshots/
 cypress/videos/
 cypress/downloads/
+test-output.txt
