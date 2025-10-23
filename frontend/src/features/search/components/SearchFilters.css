@@ -1,0 +1,132 @@
+/* Search Filters Component Styles */
+
+.search-filters-panel {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filters-header h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.add-filter-btn {
+  padding: 8px 16px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.add-filter-btn:hover {
+  background: #1976D2;
+}
+
+.no-filters-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr auto;
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.filter-field,
+.filter-operator,
+.filter-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-field label,
+.filter-operator label,
+.filter-value label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+}
+
+.filter-select,
+.filter-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  border-color: #2196F3;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: flex-end;
+}
+
+.remove-filter-btn {
+  padding: 8px 12px;
+  background: #ef5350;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.remove-filter-btn:hover {
+  background: #d32f2f;
+}
+
+.filters-summary {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.filters-count {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
