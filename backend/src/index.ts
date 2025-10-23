@@ -92,6 +92,7 @@ import security from './features/security';
 import integration from './features/integration';
 import authRouter from './routes/auth';
 import searchRouter from './features/search';
+import notificationsRouter from './features/notifications';
 
 // Import new 45 features
 import litigationManagement from './features/litigation-management';
@@ -157,6 +158,7 @@ app.use('/api/communication', communication);
 app.use('/api/security', security);
 app.use('/api/integrations', integration);
 app.use('/api/search', searchRouter);
+app.use('/api/notifications', notificationsRouter);
 
 // Register new 45 feature routes
 app.use('/api/litigation', litigationManagement);
