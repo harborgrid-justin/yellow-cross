@@ -438,6 +438,32 @@ http://localhost:3000
 
 Full API documentation: [API_REFERENCE.md](./API_REFERENCE.md)
 
+### JSDoc Documentation
+
+Yellow Cross frontend code is comprehensively documented using JSDoc with **6 specialized expert agents**:
+
+📝 **Expert Agents for JSDoc Generation:**
+- **Components Agent** - React components documentation
+- **Hooks Agent** - Custom React hooks documentation
+- **Services Agent** - API clients and services documentation
+- **Redux Agent** - State management documentation
+- **Utilities Agent** - Helper functions and utilities documentation
+- **Pages Agent** - Page components and routes documentation
+
+**Total Coverage**: ~1000-1300 frontend files with comprehensive JSDoc comments
+
+📖 **JSDoc Resources:**
+- [JSDoc Generation Guide](./docs/JSDOC_GENERATION_GUIDE.md) - Complete guide on using the expert agents
+- [JSDoc Workflow Example](./docs/JSDOC_WORKFLOW_EXAMPLE.md) - Step-by-step example of agents working together
+- [Agent Configurations](./.github/agents/README.md) - Expert agent templates and standards
+
+**Benefits:**
+- ✅ Better IDE support with IntelliSense
+- ✅ Easier onboarding for new developers
+- ✅ Type-safe documentation
+- ✅ Can generate API documentation sites
+- ✅ Consistent documentation standards
+
 ## 🧪 Testing
 
 ```bash
@@ -535,6 +561,8 @@ cd backend && npx prisma db push --force-reset
 ### 💻 Development
 - **[TYPESCRIPT_IMPLEMENTATION.md](./docs/guides/TYPESCRIPT_IMPLEMENTATION.md)** - TypeScript setup and usage
 - **[FRONTEND_ACCESS.md](./docs/guides/FRONTEND_ACCESS.md)** - Frontend pages access guide
+- **[JSDOC_GENERATION_GUIDE.md](./docs/JSDOC_GENERATION_GUIDE.md)** - JSDoc documentation with expert agents
+- **[JSDOC_WORKFLOW_EXAMPLE.md](./docs/JSDOC_WORKFLOW_EXAMPLE.md)** - Example workflow for JSDoc generation
 
 ## 🤝 Contributing
 
