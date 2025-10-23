@@ -1,6 +1,18 @@
 import React, { forwardRef, createContext, useContext } from 'react';
 import './Radio.css';
 
+/**
+ * RadioProps - Props for individual Radio component
+ * 
+ * @typedef {Object} RadioProps
+ * @extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'>
+ * @property {string} [label] - Radio button label
+ * @property {string} [description] - Additional description
+ * @property {string} [error] - Error message
+ * @property {('default'|'legal'|'priority')} [variant='default'] - Visual style
+ * @property {('sm'|'md'|'lg')} [size='md'] - Size variant
+ * @property {boolean} [invalid] - Invalid state
+ */
 export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   /** Radio button label */
   label?: string;

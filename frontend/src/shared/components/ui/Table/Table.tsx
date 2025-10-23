@@ -1,6 +1,23 @@
 import React, { forwardRef } from 'react';
 import './Table.css';
 
+/**
+ * Column - Configuration for a table column
+ * 
+ * Defines how a column should be displayed and how its data should be rendered.
+ * 
+ * @template T - The type of data in table rows
+ * @typedef {Object} Column
+ * @property {string} key - Unique column identifier
+ * @property {React.ReactNode} title - Column header content
+ * @property {keyof T} [dataIndex] - Key to access value in row data
+ * @property {Function} [render] - Custom render function for cell content
+ * @property {string|number} [width] - Column width (CSS value or number)
+ * @property {('left'|'center'|'right')} [align] - Text alignment
+ * @property {boolean} [sortable] - Enable column sorting
+ * @property {('left'|'right')} [fixed] - Fix column to left or right
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface Column<T = any> {
   key: string;
   title: React.ReactNode;
@@ -13,6 +30,31 @@ export interface Column<T = any> {
   className?: string;
 }
 
+/**
+ * TableProps - Props for the Table component
+ * 
+ * Configuration for a data table including columns, data, selection,
+ * and visual options.
+ * 
+ * @template T - The type of data in table rows
+ * @typedef {Object} TableProps
+ * @extends Omit<React.TableHTMLAttributes<HTMLTableElement>, 'className'>
+ * @property {Column<T>[]} columns - Column definitions
+ * @property {T[]} data - Array of row data
+ * @property {boolean} [loading=false] - Show loading state
+ * @property {React.ReactNode} [emptyMessage='No data available'] - Message when no data
+ * @property {keyof T | Function} [rowKey='id'] - Unique key for rows
+ * @property {Function} [onRowClick] - Handler for row click
+ * @property {Function} [onRowDoubleClick] - Handler for row double-click
+ * @property {Object} [rowSelection] - Row selection configuration
+ * @property {boolean} [pagination=false] - Enable pagination
+ * @property {('sm'|'md'|'lg')} [size='md'] - Table size
+ * @property {boolean} [bordered=false] - Show borders
+ * @property {boolean} [striped=false] - Alternate row colors
+ * @property {boolean} [hoverable=false] - Highlight on hover
+ * @property {boolean} [sticky=false] - Sticky header
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface TableProps<T = any> extends Omit<React.TableHTMLAttributes<HTMLTableElement>, 'className'> {
   columns: Column<T>[];
   data: T[];
@@ -35,6 +77,92 @@ export interface TableProps<T = any> extends Omit<React.TableHTMLAttributes<HTML
   className?: string;
 }
 
+/**
+ * Table - Feature-rich data table component
+ * 
+ * A comprehensive table component for displaying structured data with support
+ * for custom rendering, row selection, sorting, pagination, and various
+ * visual options. Fully type-safe with TypeScript generics.
+ * 
+ * Features:
+ * - Flexible column configuration with custom renderers
+ * - Row selection with checkboxes
+ * - Click and double-click row handlers
+ * - Loading state with spinner
+ * - Empty state with custom message
+ * - Three size options (sm, md, lg)
+ * - Bordered, striped, and hoverable variants
+ * - Sticky header support
+ * - Fixed columns (left/right)
+ * - Responsive design
+ * - Forward ref support
+ * 
+ * @component
+ * @template T - The type of data objects in rows
+ * @param {TableProps<T>} props - Component props
+ * @param {Column<T>[]} props.columns - Array of column configurations
+ * @param {T[]} props.data - Array of data objects for rows
+ * @param {boolean} [props.loading=false] - Show loading spinner overlay
+ * @param {React.ReactNode} [props.emptyMessage='No data available'] - Shown when data is empty
+ * @param {keyof T | Function} [props.rowKey='id'] - Function or property key for unique row IDs
+ * @param {Function} [props.onRowClick] - Called when row is clicked
+ * @param {Function} [props.onRowDoubleClick] - Called when row is double-clicked
+ * @param {Object} [props.rowSelection] - Row selection configuration with checkboxes
+ * @param {boolean} [props.pagination=false] - Enable built-in pagination
+ * @param {('sm'|'md'|'lg')} [props.size='md'] - Table size affecting padding
+ * @param {boolean} [props.bordered=false] - Add borders to cells
+ * @param {boolean} [props.striped=false] - Alternate row background colors
+ * @param {boolean} [props.hoverable=false] - Highlight row on hover
+ * @param {boolean} [props.sticky=false] - Make header sticky on scroll
+ * @param {string} [props.className] - Additional CSS classes
+ * @param {React.Ref<HTMLTableElement>} ref - Forwarded ref to table element
+ * 
+ * @returns {JSX.Element} Rendered table
+ * 
+ * @example
+ * // Basic table
+ * <Table
+ *   columns={[
+ *     { key: 'name', title: 'Name', dataIndex: 'name' },
+ *     { key: 'email', title: 'Email', dataIndex: 'email' }
+ *   ]}
+ *   data={users}
+ * />
+ * 
+ * @example
+ * // Table with custom render and selection
+ * <Table
+ *   columns={[
+ *     { key: 'name', title: 'Name', dataIndex: 'name' },
+ *     { 
+ *       key: 'status', 
+ *       title: 'Status',
+ *       render: (_, record) => <Badge>{record.status}</Badge>
+ *     }
+ *   ]}
+ *   data={cases}
+ *   rowSelection={{
+ *     selectedRowKeys: selectedIds,
+ *     onChange: setSelectedIds
+ *   }}
+ *   onRowClick={(record) => navigate(`/cases/${record.id}`)}
+ * />
+ * 
+ * @example
+ * // Table with all features
+ * <Table
+ *   columns={columns}
+ *   data={data}
+ *   loading={isLoading}
+ *   emptyMessage={<EmptyState />}
+ *   size="lg"
+ *   bordered
+ *   striped
+ *   hoverable
+ *   sticky
+ *   pagination
+ * />
+ */
 export const Table = forwardRef<HTMLTableElement, TableProps>(
   <T extends Record<string, any>>(
     {

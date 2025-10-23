@@ -30,7 +30,10 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "docker:restart": "docker-compose restart",
-    "docker:setup": "npm run docker:build && npm run docker:up && echo 'Waiting for database...' && sleep 10 && npm run db:seed"
+    "docker:setup": "npm run docker:build && npm run docker:up && echo 'Waiting for database...' && sleep 10 && npm run db:seed",
+    "docs:generate": "jsdoc -c jsdoc.json",
+    "docs:serve": "npx http-server docs/api -p 8080 -o",
+    "docs:check": "node scripts/check-jsdoc-coverage.js"
   },
   "keywords": [
     "law firm",

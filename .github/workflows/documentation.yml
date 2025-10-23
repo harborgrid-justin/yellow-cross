@@ -1,0 +1,89 @@
+name: Documentation Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/src/**/*.ts'
+      - 'frontend/src/**/*.tsx'
+      - 'frontend/src/**/*.js'
+      - 'frontend/src/**/*.jsx'
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/src/**/*.ts'
+      - 'frontend/src/**/*.tsx'
+
+jobs:
+  check-jsdoc-coverage:
+    name: Check JSDoc Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check JSDoc coverage
+        run: npm run docs:check
+        continue-on-error: false
+      
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ JSDoc coverage check failed. Please add JSDoc comments to exported functions and components.'
+            })
+
+  generate-docs:
+    name: Generate API Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install JSDoc
+        run: npm install -g jsdoc
+      
+      - name: Generate documentation
+        run: npm run docs:generate
+      
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-documentation
+          path: docs/api
+          retention-days: 30
+      
+      - name: Deploy to GitHub Pages (optional)
+        if: false  # Enable this when ready to deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/api
+          publish_branch: gh-pages
+          cname: docs.yellow-cross.com  # Optional: Set your custom domain

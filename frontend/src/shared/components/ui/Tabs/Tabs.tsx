@@ -1,6 +1,18 @@
 import React, { forwardRef, createContext, useContext, useState, useRef, useEffect } from 'react';
 import './Tabs.css';
 
+/**
+ * TabItem - Configuration for a single tab
+ * 
+ * @typedef {Object} TabItem
+ * @property {string} id - Unique tab identifier
+ * @property {string} label - Tab label text
+ * @property {React.ReactNode} [content] - Tab content panel
+ * @property {boolean} [disabled] - Whether tab is disabled
+ * @property {React.ReactNode} [icon] - Tab icon element
+ * @property {React.ReactNode} [badge] - Badge content for tab
+ * @property {boolean} [closable] - Whether tab can be closed
+ */
 export interface TabItem {
   /** Tab identifier */
   id: string;
@@ -18,6 +30,21 @@ export interface TabItem {
   closable?: boolean;
 }
 
+/**
+ * TabsProps - Props for the Tabs component
+ * 
+ * @typedef {Object} TabsProps
+ * @property {TabItem[]} [items] - Array of tab configurations
+ * @property {string} [activeTab] - Controlled active tab ID
+ * @property {string} [defaultActiveTab] - Default active tab ID
+ * @property {('default'|'pills'|'underline'|'legal'|'minimal')} [variant='default'] - Visual style
+ * @property {('sm'|'md'|'lg')} [size='md'] - Size variant
+ * @property {('horizontal'|'vertical')} [orientation='horizontal'] - Tab orientation
+ * @property {boolean} [scrollable=false] - Enable scrolling for many tabs
+ * @property {boolean} [showIndicator=true] - Show active tab indicator
+ * @property {string} [className] - Additional CSS classes
+ * @property {Function} [onChange] - Tab change handler
+ */
 export interface TabsProps {
   /** Tab items */
   items?: TabItem[];
@@ -96,6 +123,72 @@ const useTabsContext = () => {
   return context;
 };
 
+/**
+ * Tabs - Tabbed interface component with multiple variants
+ * 
+ * A comprehensive tabs component supporting multiple visual styles,
+ * orientations, and advanced features like closable tabs, badges,
+ * and custom rendering. Can be used with items prop or as compound
+ * component with Tab and TabPanel children.
+ * 
+ * Features:
+ * - Five visual variants (default, pills, underline, legal, minimal)
+ * - Horizontal and vertical orientation
+ * - Scrollable tabs for overflow handling
+ * - Closable tabs with onClose handler
+ * - Tab icons and badges
+ * - Controlled and uncontrolled modes
+ * - Compound component pattern support
+ * - Active tab indicator
+ * - Forward ref support
+ * 
+ * @component
+ * @param {TabsProps} props - Component props
+ * @param {TabItem[]} [props.items] - Tab configurations
+ * @param {string} [props.activeTab] - Controlled active tab ID
+ * @param {string} [props.defaultActiveTab] - Default active tab
+ * @param {string} [props.variant='default'] - Visual style
+ * @param {string} [props.size='md'] - Size variant
+ * @param {string} [props.orientation='horizontal'] - Tab orientation
+ * @param {boolean} [props.scrollable=false] - Enable scrolling
+ * @param {boolean} [props.showIndicator=true] - Show active indicator
+ * @param {Function} [props.onTabChange] - Tab change callback
+ * @param {Function} [props.onTabClose] - Tab close callback
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element} Tabs component
+ * 
+ * @example
+ * // Basic tabs with items
+ * <Tabs
+ *   items={[
+ *     { id: 'tab1', label: 'Overview', content: <Overview /> },
+ *     { id: 'tab2', label: 'Details', content: <Details /> }
+ *   ]}
+ * />
+ * 
+ * @example
+ * // Controlled tabs
+ * <Tabs
+ *   items={tabs}
+ *   activeTab={activeTab}
+ *   onTabChange={setActiveTab}
+ *   variant="pills"
+ * />
+ * 
+ * @example
+ * // Tabs with icons and badges
+ * <Tabs
+ *   items={[
+ *     { 
+ *       id: 'inbox', 
+ *       label: 'Inbox', 
+ *       icon: <InboxIcon />,
+ *       badge: <Badge>5</Badge>
+ *     }
+ *   ]}
+ * />
+ */
 // Main Tabs Component
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
   ({
