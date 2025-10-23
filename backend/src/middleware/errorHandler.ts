@@ -6,9 +6,12 @@
 import logger from '../config/logger';
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
+import { ApplicationError } from '../errors/CustomErrors';
+import { errorResponse } from '../utils/apiResponse';
 
 /**
  * Custom error class for API errors
+ * @deprecated Use ApplicationError and its subclasses from ../errors/CustomErrors instead
  */
 class ApiError extends Error {
   statusCode: number;
@@ -25,16 +28,12 @@ class ApiError extends Error {
 
 /**
  * Error handler middleware
- * Centralizes error handling and logging
+ * Centralizes error handling and logging with standardized responses
  */
 const errorHandler = (err: any, req: Request & { correlationId?: string }, res: Response, _next: NextFunction) => {
-  let { statusCode, message } = err;
-  
-  // Default to 500 if no status code
-  if (!statusCode) {
-    statusCode = 500;
-    message = message || 'Internal Server Error';
-  }
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal Server Error';
+  let errorCode = err.name || 'INTERNAL_SERVER_ERROR';
   
   // Log the error
   logger.logError(err, req, {
@@ -44,25 +43,38 @@ const errorHandler = (err: any, req: Request & { correlationId?: string }, res: 
     query: req.query,
   });
   
-  // Prepare error response
-  const response: any = {
-    success: false,
-    error: {
-      code: statusCode,
-      message: message,
-      correlationId: req.correlationId,
-    },
-  };
-  
-  // Add stack trace in development
-  if (process.env.NODE_ENV === 'development') {
-    response.error.stack = err.stack;
+  // Handle ApplicationError and its subclasses
+  if (err instanceof ApplicationError) {
+    statusCode = err.statusCode;
+    message = err.message;
+    errorCode = err.name;
   }
   
-  // Add validation errors if present
-  if (err.details) {
-    response.error.details = err.details;
+  // Handle Joi validation errors
+  if (err.name === 'ValidationError' && err.details) {
+    statusCode = 400;
+    errorCode = 'VALIDATION_ERROR';
   }
+  
+  // Handle Sequelize errors
+  if (err.name === 'SequelizeValidationError') {
+    statusCode = 400;
+    errorCode = 'DATABASE_VALIDATION_ERROR';
+  }
+  
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    statusCode = 409;
+    errorCode = 'DUPLICATE_ENTRY';
+    message = 'A record with this value already exists';
+  }
+  
+  // Create standardized error response
+  const response = errorResponse(
+    message,
+    errorCode,
+    process.env.NODE_ENV === 'development' ? (err.details || err.stack) : undefined,
+    req.correlationId
+  );
   
   res.status(statusCode).json(response);
 };
