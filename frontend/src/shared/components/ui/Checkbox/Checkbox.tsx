@@ -1,6 +1,19 @@
 import React, { forwardRef } from 'react';
 import './Checkbox.css';
 
+/**
+ * CheckboxProps - Props for the Checkbox component
+ * 
+ * @typedef {Object} CheckboxProps
+ * @extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
+ * @property {string} [label] - Label text for the checkbox
+ * @property {string} [description] - Additional description text
+ * @property {('sm'|'md'|'lg')} [size='md'] - Checkbox size
+ * @property {('default'|'card')} [variant='default'] - Visual style variant
+ * @property {boolean} [indeterminate=false] - Indeterminate state
+ * @property {string} [error] - Error message
+ * @property {string} [helperText] - Helper text below checkbox
+ */
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   description?: string;
@@ -11,6 +24,60 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
   helperText?: string;
 }
 
+/**
+ * Checkbox - Customizable checkbox input component
+ * 
+ * A styled checkbox component with support for labels, descriptions,
+ * error states, indeterminate state, and multiple visual variants.
+ * 
+ * Features:
+ * - Optional label and description
+ * - Three size options (sm, md, lg)
+ * - Two visual variants (default, card)
+ * - Indeterminate state support
+ * - Error handling with messages
+ * - Helper text support
+ * - Forward ref support
+ * 
+ * @component
+ * @param {CheckboxProps} props - Component props
+ * @param {string} [props.label] - Checkbox label text
+ * @param {string} [props.description] - Additional description
+ * @param {('sm'|'md'|'lg')} [props.size='md'] - Size variant
+ * @param {('default'|'card')} [props.variant='default'] - Style variant
+ * @param {boolean} [props.indeterminate=false] - Indeterminate state
+ * @param {string} [props.error] - Error message to display
+ * @param {string} [props.helperText] - Helper text
+ * @param {boolean} [props.disabled=false] - Disabled state
+ * @param {React.Ref<HTMLInputElement>} ref - Forwarded ref
+ * 
+ * @returns {JSX.Element} Checkbox component
+ * 
+ * @example
+ * // Basic checkbox
+ * <Checkbox label="Accept terms" />
+ * 
+ * @example
+ * // Checkbox with description
+ * <Checkbox 
+ *   label="Subscribe to newsletter"
+ *   description="Receive updates about new features"
+ * />
+ * 
+ * @example
+ * // Checkbox with error
+ * <Checkbox 
+ *   label="Required field"
+ *   error="This field is required"
+ * />
+ * 
+ * @example
+ * // Indeterminate checkbox
+ * <Checkbox 
+ *   label="Select all"
+ *   indeterminate={someSelected && !allSelected}
+ * />
+ */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
