@@ -1,8 +1,34 @@
 import React, { forwardRef, useState } from 'react';
 import './Input.css';
 
+/**
+ * InputType - Supported HTML input types
+ * 
+ * @typedef {('text'|'email'|'password'|'number'|'tel'|'url'|'search')} InputType
+ */
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 
+/**
+ * InputProps - Props for the Input component
+ * 
+ * Extends native HTML input attributes with additional styling and
+ * functionality options. Omits the native 'size' attribute to avoid
+ * conflicts with the custom size prop.
+ * 
+ * @typedef {Object} InputProps
+ * @extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>
+ * @property {string} [label] - Label text displayed above input
+ * @property {string} [error] - Error message displayed below input
+ * @property {string} [helperText] - Helper text displayed below input
+ * @property {React.ReactNode} [leftIcon] - Icon displayed on the left side
+ * @property {React.ReactNode} [rightIcon] - Icon displayed on the right side
+ * @property {('sm'|'md'|'lg')} [size='md'] - Input size
+ * @property {('default'|'filled'|'outline')} [variant='outline'] - Visual style variant
+ * @property {boolean} [isRequired=false] - Show required indicator
+ * @property {boolean} [isInvalid=false] - Apply error styling
+ * @property {boolean} [isDisabled=false] - Disable the input
+ * @property {boolean} [fullWidth=false] - Take full container width
+ */
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
@@ -17,6 +43,86 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   fullWidth?: boolean;
 }
 
+/**
+ * Input - Enhanced text input component with label, validation, and icons
+ * 
+ * A fully-featured input component that wraps native HTML input elements with
+ * additional functionality including labels, error states, helper text, icons,
+ * and password visibility toggle. Supports various input types and styling
+ * variants.
+ * 
+ * Features:
+ * - Optional label with required indicator
+ * - Error and helper text display
+ * - Left and right icon support
+ * - Password visibility toggle for password inputs
+ * - Three visual variants (default, filled, outline)
+ * - Three size options (sm, md, lg)
+ * - Full-width layout option
+ * - Focus state management
+ * - Accessible with proper ARIA attributes
+ * - Forward ref support
+ * 
+ * @component
+ * @param {InputProps} props - Component props
+ * @param {string} [props.label] - Label text shown above the input
+ * @param {string} [props.error] - Error message shown below input (triggers error styling)
+ * @param {string} [props.helperText] - Helper text shown below input (when no error)
+ * @param {React.ReactNode} [props.leftIcon] - Icon component displayed on left
+ * @param {React.ReactNode} [props.rightIcon] - Icon component displayed on right
+ * @param {('sm'|'md'|'lg')} [props.size='md'] - Input size affecting height and padding
+ * @param {('default'|'filled'|'outline')} [props.variant='outline'] - Visual style variant
+ * @param {boolean} [props.isRequired=false] - Shows required asterisk in label
+ * @param {boolean} [props.isInvalid=false] - Applies error styling
+ * @param {boolean} [props.isDisabled=false] - Disables the input
+ * @param {boolean} [props.fullWidth=false] - Makes input take full container width
+ * @param {string} [props.type='text'] - HTML input type
+ * @param {React.Ref<HTMLInputElement>} ref - Forwarded ref to the input element
+ * 
+ * @returns {JSX.Element} Rendered input component with wrapper
+ * 
+ * @example
+ * // Basic input
+ * <Input 
+ *   label="Email" 
+ *   type="email" 
+ *   placeholder="Enter your email"
+ * />
+ * 
+ * @example
+ * // Input with error
+ * <Input 
+ *   label="Username"
+ *   error="Username is required"
+ *   isInvalid
+ * />
+ * 
+ * @example
+ * // Input with icons
+ * <Input 
+ *   label="Search"
+ *   type="search"
+ *   leftIcon={<SearchIcon />}
+ *   placeholder="Search cases..."
+ * />
+ * 
+ * @example
+ * // Password input with visibility toggle
+ * <Input 
+ *   label="Password"
+ *   type="password"
+ *   isRequired
+ * />
+ * 
+ * @example
+ * // Full-width input with helper text
+ * <Input 
+ *   label="Description"
+ *   helperText="Enter a brief description"
+ *   fullWidth
+ *   size="lg"
+ * />
+ */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
