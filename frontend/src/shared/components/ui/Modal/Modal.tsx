@@ -2,6 +2,26 @@ import React, { forwardRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import './Modal.css';
 
+/**
+ * ModalProps - Props for the Modal component
+ * 
+ * Configuration options for the modal dialog including size, behavior,
+ * and content properties.
+ * 
+ * @typedef {Object} ModalProps
+ * @property {boolean} isOpen - Controls modal visibility
+ * @property {Function} onClose - Callback fired when modal should close
+ * @property {string} [title] - Optional modal title
+ * @property {string} [description] - Optional modal description
+ * @property {('sm'|'md'|'lg'|'xl'|'full')} [size='md'] - Modal size
+ * @property {boolean} [closeOnOverlayClick=true] - Close when clicking overlay
+ * @property {boolean} [closeOnEscape=true] - Close when pressing Escape key
+ * @property {boolean} [showCloseButton=true] - Show close button in header
+ * @property {boolean} [preventBodyScroll=true] - Prevent body scrolling when open
+ * @property {string} [className] - Additional CSS classes for modal content
+ * @property {string} [overlayClassName] - Additional CSS classes for overlay
+ * @property {React.ReactNode} children - Modal content
+ */
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,6 +37,93 @@ export interface ModalProps {
   children: React.ReactNode;
 }
 
+/**
+ * Modal - Accessible modal dialog component with overlay
+ * 
+ * A full-featured modal dialog component that renders in a React portal,
+ * providing a focus-trapped overlay for displaying content above the main
+ * application. Supports various sizes, keyboard navigation, click-outside
+ * closing, and body scroll prevention.
+ * 
+ * Features:
+ * - Renders via React portal for proper stacking
+ * - Five size options (sm, md, lg, xl, full)
+ * - Optional title and description
+ * - Keyboard navigation (Escape to close)
+ * - Click outside to close (configurable)
+ * - Focus trap for accessibility
+ * - Body scroll prevention
+ * - Close button in header
+ * - Smooth open/close animations
+ * - Forward ref support
+ * 
+ * @component
+ * @param {ModalProps} props - Component props
+ * @param {boolean} props.isOpen - Whether modal is currently visible
+ * @param {Function} props.onClose - Handler called when modal should close
+ * @param {string} [props.title] - Modal title shown in header
+ * @param {string} [props.description] - Modal description shown below title
+ * @param {('sm'|'md'|'lg'|'xl'|'full')} [props.size='md'] - Modal size
+ * @param {boolean} [props.closeOnOverlayClick=true] - Allow closing by clicking overlay
+ * @param {boolean} [props.closeOnEscape=true] - Allow closing with Escape key
+ * @param {boolean} [props.showCloseButton=true] - Show X button in header
+ * @param {boolean} [props.preventBodyScroll=true] - Prevent scrolling page behind modal
+ * @param {string} [props.className] - Additional classes for modal content
+ * @param {string} [props.overlayClassName] - Additional classes for overlay
+ * @param {React.ReactNode} props.children - Modal content
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to modal content div
+ * 
+ * @returns {JSX.Element|null} Modal portal or null if not open
+ * 
+ * @example
+ * // Basic modal
+ * const [isOpen, setIsOpen] = useState(false);
+ * 
+ * <Modal 
+ *   isOpen={isOpen} 
+ *   onClose={() => setIsOpen(false)}
+ *   title="Confirm Action"
+ * >
+ *   <p>Are you sure you want to continue?</p>
+ *   <Button onClick={() => setIsOpen(false)}>Confirm</Button>
+ * </Modal>
+ * 
+ * @example
+ * // Large modal with description
+ * <Modal 
+ *   isOpen={showDetails}
+ *   onClose={handleClose}
+ *   title="Case Details"
+ *   description="Review all case information below"
+ *   size="lg"
+ * >
+ *   <CaseDetailsForm />
+ * </Modal>
+ * 
+ * @example
+ * // Full screen modal without overlay close
+ * <Modal 
+ *   isOpen={isEditing}
+ *   onClose={handleClose}
+ *   title="Edit Document"
+ *   size="full"
+ *   closeOnOverlayClick={false}
+ *   closeOnEscape={false}
+ * >
+ *   <DocumentEditor />
+ * </Modal>
+ * 
+ * @example
+ * // Modal with custom styling
+ * <Modal 
+ *   isOpen={isOpen}
+ *   onClose={handleClose}
+ *   className="custom-modal-content"
+ *   overlayClassName="custom-overlay"
+ * >
+ *   <CustomContent />
+ * </Modal>
+ */
 export const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
     {
