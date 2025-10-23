@@ -39,6 +39,7 @@ export class CaseService extends BaseService<Case> {
 
   /**
    * Assign case to a user
+   * Uses transaction to ensure atomicity
    */
   async assignCase(
     caseId: string,
@@ -46,62 +47,90 @@ export class CaseService extends BaseService<Case> {
     assignedBy: string,
     reason?: string
   ): Promise<Case | null> {
-    const caseRecord = await this.findById(caseId);
-    if (!caseRecord) {
-      return null;
+    const sequelize = Case.sequelize;
+    if (!sequelize) {
+      throw new Error('Database not initialized');
     }
 
-    caseRecord.assignCase(assignedTo, assignedBy, reason);
-    await caseRecord.save();
+    const transaction = await sequelize.transaction();
+    try {
+      const caseRecord = await this.findById(caseId, { transaction });
+      if (!caseRecord) {
+        await transaction.rollback();
+        return null;
+      }
 
-    // Create timeline event
-    await CaseTimelineEvent.create({
-      caseId: caseRecord.id,
-      caseNumber: caseRecord.caseNumber,
-      title: 'Case Assigned',
-      description: `Case assigned to ${assignedTo}`,
-      eventType: 'Assignment',
-      eventDate: new Date(),
-      createdBy: assignedBy
-    });
+      caseRecord.assignCase(assignedTo, assignedBy, reason);
+      await caseRecord.save({ transaction });
 
-    return caseRecord;
+      // Create timeline event
+      await CaseTimelineEvent.create({
+        caseId: caseRecord.id,
+        caseNumber: caseRecord.caseNumber,
+        title: 'Case Assigned',
+        description: `Case assigned to ${assignedTo}`,
+        eventType: 'Assignment',
+        eventDate: new Date(),
+        createdBy: assignedBy
+      }, { transaction });
+
+      await transaction.commit();
+      return caseRecord;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   }
 
   /**
    * Update case status
+   * Uses transaction to ensure atomicity
    */
   async updateStatus(
     caseId: string,
     status: string,
     updatedBy: string
   ): Promise<Case | null> {
-    const caseRecord = await this.findById(caseId);
-    if (!caseRecord) {
-      return null;
+    const sequelize = Case.sequelize;
+    if (!sequelize) {
+      throw new Error('Database not initialized');
     }
 
-    const oldStatus = caseRecord.status;
-    caseRecord.status = status;
-    caseRecord.lastModifiedBy = updatedBy;
-    await caseRecord.save();
+    const transaction = await sequelize.transaction();
+    try {
+      const caseRecord = await this.findById(caseId, { transaction });
+      if (!caseRecord) {
+        await transaction.rollback();
+        return null;
+      }
 
-    // Create timeline event
-    await CaseTimelineEvent.create({
-      caseId: caseRecord.id,
-      caseNumber: caseRecord.caseNumber,
-      title: 'Status Changed',
-      description: `Status changed from ${oldStatus} to ${status}`,
-      eventType: 'Status Change',
-      eventDate: new Date(),
-      createdBy: updatedBy
-    });
+      const oldStatus = caseRecord.status;
+      caseRecord.status = status;
+      caseRecord.lastModifiedBy = updatedBy;
+      await caseRecord.save({ transaction });
 
-    return caseRecord;
+      // Create timeline event
+      await CaseTimelineEvent.create({
+        caseId: caseRecord.id,
+        caseNumber: caseRecord.caseNumber,
+        title: 'Status Changed',
+        description: `Status changed from ${oldStatus} to ${status}`,
+        eventType: 'Status Change',
+        eventDate: new Date(),
+        createdBy: updatedBy
+      }, { transaction });
+
+      await transaction.commit();
+      return caseRecord;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   }
 
   /**
    * Close a case
+   * Uses transaction to ensure atomicity
    */
   async closeCase(
     caseId: string,
@@ -109,26 +138,39 @@ export class CaseService extends BaseService<Case> {
     outcome: string,
     resolution: string
   ): Promise<Case | null> {
-    const caseRecord = await this.findById(caseId);
-    if (!caseRecord) {
-      return null;
+    const sequelize = Case.sequelize;
+    if (!sequelize) {
+      throw new Error('Database not initialized');
     }
 
-    caseRecord.closeCase(closedBy, outcome, resolution);
-    await caseRecord.save();
+    const transaction = await sequelize.transaction();
+    try {
+      const caseRecord = await this.findById(caseId, { transaction });
+      if (!caseRecord) {
+        await transaction.rollback();
+        return null;
+      }
 
-    // Create timeline event
-    await CaseTimelineEvent.create({
-      caseId: caseRecord.id,
-      caseNumber: caseRecord.caseNumber,
-      title: 'Case Closed',
-      description: `Case closed with outcome: ${outcome}`,
-      eventType: 'Case Closed',
-      eventDate: new Date(),
-      createdBy: closedBy
-    });
+      caseRecord.closeCase(closedBy, outcome, resolution);
+      await caseRecord.save({ transaction });
 
-    return caseRecord;
+      // Create timeline event
+      await CaseTimelineEvent.create({
+        caseId: caseRecord.id,
+        caseNumber: caseRecord.caseNumber,
+        title: 'Case Closed',
+        description: `Case closed with outcome: ${outcome}`,
+        eventType: 'Case Closed',
+        eventDate: new Date(),
+        createdBy: closedBy
+      }, { transaction });
+
+      await transaction.commit();
+      return caseRecord;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   }
 
   /**
