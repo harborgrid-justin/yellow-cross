@@ -84,6 +84,7 @@ import { LandlordTenantMatter } from './LandlordTenantMatter';
 import { ProBonoMatter } from './ProBonoMatter';
 import { Notification } from './Notification';
 import { NotificationPreference } from './NotificationPreference';
+import { Activity } from './Activity';
 
 // Named exports
 export {
@@ -167,7 +168,8 @@ export {
   LandlordTenantMatter,
   ProBonoMatter,
   Notification,
-  NotificationPreference
+  NotificationPreference,
+  Activity
 };
 
 // Export all models as a default object
@@ -252,5 +254,6 @@ export default {
   LandlordTenantMatter,
   ProBonoMatter,
   Notification,
-  NotificationPreference
+  NotificationPreference,
+  Activity
 };
