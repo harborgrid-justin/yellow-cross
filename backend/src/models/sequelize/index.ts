@@ -36,6 +36,7 @@ import { Report } from './Report';
 import { SecurityAuditLog } from './SecurityAuditLog';
 import { Integration } from './Integration';
 import { DocumentTemplate } from './DocumentTemplate';
+import SavedSearch from './SavedSearch';
 import { LitigationMatter } from './LitigationMatter';
 import { Mediation } from './Mediation';
 import { IntellectualProperty } from './IntellectualProperty';
@@ -117,6 +118,7 @@ export {
   SecurityAuditLog,
   Integration,
   DocumentTemplate,
+  SavedSearch,
   LitigationMatter,
   Mediation,
   IntellectualProperty,
@@ -199,6 +201,7 @@ export default {
   SecurityAuditLog,
   Integration,
   DocumentTemplate,
+  SavedSearch,
   LitigationMatter,
   Mediation,
   IntellectualProperty,
