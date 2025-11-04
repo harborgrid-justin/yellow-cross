@@ -28,7 +28,7 @@ export class Notification extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => User)
   @AllowNull(false)
@@ -85,11 +85,11 @@ export class Notification extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Instance methods
   async markAsRead(): Promise<Notification> {

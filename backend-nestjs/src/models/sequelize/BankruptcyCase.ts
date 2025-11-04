@@ -25,7 +25,7 @@ export class BankruptcyCase extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @Unique
   @AllowNull(false)
@@ -88,9 +88,9 @@ export class BankruptcyCase extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

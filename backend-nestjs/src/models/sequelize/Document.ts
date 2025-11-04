@@ -31,7 +31,7 @@ export class Document extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @Unique
   @AllowNull(false)
@@ -91,7 +91,7 @@ export class Document extends Model {
   // Version Control
   @Default(1)
   @Column(DataType.INTEGER)
-  version!: number;
+  declare version: number;
 
   @Default(true)
   @Index
@@ -224,15 +224,15 @@ export class Document extends Model {
   deletedBy?: string;
 
   @Column(DataType.DATE)
-  deletedAt?: Date;
+  declare deletedAt?: Date;
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Associations
   @HasMany(() => DocumentVersion, 'documentId')

@@ -23,7 +23,7 @@ export class ResearchItem extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -121,11 +121,11 @@ export class ResearchItem extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Track access to research item
   recordAccess(): void {

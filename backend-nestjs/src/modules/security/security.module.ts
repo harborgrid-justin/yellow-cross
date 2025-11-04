@@ -6,10 +6,10 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { SecurityService } from './security.service';
 import { SecurityController } from './security.controller';
-import { SecurityAudit } from '../../models/sequelize/SecurityAudit';
+import { SecurityAuditLog } from '../../models/sequelize/SecurityAuditLog';
 
 @Module({
-  imports: [SequelizeModule.forFeature([SecurityAudit])],
+  imports: [SequelizeModule.forFeature([SecurityAuditLog])],
   controllers: [SecurityController],
   providers: [SecurityService],
   exports: [SecurityService],

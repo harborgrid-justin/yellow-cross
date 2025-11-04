@@ -27,7 +27,7 @@ export class NotificationPreference extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => User)
   @AllowNull(false)
@@ -84,11 +84,11 @@ export class NotificationPreference extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Instance methods
   shouldSendNotification(type: string, category: string, channel: string): boolean {

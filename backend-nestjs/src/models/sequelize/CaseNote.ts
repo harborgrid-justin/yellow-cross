@@ -26,7 +26,7 @@ export class CaseNote extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => Case)
   @AllowNull(false)
@@ -59,11 +59,11 @@ export class CaseNote extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }
 
 export default CaseNote;

@@ -24,7 +24,7 @@ export class CustomField extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Index
@@ -78,11 +78,11 @@ export class CustomField extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Instance methods
   validateValue(value: any): { valid: boolean; error?: string } {

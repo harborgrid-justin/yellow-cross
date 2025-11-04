@@ -23,7 +23,7 @@ export class CourtDocket extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Index
@@ -96,11 +96,11 @@ export class CourtDocket extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Add docket entry
   addEntry(entry: any): void {

@@ -27,7 +27,7 @@ export class CustomFieldValue extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => CustomField)
   @AllowNull(false)
@@ -65,11 +65,11 @@ export class CustomFieldValue extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Instance methods
   getValue(): any {

@@ -5,13 +5,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { BaseService } from '../common/base.service';
-import { BillingEntry } from '../../models/sequelize/BillingEntry';
+import { TimeEntry } from '../../models/sequelize/TimeEntry';
 
 @Injectable()
-export class BillingService extends BaseService<BillingEntry> {
+export class BillingService extends BaseService<TimeEntry> {
   constructor(
-    @InjectModel(BillingEntry)
-    model: typeof BillingEntry,
+    @InjectModel(TimeEntry)
+    model: typeof TimeEntry,
   ) {
     super(model);
   }

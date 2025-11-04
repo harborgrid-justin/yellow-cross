@@ -19,7 +19,7 @@ import { User } from '../../models/sequelize/User';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('app.jwt.secret'),
         signOptions: {
-          expiresIn: configService.get<string>('app.jwt.expiration'),
+          expiresIn: configService.get<string>('app.jwt.expiration') as any,
         },
       }),
       inject: [ConfigService],

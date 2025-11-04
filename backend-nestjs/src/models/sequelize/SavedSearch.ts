@@ -24,7 +24,7 @@ export default class SavedSearch extends Model {
     primaryKey: true,
     autoIncrement: true,
   })
-  id!: number;
+  declare id: number;
 
   /**
    * User-friendly name for the saved search
@@ -95,7 +95,7 @@ export default class SavedSearch extends Model {
   @Column({
     type: DataType.DATE,
   })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   /**
    * Timestamp when the search was last updated
@@ -104,7 +104,7 @@ export default class SavedSearch extends Model {
   @Column({
     type: DataType.DATE,
   })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   /**
    * Timestamp when the search was last used

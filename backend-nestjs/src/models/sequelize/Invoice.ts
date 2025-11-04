@@ -24,7 +24,7 @@ export class Invoice extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @Unique
   @AllowNull(false)
@@ -125,11 +125,11 @@ export class Invoice extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Calculate if invoice is overdue
   isOverdue(): boolean {

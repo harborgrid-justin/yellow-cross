@@ -23,7 +23,7 @@ export class CalendarEvent extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -103,11 +103,11 @@ export class CalendarEvent extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Virtual for duration in minutes
   get durationMinutes(): number {

@@ -23,7 +23,7 @@ export class DocumentTemplate extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Index
@@ -57,7 +57,7 @@ export class DocumentTemplate extends Model {
 
   @Default(1)
   @Column(DataType.INTEGER)
-  version!: number;
+  declare version: number;
 
   @Column(DataType.JSONB)
   versionHistory?: object;
@@ -87,11 +87,11 @@ export class DocumentTemplate extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   // Track template usage
   recordUsage(): void {

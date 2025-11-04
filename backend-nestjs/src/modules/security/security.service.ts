@@ -5,13 +5,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { BaseService } from '../common/base.service';
-import { SecurityAudit } from '../../models/sequelize/SecurityAudit';
+import { SecurityAuditLog } from '../../models/sequelize/SecurityAuditLog';
 
 @Injectable()
-export class SecurityService extends BaseService<SecurityAudit> {
+export class SecurityService extends BaseService<SecurityAuditLog> {
   constructor(
-    @InjectModel(SecurityAudit)
-    model: typeof SecurityAudit,
+    @InjectModel(SecurityAuditLog)
+    model: typeof SecurityAuditLog,
   ) {
     super(model);
   }

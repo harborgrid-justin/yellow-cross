@@ -26,7 +26,7 @@ export class DocumentVersion extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => Document)
   @AllowNull(false)
@@ -50,7 +50,7 @@ export class DocumentVersion extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 }
 
 export default DocumentVersion;

@@ -25,7 +25,7 @@ export class WhiteCollarCrimeMatter extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @Unique
   @AllowNull(false)
@@ -74,9 +74,9 @@ export class WhiteCollarCrimeMatter extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

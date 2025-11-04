@@ -26,7 +26,7 @@ export class CaseTimelineEvent extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => Case)
   @AllowNull(false)
@@ -62,7 +62,7 @@ export class CaseTimelineEvent extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 }
 
 export default CaseTimelineEvent;

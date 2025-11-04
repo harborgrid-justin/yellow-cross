@@ -59,8 +59,8 @@ export class AuthService {
     const user = await this.userModel.create({
       ...userData,
       password: hashedPassword,
-      role: userData.role || 'user',
-      isActive: true,
+      roles: [userData.role || 'user'],
+      status: 'Active',
     } as any);
 
     const { password, ...result } = user.toJSON();

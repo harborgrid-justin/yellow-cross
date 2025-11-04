@@ -4,7 +4,8 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import { Model, ModelCtor } from 'sequelize-typescript';
+import { Model } from 'sequelize-typescript';
+import type { ModelCtor } from 'sequelize-typescript';
 import { FindOptions, Transaction, CreationAttributes } from 'sequelize';
 
 @Injectable()

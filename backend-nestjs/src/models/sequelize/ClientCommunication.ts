@@ -26,7 +26,7 @@ export class ClientCommunication extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @ForeignKey(() => Client)
   @AllowNull(false)
@@ -74,11 +74,11 @@ export class ClientCommunication extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }
 
 export default ClientCommunication;

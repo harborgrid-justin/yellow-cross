@@ -23,7 +23,7 @@ export class SecurityAuditLog extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id!: string;
+  declare id: string;
 
   @AllowNull(false)
   @Index
@@ -75,7 +75,7 @@ export class SecurityAuditLog extends Model {
 
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  declare createdAt: Date;
 
   // Static method to log action
   static async logAction(data: {
